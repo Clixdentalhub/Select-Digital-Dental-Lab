@@ -1,0 +1,17 @@
+{
+  "name": "dental-funnel-template",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Neutral, fill-in dental lead-generation funnel template (GoHighLevel-ready). Reskin via the BRAND CONFIG block in index.html.",
+  "type": "module",
+  "scripts": {
+    "serve": "node tests/serve.mjs",
+    "test": "playwright test",
+    "build": "node build-ghl.mjs && node build-ghl-thank-you.mjs",
+    "embed": "python3 embed-images.py ghl.html ghl-embedded.html && python3 embed-images.py ghl-thank-you.html ghl-thank-you-embedded.html",
+    "ghl": "npm run build && npm run embed"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.47.0"
+  }
+}

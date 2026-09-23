@@ -1,0 +1,8 @@
+node_modules/
+test-results/
+playwright-report/
+ghl.html
+ghl-thank-you.html
+ghl-embedded.html
+ghl-thank-you-embedded.html
+tests/fonts/

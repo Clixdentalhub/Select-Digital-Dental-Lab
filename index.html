@@ -1,0 +1,2269 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Paid-traffic landing page for dentists: kept out of search on purpose, so
+     the only visitors are the ones the ads send. Remove to let it be indexed. -->
+<meta name="robots" content="noindex, nofollow">
+<title>Select Digital Dental Lab — The Dental Lab Built by Dentists, for Dentists</title>
+<meta name="description" content="A fully digital, dentist-led dental lab for private practices. Crowns, bridges, veneers and dentures — every case checked by a dentist, back within ten working days.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* ============================================================
+   ★ BRAND CONFIG — the one place you set the look.
+   ------------------------------------------------------------
+   To reskin this template for a new practice, change ONLY the
+   values in this :root block, then swap the fonts on the <link>
+   above and drop assets/img/logo.png in. Everything downstream
+   (buttons, icons, rules, cards, header states) reads from these
+   tokens, so the whole funnel restyles from here.
+
+   The palette below is a neutral placeholder (slate blue). When
+   you change --color-accent / --cta-on-dark to your brand colour,
+   KEEP the contrast: run `npx playwright test` — the contrast
+   suite measures every rendered text/background pair and fails
+   any that drops below AA. Rules of thumb:
+     · --color-accent  : your colour must hit ≥ 4.5:1 with white
+                          (it is a button colour with white text)
+     · --cta-on-dark   : a LIGHT tint of your colour, ≥ 4.5:1 on
+                          the near-black bands, with dark text on it
+   ============================================================ */
+:root{
+  /* — dark band family (usually leave as-is) — */
+  --color-primary:#121212;          /* dark band                       */
+  --color-primary-dark:#0A0A0A;     /* deeper band / footer            */
+  --color-on-primary:#FFFFFF;       /* 18.73:1 on primary              */
+  --color-secondary:#232323;        /* raised surface on dark          */
+  --color-on-primary-mut:#C6C0B6;   /* body copy on dark — 10.36:1     */
+  --color-flourish:#A9CDEA;         /* ← BRAND: icons + rules on dark  */
+
+  /* — CTA family — ← BRAND: your primary colour lives here — */
+  --color-accent:#2C5F8A;           /* ← BRAND: button on light (white text, ≥4.5:1) */
+  --color-accent-dark:#244E71;      /* ← BRAND: button hover (a shade darker)         */
+  --color-on-accent:#FFFFFF;
+  /* A CTA in --color-accent almost never passes on a dark band.
+     These two exist for exactly that case.                        */
+  --cta-on-dark:#8CC1E8;            /* ← BRAND: light tint, button on dark bands      */
+  --cta-on-dark-text:#08243A;       /* ← BRAND: dark text that sits on --cta-on-dark  */
+
+  /* — light ground family — */
+  --color-background:#FBF8F4;
+  --color-surface:#FFFFFF;
+  --color-foreground:#17140F;       /* 17.35:1 on background          */
+  --color-foreground-mut:#575046;   /* 7.51:1                          */
+  --color-muted:#726A5E;            /* 5.04:1                          */
+  --color-border:#E7E0D5;
+  --color-border-strong:#978A76;    /* 3.19:1 — focus rings, inputs   */
+
+  /* — state — */
+  --color-success:#12704A;
+  --color-error:#B3251D;
+  --color-error-on-dark:#FF9C8E;    /* on-dark twin — 9.28:1          */
+  --color-star:#2C5F8A;
+  --color-star-on-dark:#8CC1E8;
+
+  /* — radii — */
+  --r-md:12px; --r-sm:8px; --r-lg:20px; --r-pill:999px;
+
+  /* — spacing, 8pt rhythm — */
+  --s-1:8px; --s-2:16px; --s-3:24px; --s-4:32px;
+  --s-5:48px; --s-6:64px; --s-7:88px; --s-8:112px;
+
+  /* — type — */
+  --font-head:"Outfit","Futura","Century Gothic",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-body:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+
+  /* — motion — */
+  --ease:cubic-bezier(.22,1,.36,1);          /* workhorse, no overshoot */
+  --ease-soft:cubic-bezier(.4,.14,.3,1);     /* panels                  */
+  --d-1:280ms; --d-2:520ms; --d-3:760ms;
+
+  /* — layout — */
+  --header-row-h:64px;   /* the logo/CTA row            */
+  --header-h:112px;      /* row + nav rail = anchor offset */
+  --cut-h:64px;
+  --maxw:1200px;
+}
+@media (min-width:768px){ :root{ --header-row-h:72px; --header-h:120px; --cut-h:96px; } }
+/* at 1200px the rail is hidden, so the row is the whole header */
+@media (min-width:1200px){ :root{ --header-row-h:80px; --header-h:80px; } }
+
+/* ============================================================
+   BASE
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:calc(var(--header-h) + 16px)}
+body{
+  margin:0;
+  font-family:var(--font-body);
+  font-size:17px;line-height:1.72;
+  color:var(--color-foreground);
+  background:var(--color-background);
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;height:auto;display:block}
+h1,h2,h3,h4{font-family:var(--font-head);margin:0 0 var(--s-2);line-height:1.12;font-weight:600;text-wrap:balance}
+h1{font-size:clamp(2rem,6.2vw,3.6rem);letter-spacing:-.03em}
+h2{font-size:clamp(1.65rem,4.4vw,2.6rem);letter-spacing:-.025em}
+h3{font-size:clamp(1.12rem,2.4vw,1.4rem);font-weight:600}
+p,li,legend,figcaption,cite,dd{text-wrap:pretty}
+p{margin:0 0 var(--s-2)}
+a{color:inherit}
+ul,ol{margin:0;padding:0;list-style:none}
+:focus-visible{outline:3px solid var(--color-accent);outline-offset:3px;border-radius:4px}
+.dark :focus-visible{outline-color:var(--cta-on-dark)}
+.wrap{width:100%;max-width:var(--maxw);margin-inline:auto;padding-inline:var(--s-2)}
+@media (min-width:768px){ .wrap{padding-inline:var(--s-4)} body{font-size:18px} }
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.nb{white-space:nowrap}   /* compound binder — never a direct child of a flex row */
+
+/* Unconfirmed values render visibly, and are inventoried by the harness. */
+.ph{background:#FFF3C4;color:#5B4708;border-bottom:2px dotted #B8891A;padding:0 .18em;border-radius:3px;font-style:normal}
+:is(.dark,.deep,.hero) .ph{background:#3A2E0B;color:#F6D77A;border-bottom-color:#8A6A12}
+
+/* ============================================================
+   SECTIONS + BANDS
+   ============================================================ */
+.section{position:relative;padding-block:var(--s-7);isolation:isolate}
+@media (min-width:768px){ .section{padding-block:var(--s-8)} }
+.section.dark{background:var(--color-primary);color:var(--color-on-primary)}
+:is(.section.dark,.section.deep,.hero) p{color:var(--color-on-primary-mut)}
+.section.deep{background:var(--color-primary-dark);color:var(--color-on-primary)}
+.section.tint{background:var(--color-surface)}
+.eyebrow{
+  font-family:var(--font-head);font-size:.72rem;font-weight:600;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:var(--color-accent);margin:0 0 var(--s-1)
+}
+:is(.dark,.deep,.hero) .eyebrow{color:var(--color-flourish)}
+.lede{font-size:1.05rem;color:var(--color-foreground-mut);max-width:62ch}
+/* Centred ledes balance their lines: `pretty` only guards single-word
+   orphans, and a centred paragraph ending on a short stub line reads
+   worse than one ending mid-length. */
+.section-head.centre .lede{text-wrap:balance}
+:is(.dark,.deep,.hero) .lede{color:var(--color-on-primary-mut)}
+.section-head{max-width:62ch;margin-bottom:var(--s-5)}
+.section-head.centre{margin-inline:auto;text-align:center}
+
+/* ============================================================
+   P2 · BACKGROUND MOTION — A1 Calm Drift
+   Absolute, clipped, inert. Colour weighted to the BASE of the
+   band, never behind running text. Explicit heights, not
+   aspect-ratio, so a short band never gets a taller-than-itself
+   bloom. Never placed behind a form.
+   ============================================================ */
+.drift{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:-1}
+.drift b{
+  position:absolute;display:block;border-radius:50%;
+  filter:blur(70px);opacity:.30;
+  will-change:transform;
+}
+.drift b:nth-child(1){
+  width:min(78vw,560px);height:300px;left:-14%;bottom:-130px;
+  background:radial-gradient(circle,#2C5F8A 0%,rgba(44,95,138,0) 70%);
+  animation:drift-a 26s var(--ease-soft) infinite alternate;
+}
+.drift b:nth-child(2){
+  width:min(70vw,480px);height:260px;right:-12%;bottom:-90px;
+  background:radial-gradient(circle,#1F3F5C 0%,rgba(31,63,92,0) 70%);
+  animation:drift-b 22s var(--ease-soft) infinite alternate;
+}
+@keyframes drift-a{ from{transform:translate3d(0,0,0)} to{transform:translate3d(9%,-14%,0)} }
+@keyframes drift-b{ from{transform:translate3d(0,0,0)} to{transform:translate3d(-11%,-9%,0)} }
+
+/* ============================================================
+   P3 · SECTION CUTS
+   Overlay at bottom:-1px of the OUTGOING band, painted in the
+   INCOMING band's colour via currentColor. The 1px bleed is what
+   stops a hairline seam on fractional device pixel ratios.
+   The clip lives on .drift, never on the section.
+   ============================================================ */
+.cut{
+  position:absolute;left:0;right:0;bottom:-1px;
+  width:100%;height:var(--cut-h);
+  line-height:0;pointer-events:none;z-index:2;
+}
+.cut svg{display:block;width:100%;height:100%}
+/* destination colours */
+.cut.to-bg{color:var(--color-background)}
+.cut.to-surface{color:var(--color-surface)}
+.cut.to-dark{color:var(--color-primary)}
+.cut.to-deep{color:var(--color-primary-dark)}
+/* Back layers carry the accent so the shape gradates light → accent →
+   destination. A single low-opacity shape over a near-white ground
+   just desaturates to grey. */
+.cut .l1{fill:var(--color-accent);opacity:.16}
+.cut .l2{fill:var(--color-accent);opacity:.30}
+.cut .l3{fill:currentColor;opacity:.55}
+.cut .l4{fill:currentColor;opacity:1}
+.dark .cut .l1,.deep .cut .l1{fill:var(--color-flourish);opacity:.10}
+.dark .cut .l2,.deep .cut .l2{fill:var(--color-flourish);opacity:.18}
+/* The outgoing band reserves room. Compound selector so it beats
+   the base .section padding regardless of source order. */
+.section.has-cut{padding-bottom:calc(var(--s-7) + 64px)}
+@media (min-width:768px){ .section.has-cut{padding-bottom:calc(var(--s-8) + 96px)} }
+</style>
+<style>
+/* ============================================================
+   P9 · STICKY HEADER, NAV RAIL, SCROLL PROGRESS
+   ============================================================ */
+.site-header{
+  position:sticky;top:0;z-index:60;
+  background:rgba(10,10,10,.94);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid #2C2620;
+  color:var(--color-on-primary);
+}
+.header-row{
+  display:flex;align-items:center;gap:var(--s-2);
+  min-height:var(--header-row-h);
+}
+/* Desktop: section links sit left, the wordmark holds the centre,
+   phone + CTA close the right. The brand is lifted out of the flex
+   flow so the centre is the true centre, not centre-of-what's-left. */
+@media (min-width:1200px){
+  .header-row{position:relative}
+  /* the links may never reach the centred wordmark, whichever lockup
+     renders — the image or the wider text fallback */
+  .header-row .nav{order:-1;max-width:calc(50% - 150px)}
+  .brand{position:absolute;left:50%;transform:translateX(-50%)}
+}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex:0 0 auto}
+.brand svg{flex:0 0 auto}
+/* Phone widths: the section links, phone number and CTA are all hidden
+   here, so the logo is alone in the row — centre it. */
+@media (max-width:559.98px){
+  .header-row{justify-content:center}
+  .header-spacer{display:none}
+}
+.brand-name{font-family:var(--font-head);font-weight:700;font-size:.98rem;letter-spacing:.01em;line-height:1.1}
+.brand-sub{display:block;font-family:var(--font-body);font-weight:400;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--color-flourish)}
+.header-spacer{flex:1 1 auto}
+
+.nav{display:none}
+@media (min-width:1200px){
+  .nav{display:block;flex:1 1 auto;min-width:0}
+  .nav ul{display:flex;gap:2px;align-items:center;justify-content:center}
+}
+:is(.nav,.nav-rail) a{
+  display:block;text-decoration:none;white-space:nowrap;
+  font-size:.86rem;font-weight:500;color:#CFC8BE;
+  padding:8px 10px;border-radius:var(--r-pill);
+  transition:color var(--d-1) var(--ease),background-color var(--d-1) var(--ease);
+}
+:is(.nav,.nav-rail) a:hover{color:#fff;background:#211D18}
+:is(.nav,.nav-rail) a[aria-current="true"]{color:var(--cta-on-dark-text);background:var(--cta-on-dark);font-weight:600}
+
+/* Below 1200px the links drop to their own scrollable rail:
+   six links plus logo + phone + CTA needs roughly 1200px. */
+.nav-rail{
+  display:block;border-top:1px solid #221E19;
+  overflow-x:auto;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 18px,#000 calc(100% - 18px),transparent 100%);
+          mask-image:linear-gradient(90deg,transparent 0,#000 18px,#000 calc(100% - 18px),transparent 100%);
+}
+.nav-rail::-webkit-scrollbar{display:none}
+/* justify-content:center on an overflowing flex track spills out of
+   BOTH sides and the left overflow is unreachable — the first link
+   ends up under the logo, visible but unclickable. Grow-and-scroll
+   instead. */
+.nav-rail ul{
+  display:flex;gap:2px;align-items:center;justify-content:center;
+  width:max-content;min-width:100%;
+  /* inline padding clears the rail's 18px edge fade, so the first
+     and last links are never half-dissolved at rest */
+  padding:6px var(--s-3);
+}
+@media (min-width:1200px){ .nav-rail{display:none} }
+
+.progress{
+  position:absolute;left:0;bottom:-1px;height:2px;width:100%;
+  transform:scaleX(0);transform-origin:0 50%;
+  background:linear-gradient(90deg,var(--color-flourish),var(--cta-on-dark));
+  z-index:3;
+}
+
+
+/* ============================================================
+   BRAND LOCKUP
+   The supplied PNG is 252x62 with a transparent ground. Whether
+   its artwork is light or dark could not be verified from this
+   environment, so --logo-invert is the one-line switch if it
+   turns out to be dark and vanishes on the near-black header.
+   Until the file is dropped in, the inline mark below stands in:
+   it is real markup, not a placeholder box.
+   ============================================================ */
+/* The supplied artwork is a dark wordmark on a transparent ground, and this
+   header is near-black — as delivered it is barely legible on it. Knocking it
+   back to a flat white (brightness(0) then invert) guarantees 19.8:1 whatever
+   colour the artwork happens to be. If a light or reversed version of the logo
+   is supplied, set --logo-filter:none and use that instead. */
+:root{ --logo-filter:brightness(0) invert(1); } /* scrolled state on dark bands: the white mark */
+.brand-logo{
+  height:30px;width:auto;display:block;
+  filter:var(--logo-filter);
+}
+@media (min-width:768px){ .brand-logo{height:36px} }
+/* Resting state is the inline lockup. The image is revealed only once
+   it has actually decoded, so the header is right with JS switched off. */
+.brand-logo{display:none}
+.brand-fallback{display:flex;align-items:center;gap:10px}
+.brand.has-logo .brand-logo{display:block}
+.brand.has-logo .brand-fallback{display:none}
+/* the logo carries the name, so only the location is worth keeping beside it */
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  font-family:var(--font-head);font-weight:600;font-size:.98rem;line-height:1.2;
+  letter-spacing:.015em;
+  text-decoration:none;text-align:center;cursor:pointer;
+  padding:15px 26px;border-radius:var(--r-pill);border:2px solid transparent;
+  min-height:52px;
+  transition:transform var(--d-1) var(--ease),background-color var(--d-1) var(--ease),
+             border-color var(--d-1) var(--ease),color var(--d-1) var(--ease);
+}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0)}
+.btn-primary{background:var(--color-accent);color:var(--color-on-accent)}
+.btn-primary:hover{background:var(--color-accent-dark)}
+/* On a dark band the accent CTA fails contrast. Use the on-dark twin. */
+:is(.dark,.deep,.site-header,.form-card,.mobile-bar) .btn-primary{
+  background:var(--cta-on-dark);color:var(--cta-on-dark-text)
+}
+:is(.dark,.deep,.site-header,.form-card,.mobile-bar) .btn-primary:hover{
+  background:#B5D8F2
+}
+.btn-ghost{border-color:var(--color-border-strong);color:var(--color-foreground);background:transparent}
+.btn-ghost:hover{border-color:var(--color-accent);color:var(--color-accent)}
+:is(.dark,.deep,.mobile-bar) .btn-ghost{border-color:#4A423A;color:var(--color-on-primary)}
+:is(.dark,.deep,.mobile-bar) .btn-ghost:hover{border-color:var(--color-flourish);color:var(--color-flourish)}
+.btn-sm{padding:10px 18px;min-height:42px;font-size:.9rem}
+.btn-block{display:flex;width:100%}
+.btn-call{color:var(--color-flourish);text-decoration:none;font-weight:600;font-size:.92rem;
+  display:none;align-items:center;gap:8px;white-space:nowrap;padding:8px 4px}
+@media (min-width:900px){ .btn-call{display:inline-flex} }
+/* Adaptive header: over a light band the chrome turns light and the
+   wordmark shows in its true colours; over dark bands it stays dark
+   with the recoloured white mark. Toggled by the scroll-spy below. */
+.site-header{transition:background var(--d-2) var(--ease),border-color var(--d-2) var(--ease),color var(--d-2) var(--ease)}
+.brand-logo{transition:filter var(--d-2) var(--ease),opacity var(--d-2) var(--ease)}
+/* At the very top the bar is transparent over the page's cream ground,
+   so it wears the light-context colours: true bronze mark, dark links.
+   The first scroll solidifies it dark and turns the mark white.
+   The id out-specifies .on-light, which supplies the colours. */
+#site-header.at-top{background:transparent;border-bottom-color:transparent;backdrop-filter:none}
+.site-header.on-light{background:rgba(251,248,244,.95);border-bottom-color:var(--color-border);color:var(--color-foreground)}
+.site-header.on-light .brand-logo{filter:none}
+.site-header.on-light :is(.nav,.nav-rail) a{color:var(--color-foreground-mut)}
+.site-header.on-light :is(.nav,.nav-rail) a:hover{color:var(--color-foreground);background:#EFE8DC}
+.site-header.on-light :is(.nav,.nav-rail) a[aria-current="true"]{color:#fff;background:var(--color-accent);font-weight:600}
+.site-header.on-light :is(.btn-call,.brand-sub){color:var(--color-accent)}
+.site-header.on-light .nav-rail{border-top-color:var(--color-border)}
+.site-header.on-light .btn-primary{background:var(--color-accent);color:var(--color-on-accent)}
+.site-header.on-light .btn-primary:hover{background:var(--color-accent-dark)}
+.header-cta{display:none}
+@media (min-width:560px){ .header-cta{display:inline-flex} }
+
+/* ============================================================
+   MEDIA SLOTS — image fallback without JS
+   The slot is a ::before on the media block showing the expected
+   filename; the <img> sits above it at z-index:1 with
+   color:transparent. A missing file leaves a labelled slot rather
+   than a broken-image icon.
+   ============================================================ */
+.media{
+  position:relative;overflow:hidden;background:#EFE9E0;
+  isolation:isolate;
+}
+.media::before{
+  content:attr(data-slot);
+  position:absolute;inset:0;z-index:0;
+  display:flex;align-items:center;justify-content:center;
+  padding:12px;text-align:center;
+  font-family:var(--font-body);font-size:.72rem;font-weight:500;
+  letter-spacing:.04em;color:#6E6455;
+  background:repeating-linear-gradient(135deg,#EFE9E0 0 10px,#E6DED2 10px 20px);
+}
+.media img{
+  position:relative;z-index:1;
+  width:100%;height:100%;object-fit:cover;
+  color:transparent;font-size:0;
+}
+.media img::after{
+  content:"";position:absolute;left:0;top:0;width:48px;height:48px;
+  background:repeating-linear-gradient(135deg,#EFE9E0 0 10px,#E6DED2 10px 20px);
+}
+/* Once the file has decoded the slot has done its job. Left behind a PNG with
+   transparent corners it shows its stripes straight through the artwork. */
+.media.loaded{background:transparent}
+.media.loaded::before{display:none}
+
+.media-16x9{aspect-ratio:16/9}
+.media-4x3{aspect-ratio:4/3}
+.media-1x1{aspect-ratio:1/1}
+.media-4x5{aspect-ratio:4/5}
+/* a portrait already cropped to a circle brings its own frame; a border and a
+   fill behind it only fight the artwork */
+.media-bare{background:transparent;border:0}
+
+/* Team: the portrait sits beside the profile it belongs to, not stretched
+   across the whole band above it. */
+/* Geometric mesh ornament — the polygonal line motif from the
+   practice's own material, redrawn as gold hairlines. Two layers
+   drift against each other, slowly enough to read as stillness. */
+.geo{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.geo svg{position:absolute;opacity:.5}
+.geo svg:first-child{right:-140px;top:-80px;width:620px;height:620px}
+.geo svg:last-child{left:-180px;bottom:-120px;width:520px;height:520px;transform:rotate(180deg)}
+@media (max-width:767px){ .geo{opacity:.55} .geo svg:first-child{right:-260px} .geo svg:last-child{left:-300px} }
+@media (prefers-reduced-motion:no-preference){
+  .geo svg:first-child{animation:geo-drift 46s ease-in-out infinite alternate}
+  .geo svg:last-child{animation:geo-drift 58s ease-in-out infinite alternate-reverse}
+}
+@keyframes geo-drift{
+  from{transform:translate3d(0,0,0) rotate(0deg)}
+  to{transform:translate3d(-28px,20px,0) rotate(4deg)}
+}
+.geo+.wrap{position:relative;z-index:1}
+
+/* The doctor sits in the middle of the composition: portrait and
+   profile centre on each other and the pair centres in the wrap. */
+.team-grid{display:grid;gap:var(--s-4);align-items:center;justify-content:center}
+@media (min-width:900px){ .team-grid{grid-template-columns:minmax(0,340px) minmax(0,600px);gap:var(--s-6)} }
+.team-portrait{margin:0;max-width:340px;position:relative}
+@media (max-width:899px){ .team-portrait{max-width:250px;margin-inline:auto} }
+/* offset gold hairline — the quiet frame */
+.team-portrait::before{
+  content:"";position:absolute;inset:-10px;border:1px solid rgba(138,90,18,.35);
+  border-radius:var(--r-lg);pointer-events:none;
+}
+.team-portrait .media{border-radius:var(--r-md);box-shadow:0 24px 48px -28px rgba(23,20,15,.45)}
+.team-portrait figcaption{
+  text-align:center;margin-top:var(--s-1);
+  font-family:var(--font-head);font-weight:600;font-size:1rem;
+}
+.team-portrait figcaption>span:last-child{
+  display:block;font-family:var(--font-body);font-weight:400;font-size:.76rem;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent);margin-top:3px;
+}
+
+/* ============================================================
+   CARDS — image-on-top pattern
+   Media block and card body are SIBLINGS in a flex column: media
+   with top-only radius and no bottom border, body with bottom-only
+   radius. The image is never nested inside the card fighting its
+   padding.
+   ============================================================ */
+.card{display:flex;flex-direction:column;height:100%}
+.card .media{
+  border:1px solid var(--color-border);border-bottom:0;
+  border-radius:var(--r-md) var(--r-md) 0 0;
+}
+.card-body{
+  flex:1 1 auto;
+  background:var(--color-surface);
+  border:1px solid var(--color-border);border-top:0;
+  border-radius:0 0 var(--r-md) var(--r-md);
+  padding:var(--s-4) var(--s-3) calc(var(--s-4) + 4px);
+}
+.card-plain{
+  background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--r-md);padding:var(--s-4);height:100%;
+}
+/* A wider border on one card of a row shifts its content by that many
+   pixels and puts three headings on three different left edges.
+   An inset ring paints inside the box and moves nothing. */
+.is-featured{box-shadow:inset 0 0 0 1px var(--color-accent)}
+.grid{display:grid;gap:var(--s-3)}
+@media (min-width:640px){ .grid-2{grid-template-columns:repeat(2,1fr)} }
+@media (min-width:900px){ .grid-3{grid-template-columns:repeat(3,1fr)} .grid-4{grid-template-columns:repeat(4,1fr)} }
+@media (min-width:640px) and (max-width:899px){ .grid-4{grid-template-columns:repeat(2,1fr)} }
+
+/* — ticks — */
+.ticks{display:grid;gap:12px}
+.tick{display:flex;gap:12px;align-items:flex-start;line-height:1.5}
+.tick svg{flex:0 0 auto;margin-top:3px;color:var(--color-accent)}
+.dark .tick svg,.deep .tick svg,.form-card .tick svg{color:var(--color-flourish)}
+/* the chips are a separate band of proof, not a fourth tick — the gap
+   above them is what stops them reading as part of the list */
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:var(--s-4)}
+.chip{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:.8rem;font-weight:600;letter-spacing:.01em;
+  padding:7px 13px;border-radius:var(--r-pill);
+  border:1px solid var(--color-border);background:var(--color-surface);
+  color:var(--color-foreground-mut);
+}
+.dark .chip,.deep .chip{background:#1C1916;border-color:#332D26;color:var(--color-on-primary-mut)}
+.chip svg{color:var(--color-accent)}
+.dark .chip svg,.deep .chip svg{color:var(--color-flourish)}
+</style>
+<style>
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{
+  position:relative;isolation:isolate;
+  background:var(--color-primary-dark);color:var(--color-on-primary);
+  padding-top:var(--s-5);
+  padding-bottom:calc(var(--s-6) + 64px);
+}
+@media (min-width:768px){ .hero{padding-top:var(--s-6);padding-bottom:calc(var(--s-7) + 96px)} }
+.hero-grid{display:grid;gap:var(--s-4)}
+@media (min-width:1024px){
+  .hero-grid{grid-template-columns:minmax(0,1.05fr) minmax(380px,.95fr);gap:var(--s-5);align-items:start}
+}
+.hero h1{color:#fff;margin-bottom:var(--s-2)}
+.hero .lede{font-size:1.06rem;margin-bottom:var(--s-3)}
+
+/* Below the two-column break the copy stacks above the form on its own,
+   and a left edge with nothing beside it reads as unfinished. Centre the
+   whole column, and centre each wrapping group as a block while the rows
+   inside it keep their natural left alignment — a centred checklist whose
+   ticks and text still line up, not ragged centred lines. This is the
+   shared mobile treatment every funnel hero inherits. */
+@media (max-width:1023.98px){
+  .hero-copy{text-align:center}
+  .hero-copy .anchor-figure{align-items:center}
+  .hero-copy .ticks{width:fit-content;max-width:100%;margin-inline:auto;text-align:left}
+  /* on the stacked mobile hero the savings recap and trust chips are cut,
+     to keep the opening screen short — both still show on desktop, and the
+     turnaround figure still leads the column */
+  .hero-copy .af-save,
+  .hero-copy .chips{display:none}
+}
+/* anchor figure */
+/* centre, not baseline: the two small lines sit as one block, and the
+   big figure centres on it — baseline left line two hanging underneath */
+/* Three lines, no more: the figure, the finance note, then the savings.
+   The big number and "per month" share the first line on a baseline. */
+.anchor-figure{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin-bottom:var(--s-2)}
+.af-price{display:flex;align-items:baseline;gap:10px}
+.af-price b{
+  font-family:var(--font-head);font-weight:700;
+  font-size:clamp(2.4rem,9vw,3.6rem);line-height:1;
+  color:var(--cta-on-dark);letter-spacing:-.03em;
+}
+.af-per{font-size:.95rem;color:var(--color-on-primary-mut)}
+.af-fin{font-size:.95rem;color:var(--color-on-primary-mut)}
+/* the savings share one line — pill then the was/now, wrapping together */
+.af-save{display:flex;flex-flow:row wrap;align-items:center;gap:8px 12px}
+.save-pill{
+  align-self:flex-start;display:inline-flex;align-items:center;gap:6px;
+  background:var(--cta-on-dark);color:var(--cta-on-dark-text);
+  font-weight:700;font-size:.8rem;letter-spacing:.01em;
+  padding:5px 12px;border-radius:var(--r-pill);
+}
+.af-wasnow{font-size:.95rem;color:var(--color-on-primary-mut)}
+/* #BDB5A9 keeps 4.5:1 even over the scrim's worst case, a white video frame */
+.af-wasnow s{color:#BDB5A9;text-decoration-thickness:2px;margin-right:4px}
+.af-wasnow b{color:#fff;font-weight:700}
+
+/* ============================================================
+   P6 · QUALIFIER FORM — "Ink Atelier"
+   The card itself goes dark, glass rows, a static accent bloom
+   weighted to its base. No looping motion behind a form.
+   ============================================================ */
+.form-card{
+  position:relative;isolation:isolate;overflow:hidden;
+  background:linear-gradient(180deg,#1A1714 0%,#141210 100%);
+  border:1px solid #352E24;
+  border-radius:var(--r-lg);
+  padding:var(--s-3);
+  color:var(--color-on-primary);
+  box-shadow:0 40px 80px -50px rgba(0,0,0,.9);
+}
+@media (min-width:480px){ .form-card{padding:var(--s-4)} }
+.form-card::after{ /* static bloom, weighted to the base */
+  content:"";position:absolute;left:50%;bottom:-160px;translate:-50% 0;
+  width:min(120%,520px);height:280px;border-radius:50%;
+  background:radial-gradient(circle,rgba(140,193,232,.20) 0%,rgba(140,193,232,0) 70%);
+  pointer-events:none;z-index:-1;
+}
+.form-head{margin-bottom:var(--s-3)}
+.form-kicker{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--font-head);font-size:.7rem;font-weight:600;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--cta-on-dark);
+  margin-bottom:10px;
+}
+.form-card h2{font-size:clamp(1.25rem,4vw,1.6rem);color:#fff;margin-bottom:6px}
+.form-card .form-sub{font-size:.92rem;color:var(--color-on-primary-mut);margin:0}
+
+.steps-meter{display:flex;align-items:center;gap:10px;margin-bottom:var(--s-3)}
+.steps-meter .bar{flex:1 1 auto;height:4px;border-radius:var(--r-pill);background:#2C2620;overflow:hidden}
+.steps-meter .bar>i{
+  display:block;height:100%;width:33.333%;border-radius:inherit;
+  background:linear-gradient(90deg,var(--color-flourish),var(--cta-on-dark));
+  transition:width var(--d-2) var(--ease);
+}
+.steps-meter .count{
+  font-family:var(--font-head);font-size:.7rem;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--color-on-primary-mut);
+  white-space:nowrap;
+}
+
+.step[hidden]{display:none}
+.step-q{font-family:var(--font-head);font-size:1.06rem;font-weight:600;color:#fff;margin:0 0 var(--s-2);line-height:1.3}
+.opts{display:grid;gap:10px;margin-bottom:var(--s-3);border:0;padding:0}
+.opt{position:relative;display:block}
+.opt input{position:absolute;opacity:0;width:1px;height:1px}
+.opt span{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 16px;cursor:pointer;
+  background:rgba(255,255,255,.04);
+  border:1px solid #373026;border-radius:var(--r-md);
+  font-size:.95rem;line-height:1.4;
+  transition:background-color var(--d-1) var(--ease),border-color var(--d-1) var(--ease),transform var(--d-1) var(--ease);
+}
+.opt span::before{ /* the tick well */
+  content:"";flex:0 0 auto;width:22px;height:22px;border-radius:50%;
+  border:2px solid #574E40;
+  background:no-repeat center/12px 12px;
+  transition:border-color var(--d-1) var(--ease),background-color var(--d-1) var(--ease);
+}
+.opt:hover span{background:rgba(255,255,255,.07);border-color:#4C4335}
+.opt input:checked+span{
+  background:rgba(140,193,232,.12);border-color:var(--cta-on-dark);
+}
+.opt input:checked+span::before{
+  border-color:var(--cta-on-dark);background-color:var(--cta-on-dark);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%231A1205' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 8.5l3.6 3.6L13.5 4.7'/%3E%3C/svg%3E");
+}
+.opt input:focus-visible+span{outline:3px solid var(--cta-on-dark);outline-offset:3px}
+
+.field{margin-bottom:var(--s-2)}
+.field label{display:block;font-size:.82rem;font-weight:600;letter-spacing:.02em;color:var(--color-on-primary-mut);margin-bottom:6px}
+.field input{
+  width:100%;font:inherit;font-size:1rem;
+  padding:14px 15px;color:#fff;
+  background:rgba(255,255,255,.05);
+  border:1px solid #373026;border-radius:var(--r-md);
+  transition:border-color var(--d-1) var(--ease),background-color var(--d-1) var(--ease);
+}
+.field input::placeholder{color:#7E7365}
+.field input:hover{border-color:#4C4335}
+.field input:focus{outline:0;border-color:var(--cta-on-dark);background:rgba(255,255,255,.08);box-shadow:0 0 0 3px rgba(140,193,232,.25)}
+.field input[aria-invalid="true"]{border-color:var(--color-error-on-dark)}
+.err{
+  display:block;min-height:0;font-size:.82rem;font-weight:500;
+  color:var(--color-error-on-dark);margin-top:6px;
+}
+.err:empty{display:none}
+.field-row{display:grid;gap:var(--s-2)}
+@media (min-width:480px){ .field-row{grid-template-columns:1fr 1fr} }
+.hp{position:absolute!important;left:-9999px;width:1px;height:1px;overflow:hidden}
+.form-actions{display:flex;gap:10px;align-items:center;margin-top:var(--s-2)}
+.form-actions .btn-primary{flex:1 1 auto}
+.btn-back{
+  background:none;border:0;cursor:pointer;font:inherit;font-size:.88rem;font-weight:600;
+  color:var(--color-on-primary-mut);padding:12px 10px;border-radius:var(--r-sm);
+  display:inline-flex;align-items:center;gap:6px;
+}
+.btn-back:hover{color:#fff}
+.form-foot{
+  display:flex;align-items:flex-start;gap:8px;
+  font-size:.76rem;line-height:1.5;color:#9C9488;margin:var(--s-2) 0 0;
+}
+.form-foot svg{flex:0 0 auto;margin-top:2px;color:var(--color-flourish)}
+
+/* success state */
+.form-done[hidden]{display:none}
+.form-done{text-align:center;padding:var(--s-2) 0}
+.form-done h3{color:#fff;font-size:1.35rem}
+.tick-draw circle,.tick-draw path{
+  stroke-dasharray:var(--len,180);stroke-dashoffset:var(--len,180);
+}
+.tick-draw.go circle{animation:draw 700ms var(--ease) forwards}
+.tick-draw.go path{animation:draw 460ms var(--ease) 380ms forwards}
+@keyframes draw{ to{stroke-dashoffset:0} }
+</style>
+<style>
+/* ============================================================
+   TRUST STRIP / STATS
+   ============================================================ */
+/* The trust strip is one row of figures, not a full section — it reads as a
+   band between the hero and the problem cards, so it sits tighter than the
+   section default. The extra bottom is clearance for the cut overlay. */
+#trust{padding-top:var(--s-4);padding-bottom:calc(var(--s-3) + var(--cut-h))}
+@media (min-width:768px){ #trust{padding-top:var(--s-5);padding-bottom:calc(var(--s-4) + var(--cut-h))} }
+.stats{display:grid;gap:var(--s-3);text-align:center}
+@media (min-width:640px){ .stats{grid-template-columns:repeat(2,1fr)} }
+@media (min-width:900px){ .stats{grid-template-columns:repeat(4,1fr)} }
+.stat b{
+  display:block;font-family:var(--font-head);font-weight:700;
+  font-size:clamp(1.9rem,5vw,2.5rem);line-height:1.05;
+  color:var(--color-flourish);letter-spacing:-.02em;
+}
+.stat span{display:block;font-size:.9rem;color:var(--color-on-primary-mut);margin-top:6px}
+.stat+.stat{border-top:1px solid #262019;padding-top:var(--s-3)}
+@media (min-width:640px){ .stat+.stat{border-top:0;padding-top:0} }
+
+/* ============================================================
+   PRICING
+   ============================================================ */
+.price-card{position:relative;display:flex;flex-direction:column;height:100%;
+  background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--r-md);padding:var(--s-3)}
+.price-flag{
+  position:absolute;top:-13px;left:var(--s-3);
+  font-family:var(--font-head);font-size:.68rem;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;
+  background:var(--color-accent);color:var(--color-on-accent);
+  padding:6px 12px;border-radius:var(--r-pill);
+}
+.price-figure{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:var(--s-1) 0}
+.price-figure b{font-family:var(--font-head);font-weight:700;font-size:2.2rem;line-height:1;letter-spacing:-.025em}
+.price-figure s{color:var(--color-muted);font-size:1rem}
+.price-sub{font-size:.9rem;color:var(--color-foreground-mut);margin-bottom:var(--s-2)}
+.price-card ul{margin-bottom:var(--s-3)}
+.price-card .btn{margin-top:auto}
+
+/* ============================================================
+   P4 · BEFORE / AFTER — native range driving a clip
+   Keyboard-accessible by construction: no custom drag handling,
+   no ARIA to get wrong.
+   ============================================================ */
+.ba{position:relative;border-radius:var(--r-md);overflow:hidden;border:1px solid var(--color-border);
+  background:#EFE9E0;--pos:50%}
+.ba .layer{position:relative}
+.ba .after{position:absolute;inset:0;clip-path:inset(0 0 0 var(--pos))}
+.ba .tag{
+  position:absolute;top:10px;z-index:3;
+  font-family:var(--font-head);font-size:.66rem;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;padding:5px 10px;border-radius:var(--r-pill);
+  background:rgba(10,10,10,.78);color:#fff;
+}
+.ba .tag.l{left:10px} .ba .tag.r{right:10px}
+.ba .seam{position:absolute;top:0;bottom:0;left:var(--pos);width:2px;background:#fff;z-index:3;
+  transform:translateX(-1px);box-shadow:0 0 0 1px rgba(0,0,0,.25);pointer-events:none}
+.ba input[type=range]{
+  position:absolute;inset:auto 0 0 0;z-index:4;
+  width:100%;margin:0;height:56px;background:transparent;
+  -webkit-appearance:none;appearance:none;cursor:ew-resize;
+}
+.ba input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;width:40px;height:40px;border-radius:50%;
+  background:#fff;border:2px solid var(--color-accent);
+  box-shadow:0 4px 14px rgba(0,0,0,.35);cursor:ew-resize;
+}
+.ba input[type=range]::-moz-range-thumb{
+  width:40px;height:40px;border-radius:50%;background:#fff;
+  border:2px solid var(--color-accent);box-shadow:0 4px 14px rgba(0,0,0,.35);cursor:ew-resize;
+}
+.ba input[type=range]::-webkit-slider-runnable-track{background:transparent}
+.ba input[type=range]:focus-visible{outline:3px solid var(--color-accent);outline-offset:-3px}
+.ba-caption{font-size:.88rem;color:var(--color-foreground-mut);margin-top:10px}
+
+/* ============================================================
+   P5 · REVIEWS — three-column vertical marquee
+   ============================================================ */
+.reviews-cols{display:grid;gap:12px;grid-template-columns:1fr;
+  height:560px;overflow:hidden;position:relative;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 90px,#000 calc(100% - 90px),transparent 100%);
+          mask-image:linear-gradient(180deg,transparent 0,#000 90px,#000 calc(100% - 90px),transparent 100%);
+}
+@media (min-width:700px){ .reviews-cols{grid-template-columns:repeat(2,1fr)} }
+@media (min-width:1000px){ .reviews-cols{grid-template-columns:repeat(3,1fr);height:620px} }
+.rev-col{overflow:hidden}
+.rev-track{display:grid;gap:12px;will-change:transform}
+.rev-col:nth-child(1) .rev-track{animation:mq-down 46s linear infinite}
+.rev-col:nth-child(2) .rev-track{animation:mq-up 54s linear infinite}
+.rev-col:nth-child(3) .rev-track{animation:mq-down 62s linear infinite}
+.reviews-cols:hover .rev-track{animation-play-state:paused}
+@keyframes mq-up{ from{transform:translate3d(0,0,0)} to{transform:translate3d(0,-50%,0)} }
+@keyframes mq-down{ from{transform:translate3d(0,-50%,0)} to{transform:translate3d(0,0,0)} }
+/* Dark cards on the light band — the inversion is what makes the
+   wall read as a feature rather than furniture. Every pair below is
+   proven by the contrast harness: mut 10.36:1, name 17.9:1. */
+.rev{background:var(--color-primary);border:1px solid #262019;
+  border-radius:var(--r-md);padding:var(--s-3)}
+.rev .stars{display:flex;gap:2px;color:var(--color-star-on-dark);margin-bottom:10px}
+.rev p{font-size:.95rem;margin-bottom:12px;color:var(--color-on-primary-mut)}
+.rev cite{font-style:normal;font-size:.85rem;font-weight:600;color:#fff}
+.rev cite span{display:block;font-weight:400;color:#9C948A;font-size:.8rem}
+
+/* ============================================================
+   JOURNEY
+   ============================================================ */
+.journey{display:grid;gap:var(--s-4);counter-reset:step}
+@media (min-width:900px){ .journey{grid-template-columns:repeat(3,1fr);gap:var(--s-3)} }
+.jstep{position:relative;padding-top:var(--s-1)}
+.jstep .num{
+  display:flex;align-items:center;justify-content:center;
+  width:56px;height:56px;border-radius:50%;
+  font-family:var(--font-head);font-weight:700;font-size:1.3rem;
+  background:var(--color-primary);color:var(--cta-on-dark);
+  margin-bottom:var(--s-2);position:relative;z-index:2;
+}
+@media (min-width:900px){
+  .jstep::after{
+    content:"";position:absolute;top:28px;left:56px;right:-12px;height:2px;
+    background:repeating-linear-gradient(90deg,var(--color-border-strong) 0 7px,transparent 7px 14px);
+    z-index:1;
+  }
+  .jstep:last-child::after{display:none}
+}
+
+/* ============================================================
+   TEAM
+   ============================================================ */
+/* No box — the profile floats on the band, held by the quote rule. */
+.profile{background:transparent;border:0;border-radius:0;padding:0}
+.profile blockquote{margin:0 0 var(--s-2);padding-left:var(--s-2);
+  border-left:3px solid var(--color-flourish);font-size:1.12rem;line-height:1.6}
+.profile .role{font-size:.85rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--color-accent);margin-bottom:4px}
+
+/* ============================================================
+   FAQ
+   ============================================================ */
+.faq{border-top:1px solid var(--color-border)}
+.faq-item{border-bottom:1px solid var(--color-border)}
+.faq-q{
+  width:100%;display:flex;align-items:flex-start;gap:var(--s-2);justify-content:space-between;
+  font:inherit;font-family:var(--font-head);font-weight:600;font-size:1.02rem;line-height:1.4;
+  text-align:left;cursor:pointer;background:none;border:0;color:inherit;
+  padding:var(--s-3) 4px;
+}
+.faq-q:hover{color:var(--color-accent)}
+.faq-q .ico{flex:0 0 auto;margin-top:2px;transition:transform var(--d-1) var(--ease);color:var(--color-accent)}
+.faq-q[aria-expanded="true"] .ico{transform:rotate(45deg)}
+.faq-a{overflow:hidden;display:grid;grid-template-rows:0fr;transition:grid-template-rows var(--d-2) var(--ease-soft)}
+.faq-q[aria-expanded="true"]+.faq-a{grid-template-rows:1fr}
+.faq-a>div{min-height:0}
+.faq-a p{padding:0 4px var(--s-3);margin:0;color:var(--color-foreground-mut)}
+
+/* ============================================================
+   FOOTER + STICKY MOBILE BAR
+   ============================================================ */
+.site-footer{background:var(--color-primary-dark);color:#9C9488;
+  padding-block:var(--s-5);padding-bottom:calc(var(--s-5) + 84px);font-size:.86rem}
+@media (min-width:768px){ .site-footer{padding-bottom:var(--s-5)} }
+.site-footer h4{font-family:var(--font-head);color:#fff;font-size:.95rem;margin-bottom:10px}
+.site-footer a{color:var(--color-flourish)}
+.footer-grid{display:grid;gap:var(--s-4)}
+@media (min-width:768px){ .footer-grid{grid-template-columns:1.4fr 1fr 1fr} }
+.legal{border-top:1px solid #221E19;margin-top:var(--s-4);padding-top:var(--s-3);font-size:.78rem;line-height:1.6;color:#8A8377}
+
+.mobile-bar{
+  position:fixed;left:0;right:0;bottom:0;z-index:70;
+  display:flex;gap:10px;align-items:center;
+  padding:10px var(--s-2);
+  padding-bottom:calc(10px + env(safe-area-inset-bottom));
+  background:rgba(10,10,10,.96);backdrop-filter:blur(10px);
+  border-top:1px solid #2C2620;
+  transform:translateY(110%);
+  transition:transform var(--d-2) var(--ease);
+}
+.mobile-bar.on{transform:translateY(0)}
+.mobile-bar .btn{flex:1 1 auto;padding:13px 14px;min-height:48px;font-size:.94rem}
+@media (min-width:768px){ .mobile-bar{display:none} }
+
+
+/* ============================================================
+   PRACTICE GALLERY — continuous marquee, the horizontal twin of
+   the reviews columns. The track holds two identical sets, so a
+   -50% translate loops seamlessly; hover pauses it. With reduced
+   motion the same track is a plain scrollable, snappable rail.
+   ============================================================ */
+.gallery{
+  overflow-x:auto;overflow-y:hidden;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  padding-block:4px;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 40px,#000 calc(100% - 40px),transparent 100%);
+          mask-image:linear-gradient(90deg,transparent 0,#000 40px,#000 calc(100% - 40px),transparent 100%);
+}
+.gallery::-webkit-scrollbar{display:none}
+.gallery:focus-visible{outline:3px solid var(--cta-on-dark);outline-offset:4px}
+/* Gap lives on the items, not the track: the loop point then sits
+   exactly at -50% of the track, with no half-gap jump. */
+.gallery-track{display:flex;width:max-content;min-width:100%;margin:0;padding-inline:var(--s-2)}
+.gallery-item{flex:0 0 auto;width:min(78vw,400px);margin:0 var(--s-2) 0 0;scroll-snap-align:center}
+.gallery-item .media{
+  border-radius:var(--r-md);border:1px solid #2C2620;
+}
+@media (prefers-reduced-motion:no-preference){
+  .gallery{overflow-x:hidden}
+  .gallery-track.dup{padding-inline:0;animation:gal-slide 70s linear infinite}
+  .gallery:hover .gallery-track{animation-play-state:paused}
+}
+@keyframes gal-slide{
+  from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(-50%,0,0)}
+}
+
+
+/* ============================================================
+   PHOTOGRAPHIC SECTION BAND
+   A still behind a dark section. The scrim carries the same .82
+   alpha floor the video band uses, which tests/contrast.spec.mjs
+   proves against the worst frame a photograph can present.
+   ============================================================ */
+.section-photo{position:relative;isolation:isolate}
+.section-photo>.photo-bg{
+  position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;
+  background-size:cover;background-position:center 38%;
+}
+.section-photo>.photo-bg::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,
+    rgba(18,18,18,.90) 0%,
+    rgba(18,18,18,.86) 42%,
+    rgba(18,18,18,.94) 100%);
+}
+@media (max-width:767px){
+  .section-photo>.photo-bg{background-position:center}
+  .section-photo>.photo-bg::after{background:rgba(18,18,18,.93)}
+}
+
+/* ============================================================
+   BACKGROUND VIDEO
+   Placed on the closing band, never the hero: the hero holds the
+   qualifier, and looping motion does not belong behind a form.
+
+   Resting state is the poster frame — `autoplay` is deliberately
+   NOT in the markup, so with JS off, on reduced motion, or on a
+   save-data connection the band is a still image rather than a
+   broken black box. JS only decides when to start.
+   ============================================================ */
+
+
+/* ============================================================
+   PHOTO-BACKED CALLOUT
+   The image is a background, so the scrim has to carry the text
+   on its own: the panel colour is painted at .93 over the photo,
+   which is what keeps the measured contrast honest when nobody
+   has seen the picture. Same reasoning as the video band.
+   ============================================================ */
+.card-photo{position:relative;isolation:isolate;overflow:hidden;color:var(--color-on-primary)}
+.card-photo>.card-photo-bg{
+  position:absolute;inset:0;z-index:-1;
+  background-size:cover;background-position:center;
+}
+.card-photo>.card-photo-bg::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(18,18,18,.93) 0%,rgba(18,18,18,.96) 100%);
+}
+.card-photo h3{color:#fff}
+.card-photo p{color:var(--color-on-primary-mut)}
+
+/* ============================================================
+   PHOTOGRAPHIC SECTION BAND
+   A still behind a dark section. The scrim carries the same .82
+   alpha floor the video band uses, which tests/contrast.spec.mjs
+   proves against the worst frame a photograph can present.
+   ============================================================ */
+.section-photo{position:relative;isolation:isolate}
+.section-photo>.photo-bg{
+  position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;
+  background-size:cover;background-position:center 38%;
+}
+.section-photo>.photo-bg::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,
+    rgba(18,18,18,.90) 0%,
+    rgba(18,18,18,.86) 42%,
+    rgba(18,18,18,.94) 100%);
+}
+@media (max-width:767px){
+  .section-photo>.photo-bg{background-position:center}
+  .section-photo>.photo-bg::after{background:rgba(18,18,18,.93)}
+}
+
+/* ============================================================
+   BACKGROUND VIDEO
+   Behind the hero. The scrim's alpha floor is what makes this safe
+   over a form: the qualifier card carries its own solid background,
+   and every colour painted directly on the band is proven against a
+   full-white frame in tests/contrast.spec.mjs.
+
+   The band renders correctly with no video at all — scrim over the
+   flat band colour. Set data-video on it and JS builds the element;
+   until then nothing is requested and nothing is broken.
+   ============================================================ */
+.bg-video{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:-1}
+.bg-video video{width:100%;height:100%;object-fit:cover;display:block}
+/* The alpha floor is load-bearing, not taste: against the worst case the
+   footage can present — a full white frame — .82 is what keeps the muted
+   label at 4.5:1. Verified in tests/contrast.spec.mjs, which reads these
+   alphas back out of the computed style. */
+.bg-video::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,
+    rgba(18,18,18,.82) 0%,
+    rgba(18,18,18,.88) 45%,
+    rgba(18,18,18,.96) 100%);
+}
+@media (max-width:767px){
+  /* the four figures stack here, so the type covers the whole frame */
+  .bg-video::after{background:rgba(18,18,18,.93)}
+}
+
+/* ============================================================
+   P8 · MOTION — one pattern per section, never two
+   Every animated element has a defined resting state, so nothing
+   depends on JS to look right — only to know when to start.
+   ============================================================ */
+[data-anim]{--i:0}
+
+/* C1 cascade left-to-right — problem cards */
+[data-anim="cascade"] > *{opacity:0;transform:translateY(28px);
+  transition:opacity var(--d-2) var(--ease) calc(var(--i)*110ms),transform var(--d-2) var(--ease) calc(var(--i)*110ms)}
+[data-anim="cascade"].in > *{opacity:1;transform:none}
+
+/* C2 centre-out — pricing */
+[data-anim="centre-out"] > *{opacity:0;transform:translateY(26px) scale(.985);
+  transition:opacity var(--d-2) var(--ease) calc(var(--i)*130ms),transform var(--d-2) var(--ease) calc(var(--i)*130ms)}
+[data-anim="centre-out"].in > *{opacity:1;transform:none}
+
+/* M3 clip sweep — before/after */
+[data-anim="clip-sweep"] > *{clip-path:inset(0 100% 0 0);
+  transition:clip-path var(--d-3) var(--ease) calc(var(--i)*140ms)}
+[data-anim="clip-sweep"].in > *{clip-path:inset(0 0 0 0)}
+
+/* S3 rule draws first — reassurance */
+[data-anim="rule-first"] .rule{transform:scaleX(0);transform-origin:0 50%;
+  transition:transform var(--d-3) var(--ease)}
+[data-anim="rule-first"] .rule-body{opacity:0;transform:translateY(16px);
+  transition:opacity var(--d-2) var(--ease) 320ms,transform var(--d-2) var(--ease) 320ms}
+[data-anim="rule-first"].in .rule{transform:scaleX(1)}
+[data-anim="rule-first"].in .rule-body{opacity:1;transform:none}
+
+/* U2 tick draw — journey.
+   Three beats per step, offset by --i so the row reads left to right as a
+   journey: the step rises, its number lands, then the connector draws on
+   towards the next one. */
+[data-anim="step-draw"] .jstep{opacity:0;transform:translateY(20px);
+  transition:opacity var(--d-2) var(--ease) calc(var(--i)*220ms),
+             transform var(--d-2) var(--ease) calc(var(--i)*220ms)}
+[data-anim="step-draw"].in .jstep{opacity:1;transform:none}
+
+[data-anim="step-draw"] .jstep .num{
+  transform:scale(.5);opacity:0;
+  transition:transform var(--d-2) var(--ease) calc(var(--i)*220ms + 90ms),
+             opacity var(--d-1) var(--ease) calc(var(--i)*220ms + 90ms)}
+[data-anim="step-draw"].in .jstep .num{transform:scale(1);opacity:1}
+
+/* the connector is drawn, not faded — it is the line of travel */
+[data-anim="step-draw"] .jstep::after{
+  transform:scaleX(0);transform-origin:0 50%;
+  transition:transform var(--d-3) var(--ease) calc(var(--i)*220ms + 300ms)}
+[data-anim="step-draw"].in .jstep::after{transform:scaleX(1)}
+
+/* M2 zoom settle from 114% — team */
+[data-anim="zoom-settle"] .media img,[data-anim="zoom-settle"] .media::before{
+  transform:scale(1.14);transition:transform 900ms var(--ease)}
+[data-anim="zoom-settle"].in .media img,[data-anim="zoom-settle"].in .media::before{transform:scale(1)}
+
+/* C5 mask rise in place — what's included */
+[data-anim="mask-rise"] > *{clip-path:inset(100% 0 0 0);transform:translateY(14px);
+  transition:clip-path var(--d-3) var(--ease) calc(var(--i)*90ms),transform var(--d-3) var(--ease) calc(var(--i)*90ms)}
+[data-anim="mask-rise"].in > *{clip-path:inset(0 0 0 0);transform:none}
+
+/* S4 settle from 97% — FAQ */
+[data-anim="settle"] > *{opacity:0;transform:scale(.97);
+  transition:opacity var(--d-2) var(--ease),transform var(--d-2) var(--ease)}
+[data-anim="settle"].in > *{opacity:1;transform:none}
+
+/* M1 colour curtain — final CTA */
+[data-anim="curtain"]{position:relative}
+[data-anim="curtain"]::after{
+  content:"";position:absolute;inset:0;z-index:5;pointer-events:none;
+  background:var(--color-accent);transform-origin:100% 50%;transform:scaleX(1);
+  transition:transform var(--d-3) var(--ease);
+}
+[data-anim="curtain"].in::after{transform:scaleX(0)}
+
+/* H2 word rise — headlines, masks built from live text at runtime */
+.wordmask{display:inline-block;overflow:hidden;vertical-align:bottom;
+  padding-bottom:.14em;margin-bottom:-.14em}
+.wordmask>i{display:inline-block;font-style:inherit;transform:translateY(110%);
+  transition:transform var(--d-3) var(--ease) calc(var(--w)*46ms)}
+.in .wordmask>i,.wordmask.in>i{transform:translateY(0)}
+
+/* I1 hover lift */
+.lift{transition:transform var(--d-1) var(--ease),box-shadow var(--d-1) var(--ease)}
+.lift:hover{transform:translateY(-3px);box-shadow:0 18px 40px -30px rgba(23,20,15,.38)}
+
+/* Reduced motion: FINISHED state, never a faster animation. */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .drift{display:none}
+  [data-anim] > *,[data-anim] .jstep{opacity:1!important;transform:none!important;clip-path:none!important}
+  [data-anim="curtain"]::after{display:none}
+  [data-anim="step-draw"] .jstep .num,
+  [data-anim="step-draw"] .jstep::after{transform:none!important;opacity:1!important}
+  [data-anim="zoom-settle"] .media img{transform:none!important}
+  .wordmask>i{transform:none!important}
+  .tick-draw circle,.tick-draw path{stroke-dashoffset:0!important}
+  .rev-track{animation:none!important}
+  .mobile-bar{transition:none}
+}
+/* ============================================================
+   SELECT DIGITAL DENTAL LAB — page-specific pieces
+   ============================================================ */
+.brand-mark{color:var(--color-flourish)}
+.site-header.on-light .brand-mark{color:var(--color-accent)}
+/* the trust figures are words, not numbers, so they sit a size down */
+.stat b{font-size:clamp(1.55rem,3.2vw,2.1rem)}
+.icon-well{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:48px;height:48px;border-radius:var(--r-md);margin-bottom:var(--s-2);
+  background:#E8F1F8;color:var(--color-accent);
+}
+.card-plain p:last-child{margin-bottom:0}
+.section-close{
+  text-align:center;margin:var(--s-5) auto 0;max-width:40ch;
+  font-family:var(--font-head);font-weight:600;font-size:clamp(1.15rem,2.6vw,1.45rem);line-height:1.35;
+  color:var(--color-accent);text-wrap:balance;
+}
+.rep-grid{display:grid;gap:var(--s-4);align-items:start}
+@media (min-width:900px){ .rep-grid{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:var(--s-6)} }
+.rep-grid h2{margin:0}
+.final-ticks{width:fit-content;max-width:100%;margin:var(--s-3) auto var(--s-4);text-align:left}
+</style>
+</head>
+<body>
+
+<a class="sr-only" href="#main">Skip to content</a>
+
+<!-- ========================================================
+     1 · STICKY HEADER — nav, CTA, progress bar
+     ======================================================== -->
+<header class="site-header" id="site-header">
+  <div class="wrap">
+    <div class="header-row">
+      <a class="brand" href="#main" aria-label="Select Digital Dental Lab — home">
+        <!-- Drop the real logo in at assets/img/logo.png (transparent PNG, ~504×124).
+             Until it exists, the inline lockup below stands in. -->
+        <img class="brand-logo" src="assets/img/logo.png"
+             width="504" height="124" alt="Select Digital Dental Lab" data-fallback="inline-lockup">
+        <span class="brand-fallback">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="brand-mark">
+            <path d="M12 21c-1.3 0-1.8-2-2.3-4.2C9.2 14.6 8.6 13 7.4 13c-1 0-1.6 1-2.1 1-.7 0-1.3-1.4-1.3-3.6C4 6.3 6.2 3.5 9 3.5c1.4 0 2.2.7 3 .7s1.6-.7 3-.7c2.8 0 5 2.8 5 6.9 0 2.2-.6 3.6-1.3 3.6-.5 0-1.1-1-2.1-1-1.2 0-1.8 1.6-2.3 3.8C13.8 19 13.3 21 12 21Z"/>
+          </svg>
+          <span class="brand-name">Select Digital Dental Lab
+            <span class="brand-sub">Built by dentists, for dentists</span>
+          </span>
+        </span>
+      </a>
+
+      <nav class="nav" aria-label="Section navigation">
+        <ul>
+          <li><a href="#problem">Sound familiar?</a></li>
+          <li><a href="#digital">Why digital</a></li>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#services">What we make</a></li>
+          <li><a href="#faq">FAQs</a></li>
+        </ul>
+      </nav>
+
+      <span class="header-spacer"></span>
+
+      <a class="btn btn-primary btn-sm header-cta" href="#qualifier-card">See if we&rsquo;re a fit</a>
+    </div>
+  </div>
+
+  <nav class="nav-rail" aria-label="Section navigation, compact">
+    <ul>
+      <li><a href="#problem">Sound familiar?</a></li>
+      <li><a href="#digital">Why digital</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#services">What we make</a></li>
+      <li><a href="#faq">FAQs</a></li>
+    </ul>
+  </nav>
+
+  <!-- painted over the header's own bottom border, so it costs no height -->
+  <div class="progress" id="progress" aria-hidden="true"></div>
+</header>
+
+<main id="main">
+
+<!-- ========================================================
+     2 · HERO — the ad's promise, with the practice qualifier.
+     Motion: H2 word rise (headline only).
+     ======================================================== -->
+<section class="hero" id="enquiry">
+  <!-- Optional background video: hosted .mp4 in data-video. Empty = flat dark band. -->
+  <div class="bg-video" aria-hidden="true" data-video=""></div>
+  <div class="drift" aria-hidden="true"><b></b><b></b></div>
+  <div class="wrap">
+    <div class="hero-grid">
+
+      <div class="hero-copy">
+        <p class="eyebrow">Dentist-led digital dental lab · Private practices only</p>
+
+        <h1 data-words>The Dental Lab Built by Dentists, for Dentists</h1>
+
+        <p class="lede">Crowns, bridges, veneers and dentures made on a fully digital workflow &mdash;
+        and checked by a dentist before they&rsquo;re approved. Predictable contacts. Predictable occlusion.
+        A margin you can actually rely&nbsp;on.</p>
+
+        <div class="anchor-figure">
+          <div class="af-price"><b>10</b><span class="af-per">working&nbsp;day turnaround</span></div>
+          <div class="af-fin">A timeline you can plan your diary&nbsp;around</div>
+        </div>
+
+        <ul class="ticks" aria-label="How Select Digital Dental Lab works">
+          <li class="tick"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 6.9"/></svg>
+            <span>Every case checked by a dentist <span class="nb">before approval</span></span></li>
+          <li class="tick"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 6.9"/></svg>
+            <span>Fully digital, from your scan to the <span class="nb">finished restoration</span></span></li>
+          <li class="tick"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 6.9"/></svg>
+            <span>Private practices only. Premium materials&nbsp;only.</span></li>
+        </ul>
+
+        <div class="chips">
+          <span class="chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6.5v5.2c0 5 3.4 8.6 8 9.8 4.6-1.2 8-4.8 8-9.8V6.5Z"/><path d="M9 12.2l2.1 2.1L15.4 10"/></svg> Dentist-checked</span>
+          <span class="chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg> Fully digital</span>
+          <span class="chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8 12 3 3 8v8l9 5 9-5Z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg> 10&nbsp;working&nbsp;days</span>
+        </div>
+
+      </div>
+
+      <!-- P6 · three-step practice qualifier -->
+      <div class="form-card" id="qualifier-card">
+        <div class="form-head">
+          <p class="form-kicker">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg>
+            Limited number of partner practices
+          </p>
+          <h2>See if we&rsquo;re the right fit for your practice</h2>
+          <p class="form-sub">Two quick questions, then your details. Takes about 30&nbsp;seconds, with no&nbsp;obligation.</p>
+        </div>
+
+        <div class="steps-meter" id="meter">
+          <div class="bar"><i id="meter-fill"></i></div>
+          <span class="count" id="meter-count">Step 1 of 3</span>
+        </div>
+
+        <form id="qualifier" novalidate>
+          <!-- ── Step 1 ── -->
+          <div class="step" data-step="1">
+            <fieldset class="opts">
+              <legend class="step-q">Which best describes your&nbsp;practice?</legend>
+              <label class="opt"><input type="radio" name="practiceType" value="Fully private practice" required>
+                <span>Fully private practice</span></label>
+              <label class="opt"><input type="radio" name="practiceType" value="Mixed practice, mostly private">
+                <span>Mixed practice, mostly private</span></label>
+              <label class="opt"><input type="radio" name="practiceType" value="Mixed practice, mostly NHS">
+                <span>Mixed practice, mostly NHS</span></label>
+              <label class="opt"><input type="radio" name="practiceType" value="Opening a new practice">
+                <span>I&rsquo;m opening a new practice</span></label>
+            </fieldset>
+            <p class="err" id="err-practiceType" role="alert"></p>
+            <div class="form-actions">
+              <button type="button" class="btn btn-primary" data-next>Continue
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12.5 5.5 19 12l-6.5 6.5"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- ── Step 2 ── -->
+          <div class="step" data-step="2" hidden>
+            <fieldset class="opts">
+              <legend class="step-q">What&rsquo;s the biggest frustration with your current&nbsp;lab?</legend>
+              <label class="opt"><input type="radio" name="frustration" value="Fit - crowns not seating first time" required>
+                <span>Fit &mdash; restorations not seating first time</span></label>
+              <label class="opt"><input type="radio" name="frustration" value="Remakes and lost chair time">
+                <span>Remakes and lost chair time</span></label>
+              <label class="opt"><input type="radio" name="frustration" value="Communication - they don't get what I'm asking for">
+                <span>They don&rsquo;t understand what I&rsquo;m asking&nbsp;for</span></label>
+              <label class="opt"><input type="radio" name="frustration" value="Late cases and chasing">
+                <span>Late cases and chasing them up</span></label>
+            </fieldset>
+            <p class="err" id="err-frustration" role="alert"></p>
+            <div class="form-actions">
+              <button type="button" class="btn-back" data-back>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H6M11.5 5.5 5 12l6.5 6.5"/></svg> Back</button>
+              <button type="button" class="btn btn-primary" data-next>Continue
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12.5 5.5 19 12l-6.5 6.5"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- ── Step 3 ── -->
+          <div class="step" data-step="3" hidden>
+            <p class="step-q">Where should we get in touch?</p>
+            <div class="field-row">
+              <div class="field">
+                <label for="f-first">First name</label>
+                <input id="f-first" name="firstName" type="text" autocomplete="given-name" placeholder="Jane" required>
+                <span class="err" id="err-firstName" role="alert"></span>
+              </div>
+              <div class="field">
+                <label for="f-last">Surname</label>
+                <input id="f-last" name="lastName" type="text" autocomplete="family-name" placeholder="Smith" required>
+                <span class="err" id="err-lastName" role="alert"></span>
+              </div>
+            </div>
+            <div class="field">
+              <label for="f-practice">Practice name</label>
+              <input id="f-practice" name="practiceName" type="text" autocomplete="organization" placeholder="Smith Dental Care" required>
+              <span class="err" id="err-practiceName" role="alert"></span>
+            </div>
+            <div class="field">
+              <label for="f-phone">Phone</label>
+              <input id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="07700 900123" required>
+              <span class="err" id="err-phone" role="alert"></span>
+            </div>
+            <div class="field">
+              <label for="f-email">Email</label>
+              <input id="f-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="jane@smithdental.co.uk" required>
+              <span class="err" id="err-email" role="alert"></span>
+            </div>
+            <div class="hp" aria-hidden="true">
+              <label for="f-company">Company</label>
+              <input id="f-company" name="company" type="text" tabindex="-1" autocomplete="off">
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn-back" data-back>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H6M11.5 5.5 5 12l6.5 6.5"/></svg> Back</button>
+              <button type="submit" class="btn btn-primary">See if we&rsquo;re a fit</button>
+            </div>
+            <p class="form-foot">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>
+              We use your details only to talk to you about working together. No obligation, and you can ask us to delete them at any time.
+            </p>
+          </div>
+        </form>
+
+        <!-- success state -->
+        <div class="form-done" id="form-done" hidden tabindex="-1">
+          <svg class="tick-draw" id="done-tick" width="72" height="72" viewBox="0 0 72 72" fill="none" stroke="#8CC1E8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin:0 auto var(--s-2)">
+            <circle cx="36" cy="36" r="31" style="--len:195"/>
+            <path d="M22 37.5l10 10 19-21" style="--len:46"/>
+          </svg>
+          <h3>Thanks &mdash; we&rsquo;ve got your details</h3>
+          <p class="form-sub">We&rsquo;ll be in touch shortly to talk through your cases and how we work.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- cut into the dark trust strip -->
+  <div class="cut to-dark" aria-hidden="true">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none" role="presentation" focusable="false">
+      <path class="l1" d="M0,64 C240,110 480,18 720,44 C960,70 1200,116 1440,80 L1440,120 L0,120 Z"/>
+      <path class="l2" d="M0,78 C260,116 500,40 720,62 C940,84 1200,120 1440,94 L1440,120 L0,120 Z"/>
+      <path class="l3" d="M0,92 C280,120 520,58 720,80 C920,102 1220,124 1440,104 L1440,120 L0,120 Z"/>
+      <path class="l4" d="M0,106 C300,124 540,80 720,96 C900,112 1240,126 1440,114 L1440,120 L0,120 Z"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ========================================================
+     3 · TRUST STRIP — dark band.
+     ======================================================== -->
+<section class="section dark has-cut" id="trust" aria-labelledby="trust-h">
+  <div class="wrap">
+    <h2 id="trust-h" class="sr-only">Why private practices choose Select Digital Dental Lab</h2>
+    <ul class="stats">
+      <li class="stat"><b>Dentist-led</b><span>Built by dentists, for&nbsp;dentists</span></li>
+      <li class="stat"><b>Every case</b><span>Checked by a dentist before&nbsp;approval</span></li>
+      <li class="stat"><b>100% digital</b><span>From your scan to the finished&nbsp;restoration</span></li>
+      <li class="stat"><b>10 days</b><span>Working day turnaround, every&nbsp;case</span></li>
+    </ul>
+  </div>
+  <div class="cut to-bg" aria-hidden="true">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none" role="presentation" focusable="false">
+      <path class="l1" d="M0,52 L1440,96 L1440,120 L0,120 Z"/>
+      <path class="l2" d="M0,70 L1440,104 L1440,120 L0,120 Z"/>
+      <path class="l3" d="M0,88 L1440,110 L1440,120 L0,120 Z"/>
+      <path class="l4" d="M0,104 L1440,116 L1440,120 L0,120 Z"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ========================================================
+     4 · PROBLEM — "The Remake Cycle". Motion: C1 cascade.
+     ======================================================== -->
+<section class="section" id="problem" aria-labelledby="problem-h">
+  <div class="wrap">
+    <div class="section-head centre">
+      <p class="eyebrow">Sound familiar?</p>
+      <h2 id="problem-h">The remake isn&rsquo;t the worst part. It&rsquo;s the patient sat in your chair while you&nbsp;apologise.</h2>
+      <p class="lede" style="margin-inline:auto">A crown comes back. You go to seat it &mdash; and the margin&rsquo;s open.
+      Now you&rsquo;re improvising, in front of a patient who trusted you. Another impression. Reschedule them.
+      Lose the chair time. And you still paid for the crown that didn&rsquo;t&nbsp;fit.</p>
+    </div>
+
+    <div class="grid grid-3" data-anim="cascade">
+      <article class="card-plain lift">
+        <span class="icon-well" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v6h6"/></svg></span>
+        <h3>Paying twice for one crown</h3>
+        <p>The remake costs more than the lab fee. It&rsquo;s another appointment, lost chair time and a conversation
+        you shouldn&rsquo;t have needed to&nbsp;have.</p>
+      </article>
+
+      <article class="card-plain lift">
+        <span class="icon-well" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/><path d="M8 9h8M8 13h5"/></svg></span>
+        <h3>Translating dentistry to your own&nbsp;lab</h3>
+        <p>The occlusion. The emergence profile. Why that contact matters. You explain it clearly &mdash; and it comes back
+        wrong&nbsp;anyway.</p>
+      </article>
+
+      <article class="card-plain lift">
+        <span class="icon-well" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.4 2"/></svg></span>
+        <h3>Chasing a case that&rsquo;s already&nbsp;late</h3>
+        <p>The patient is booked, the case isn&rsquo;t back, and you&rsquo;re on the phone to the lab instead of doing
+        the dentistry.</p>
+      </article>
+    </div>
+
+    <p class="section-close">That&rsquo;s the cycle Select Digital Dental Lab was built to&nbsp;end.</p>
+  </div>
+</section>
+
+<!-- ========================================================
+     5 · WHY DIGITAL — dark band, the core mechanism.
+     Motion: S3 rule draws first.
+     ======================================================== -->
+<section class="section dark has-cut" id="digital" aria-labelledby="digital-h" data-anim="rule-first">
+  <div class="drift" aria-hidden="true"><b></b><b></b></div>
+  <div class="wrap">
+    <div style="max-width:70ch;margin-inline:auto;text-align:center">
+      <p class="eyebrow">Why digital changes the fit</p>
+      <h2 id="digital-h">The real reason your crowns don&rsquo;t always seat first time &mdash; and it usually isn&rsquo;t your&nbsp;prep</h2>
+      <div class="rule" style="height:2px;background:linear-gradient(90deg,var(--color-flourish),transparent);margin:var(--s-3) 0" aria-hidden="true"></div>
+      <div class="rule-body">
+        <p>The moment a conventional impression is taken, error is introduced. The material distorts. The pour adds more.
+        By the time it&rsquo;s a model on a bench, it&rsquo;s a copy of a copy of your patient&rsquo;s mouth. Small errors
+        &mdash; but they land at the margin. And the margin is where you feel&nbsp;them.</p>
+        <ul class="ticks" style="max-width:52ch;margin:var(--s-3) auto 0;text-align:left" aria-label="How a fully digital workflow protects the fit">
+          <li class="tick"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 6.9"/></svg>
+            <span>Your scan comes straight to us &mdash; no distortion, no pour, no copy of a&nbsp;copy</span></li>
+          <li class="tick"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 6.9"/></svg>
+            <span>Contacts and occlusion are verified on screen. The fit is engineered, not&nbsp;guessed</span></li>
+          <li class="tick"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 6.9"/></svg>
+            <span>Every case is signed off by a dentist before it comes back to&nbsp;you</span></li>
+        </ul>
+        <p style="margin-top:var(--s-3)">That&rsquo;s how you get the crown that drops in with a satisfying click &mdash;
+        every time, not just on the good&nbsp;days.</p>
+        <a class="btn btn-primary" href="#qualifier-card" style="margin-top:var(--s-1)">See how we work</a>
+      </div>
+    </div>
+  </div>
+  <div class="cut to-bg" aria-hidden="true">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none" role="presentation" focusable="false">
+      <path class="l1" d="M0,120 L0,44 L560,44 L620,4 L820,4 L880,44 L1440,44 L1440,120 Z"/>
+      <path class="l2" d="M0,120 L0,64 L570,64 L628,26 L812,26 L870,64 L1440,64 L1440,120 Z"/>
+      <path class="l3" d="M0,120 L0,84 L580,84 L636,50 L804,50 L860,84 L1440,84 L1440,120 Z"/>
+      <path class="l4" d="M0,120 L0,102 L590,102 L644,74 L796,74 L850,102 L1440,102 L1440,120 Z"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ========================================================
+     6 · HOW IT WORKS — Motion: U2 numbered step draw.
+     ======================================================== -->
+<section class="section" id="how" aria-labelledby="how-h">
+  <div class="wrap">
+    <div class="section-head centre">
+      <p class="eyebrow">How it works</p>
+      <h2 id="how-h">Scan to seat, with a dentist checking every step that&nbsp;matters</h2>
+    </div>
+    <ol class="journey" data-anim="step-draw">
+      <li class="jstep">
+        <span class="num" aria-hidden="true">1</span>
+        <h3>Send us your scan</h3>
+        <p>Your scan comes straight to us. No impression to distort, no pour to add error &mdash; the case starts from an
+        accurate record of your patient&rsquo;s&nbsp;mouth.</p>
+      </li>
+      <li class="jstep">
+        <span class="num" aria-hidden="true">2</span>
+        <h3>Designed digitally, checked by a&nbsp;dentist</h3>
+        <p>Contacts and occlusion are verified on screen, and the case is reviewed by a dentist who understands what
+        you&rsquo;re asking for &mdash; before it&rsquo;s&nbsp;approved.</p>
+      </li>
+      <li class="jstep">
+        <span class="num" aria-hidden="true">3</span>
+        <h3>Back within ten working&nbsp;days</h3>
+        <p>A turnaround you can plan your diary around, and a restoration you can seat with confidence &mdash;
+        not one you have to improvise&nbsp;with.</p>
+      </li>
+    </ol>
+    <p style="text-align:center;margin-top:var(--s-4)">
+      <a class="btn btn-primary" href="#qualifier-card">See if we&rsquo;re the right fit</a>
+    </p>
+  </div>
+</section>
+
+<!-- ========================================================
+     7 · YOUR NAME IS ON IT — profile layout, no portrait.
+     ======================================================== -->
+<section class="section tint" id="reputation" aria-labelledby="reputation-h">
+  <div class="wrap">
+    <div class="rep-grid">
+      <div>
+        <p class="eyebrow">Your name is on it</p>
+        <h2 id="reputation-h">Your patient doesn&rsquo;t know which lab made their crown. They know you fitted&nbsp;it.</h2>
+      </div>
+      <div class="profile">
+        <blockquote>&ldquo;Every time you cement a restoration, you&rsquo;re putting your name on it. When the fit&rsquo;s off,
+        or the shade&rsquo;s wrong, or it fails early, that&rsquo;s your reputation on the line &mdash; not the&nbsp;lab&rsquo;s.&rdquo;</blockquote>
+        <p>Select Digital Dental Lab was built by dentists who know that feeling &mdash; and built to make sure it stops.
+        Dentist-led and fully digital. Private practices only. Premium materials only. Every case checked by a dentist
+        before it&rsquo;s approved, and back with you within ten working&nbsp;days.</p>
+        <p style="margin:0"><strong>You&rsquo;ve built a practice patients pay a premium for. Your lab should protect that
+        &mdash; not put it at&nbsp;risk.</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================
+     8 · WHAT WE MAKE — Motion: C2 centre-out.
+     ======================================================== -->
+<section class="section" id="services" aria-labelledby="services-h">
+  <div class="wrap">
+    <div class="section-head centre">
+      <p class="eyebrow">What we make</p>
+      <h2 id="services-h">Crowns, bridges, veneers and dentures &mdash; made&nbsp;properly</h2>
+      <p class="lede" style="margin-inline:auto">We work exclusively with private practices. No NHS <span class="nb">production-line</span> volume.
+      No compromise. Every restoration runs through the same fully digital, <span class="nb">dentist-checked</span>&nbsp;workflow.</p>
+    </div>
+
+    <div class="grid grid-4" data-anim="centre-out">
+      <article class="card-plain lift">
+        <h3>Crowns</h3>
+        <p style="margin:0">Predictable contacts, predictable occlusion, and a margin you can actually rely&nbsp;on.</p>
+      </article>
+      <article class="card-plain lift">
+        <h3>Bridges</h3>
+        <p style="margin:0">Designed and verified on screen, so the fit is engineered rather than&nbsp;guessed.</p>
+      </article>
+      <article class="card-plain lift">
+        <h3>Veneers</h3>
+        <p style="margin:0">Aesthetic work made to the standard your patients are paying a premium&nbsp;for.</p>
+      </article>
+      <article class="card-plain lift">
+        <h3>Dentures</h3>
+        <p style="margin:0">Made on the same digital workflow, and checked by a dentist before they&rsquo;re&nbsp;approved.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================
+     9 · WHAT YOU GET — Motion: C5 mask rise in place.
+     ======================================================== -->
+<section class="section tint has-cut" id="included" aria-labelledby="included-h">
+  <div class="wrap">
+    <div class="section-head centre">
+      <p class="eyebrow">Speak the same language</p>
+      <h2 id="included-h">A lab that understands what happens on your side of the&nbsp;chair</h2>
+    </div>
+
+    <div class="grid grid-2" data-anim="mask-rise" style="align-items:start">
+      <ul class="ticks card-plain" style="gap:16px">
+        <li class="tick"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 6.9"/></svg>
+          <span><strong>Built by dentists</strong> &mdash; your cases are reviewed by people who understand both the laboratory and the clinical side</span></li>
+        <li class="tick"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 6.9"/></svg>
+          <span><strong>Fully digital workflow</strong>, start to finish</span></li>
+        <li class="tick"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 6.9"/></svg>
+          <span><strong>Every case checked by a dentist</strong> before it&rsquo;s&nbsp;approved</span></li>
+        <li class="tick"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 6.9"/></svg>
+          <span><strong>Premium materials only</strong> &mdash; for practices delivering premium private dentistry</span></li>
+        <li class="tick"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 6.9"/></svg>
+          <span><strong>Ten working day turnaround</strong> you can plan your diary around</span></li>
+      </ul>
+
+      <div class="grid" style="gap:var(--s-3)">
+        <div class="card-plain card-photo">
+          <span class="card-photo-bg" aria-hidden="true"></span>
+          <h3>Occlusion. Margins. Contacts. Fit.&nbsp;Aesthetics.</h3>
+          <p style="margin:0">These aren&rsquo;t just manufacturing details. They affect what happens in the chair &mdash;
+          and when you send us a case, it&rsquo;s reviewed by someone who knows&nbsp;that.</p>
+        </div>
+        <div class="card-plain card-photo">
+          <span class="card-photo-bg" aria-hidden="true"></span>
+          <h3>You shouldn&rsquo;t have to translate dentistry to your own&nbsp;lab</h3>
+          <p style="margin:0">Your lab is an extension of your hands. It shouldn&rsquo;t feel like the weakest link in
+          the&nbsp;chain.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cut to-bg" aria-hidden="true">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none" role="presentation" focusable="false">
+      <path class="l1" d="M0,52 L1440,96 L1440,120 L0,120 Z"/>
+      <path class="l2" d="M0,70 L1440,104 L1440,120 L0,120 Z"/>
+      <path class="l3" d="M0,88 L1440,110 L1440,120 L0,120 Z"/>
+      <path class="l4" d="M0,104 L1440,116 L1440,120 L0,120 Z"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ========================================================
+     10 · FAQ — Motion: S4 settle from 97%.
+     ======================================================== -->
+<section class="section has-cut" id="faq" aria-labelledby="faq-h">
+  <div class="wrap" style="max-width:860px">
+    <div class="section-head centre">
+      <p class="eyebrow">Questions</p>
+      <h2 id="faq-h">What dentists ask us&nbsp;first</h2>
+    </div>
+
+    <div class="faq" data-anim="settle">
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false" aria-controls="a1" id="q1">
+          Who actually checks my cases?
+          <svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <div class="faq-a" id="a1" role="region" aria-labelledby="q1"><div>
+          <p>A dentist. Select Digital Dental Lab was built by dentists, for dentists, and every case is checked by a
+          dentist before it&rsquo;s approved and sent back to you &mdash; including&nbsp;yours.</p>
+        </div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false" aria-controls="a2" id="q2">
+          Why does a fully digital workflow improve the&nbsp;fit?
+          <svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <div class="faq-a" id="a2" role="region" aria-labelledby="q2"><div>
+          <p>A conventional impression distorts, and the pour adds more error &mdash; by the time it&rsquo;s a model it&rsquo;s a
+          copy of a copy, and those small errors land at the margin. Working digitally from your scan, contacts and
+          occlusion are verified on screen, so the fit is engineered rather than&nbsp;guessed.</p>
+        </div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false" aria-controls="a3" id="q3">
+          What do you make?
+          <svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <div class="faq-a" id="a3" role="region" aria-labelledby="q3"><div>
+          <p>Crowns, bridges, veneers and dentures &mdash; all on the same fully digital workflow, in premium materials,
+          and all checked by a dentist before&nbsp;approval.</p>
+        </div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false" aria-controls="a4" id="q4">
+          How long does a case take?
+          <svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <div class="faq-a" id="a4" role="region" aria-labelledby="q4"><div>
+          <p>Cases are back with you within ten working days &mdash; a turnaround you can plan your diary around, rather
+          than one you have to&nbsp;chase.</p>
+        </div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false" aria-controls="a5" id="q5">
+          Do you work with NHS practices?
+          <svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <div class="faq-a" id="a5" role="region" aria-labelledby="q5"><div>
+          <p>We work exclusively with private practices. No NHS <span class="nb">production-line</span> volume, and no compromise on
+          materials or&nbsp;time.</p>
+        </div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false" aria-controls="a6" id="q6">
+          Why only a limited number of practices?
+          <svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <div class="faq-a" id="a6" role="region" aria-labelledby="q6"><div>
+          <p>Because every case is reviewed by a dentist before it&rsquo;s approved, we partner with a limited number of private
+          practices &mdash; so that standard holds for every case, not just on the good&nbsp;days.</p>
+        </div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false" aria-controls="a7" id="q7">
+          How do we get started?
+          <svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <div class="faq-a" id="a7" role="region" aria-labelledby="q7"><div>
+          <p>Answer the two quick questions at the top of this page and leave your details. We&rsquo;ll get in touch to talk
+          through the cases you send, how we work, and whether we&rsquo;re the right fit for your&nbsp;practice.</p>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cut to-deep" aria-hidden="true">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none" role="presentation" focusable="false">
+      <path class="l1" d="M0,120 L0,30 C360,86 1080,86 1440,30 L1440,120 Z"/>
+      <path class="l2" d="M0,120 L0,54 C360,102 1080,102 1440,54 L1440,120 Z"/>
+      <path class="l3" d="M0,120 L0,78 C360,114 1080,114 1440,78 L1440,120 Z"/>
+      <path class="l4" d="M0,120 L0,98 C360,120 1080,120 1440,98 L1440,120 Z"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ========================================================
+     11 · FINAL CTA — dark band. Motion: M1 colour curtain.
+     ======================================================== -->
+<section class="section deep" id="start" aria-labelledby="final-h" data-anim="curtain">
+  <div class="drift" aria-hidden="true"><b></b><b></b></div>
+  <div class="wrap">
+    <div style="max-width:64ch;margin-inline:auto;text-align:center">
+      <p class="eyebrow">Limited number of partner practices</p>
+      <h2 id="final-h">Your clinical work deserves a lab that works to the same&nbsp;standard</h2>
+      <p class="lede" style="margin-inline:auto">If you&rsquo;re tired of paying twice, and you&rsquo;ve built a practice
+      around delivering <span class="nb">high-quality</span> dentistry, see if we&rsquo;re the right fit for&nbsp;yours.</p>
+
+      <ul class="ticks final-ticks">
+        <li class="tick"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 6.9"/></svg>
+          <span>Fully digital workflow</span></li>
+        <li class="tick"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 6.9"/></svg>
+          <span>Every case checked by a dentist</span></li>
+        <li class="tick"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 6.9"/></svg>
+          <span>Ten working day turnaround</span></li>
+      </ul>
+
+      <a class="btn btn-primary" href="#qualifier-card">See if we&rsquo;re the right fit</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h4>Select Digital Dental Lab</h4>
+        <p style="margin:0">A fully digital, <span class="nb">dentist-led</span> dental lab for private practices.
+        Built by dentists, for dentists.</p>
+      </div>
+      <div>
+        <h4>This page</h4>
+        <ul style="display:grid;gap:6px">
+          <li><a href="#problem">Sound familiar?</a></li>
+          <li><a href="#digital">Why digital</a></li>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#services">What we make</a></li>
+          <li><a href="#faq">FAQs</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Work with us</h4>
+        <p style="margin:0"><a href="#qualifier-card">See if we&rsquo;re the right fit for your practice</a></p>
+      </div>
+    </div>
+
+    <div class="legal">
+      <p>Select Digital Dental Lab works exclusively with private dental practices. This page is intended for dental
+      professionals.</p>
+      <p style="margin:0">&copy; <span id="year">2026</span> Select Digital Dental Lab. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<div class="mobile-bar" id="mobile-bar">
+  <a class="btn btn-ghost" href="#how">How it works</a>
+  <a class="btn btn-primary" href="#qualifier-card">See if we&rsquo;re a fit</a>
+</div>
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Organization",
+  "name":"Select Digital Dental Lab",
+  "slogan":"Built by dentists, for dentists",
+  "description":"A fully digital, dentist-led dental lab for private practices. Crowns, bridges, veneers and dentures, every case checked by a dentist, with a ten working day turnaround.",
+  "knowsAbout":["Dental crowns","Dental bridges","Dental veneers","Dentures","Digital dentistry"]
+}
+</script>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement;
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------------------------------------------------------
+     P9 · --header-h must be >= the real rendered header at every
+     width, because every anchor offset resolves from it. Measure
+     it and write the real value back; a token 18px short drops
+     every heading behind the header on a link click.
+     --------------------------------------------------------- */
+  var header = document.getElementById('site-header');
+  function syncHeaderH() {
+    var real = Math.ceil(header.getBoundingClientRect().height);
+    var token = parseFloat(getComputedStyle(root).getPropertyValue('--header-h')) || 0;
+    if (real > token) root.style.setProperty('--header-h', real + 'px');
+    root.dataset.headerReal = real;
+  }
+  syncHeaderH();
+  if (window.ResizeObserver) new ResizeObserver(syncHeaderH).observe(header);
+  window.addEventListener('resize', syncHeaderH);
+
+  /* ---------------------------------------------------------
+     Scroll progress + scroll-spy share ONE rAF-throttled
+     listener. A scroll event fires dozens of times per frame and
+     doing layout reads in each one is how a smooth page starts
+     to feel sticky.
+     --------------------------------------------------------- */
+  var bar = document.getElementById('progress');
+  var mobileBar = document.getElementById('mobile-bar');
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.nav a, .nav-rail a'));
+  var rail = document.querySelector('.nav-rail');
+  var targets = [];
+  navLinks.forEach(function (a) {
+    var id = a.getAttribute('href').slice(1);
+    var el = document.getElementById(id);
+    if (el && targets.indexOf(el) === -1) targets.push(el);
+  });
+  var lastId = null;
+
+  /* every band, not just the nav-linked ones — the header needs to
+     know light from dark for all of them */
+  var bands = Array.prototype.slice.call(document.querySelectorAll('main > section, footer'));
+  function bandIsDark(el) {
+    if (!el) return true;
+    var c = el.className || '';
+    return el.tagName === 'FOOTER' || /\bhero\b|\bdark\b|\bdeep\b/.test(c);
+  }
+
+  function onScrollFrame() {
+    var y = window.scrollY || window.pageYOffset;
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    var p = max > 0 ? Math.min(1, Math.max(0, y / max)) : 0;
+    bar.style.transform = 'scaleX(' + p + ')';
+
+    mobileBar.classList.toggle('on', y > 420);
+
+    var line = y + (parseFloat(getComputedStyle(root).getPropertyValue('--header-h')) || 64) + 24;
+
+    /* which band sits under the header's own midline? */
+    var mid = y + (parseFloat(getComputedStyle(root).getPropertyValue('--header-row-h')) || 64) / 2;
+    var under = null;
+    for (var b = 0; b < bands.length; b++) {
+      if (bands[b].offsetTop <= mid) under = bands[b];
+    }
+    var atTop = y < 24;
+    header.classList.toggle('on-light', atTop || !bandIsDark(under));
+    header.classList.toggle('at-top', atTop);
+    var current = null;
+    for (var i = 0; i < targets.length; i++) {
+      if (targets[i].offsetTop <= line) current = targets[i];
+    }
+    /* explicit bottom-of-page case, or the last section never
+       reaches the trigger line and its link never lights up */
+    if (max > 0 && y >= max - 2 && targets.length) current = targets[targets.length - 1];
+
+    var id = current ? current.id : null;
+    if (id !== lastId) {
+      lastId = id;
+      navLinks.forEach(function (a) {
+        var on = a.getAttribute('href') === '#' + id;
+        if (on) { a.setAttribute('aria-current', 'true'); } else { a.removeAttribute('aria-current'); }
+        /* scroll the active chip to centre — the rail only, never the page */
+        if (on && rail && rail.contains(a) && rail.scrollWidth > rail.clientWidth) {
+          rail.scrollTo({
+            left: a.offsetLeft - (rail.clientWidth - a.offsetWidth) / 2,
+            behavior: reduced ? 'auto' : 'smooth'
+          });
+        }
+      });
+    }
+  }
+  var ticking = false;
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () { onScrollFrame(); ticking = false; });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  onScrollFrame();
+
+  /* ---------------------------------------------------------
+     P8 · Headline masking, per word, built from the live text at
+     runtime. Masking hand-written lines means hard-coding the
+     line breaks, and the headline then re-wraps inside them.
+     Per word preserves natural wrapping at every width, and the
+     plain text stands if this never runs.
+     --------------------------------------------------------- */
+  document.querySelectorAll('[data-words]').forEach(function (el) {
+    var words = el.textContent.trim().split(/\s+/);
+    el.textContent = '';
+    words.forEach(function (w, i) {
+      var mask = document.createElement('span');
+      mask.className = 'wordmask';
+      var inner = document.createElement('i');
+      inner.style.setProperty('--w', i);
+      inner.textContent = w;
+      mask.appendChild(inner);
+      el.appendChild(mask);
+      if (i < words.length - 1) el.appendChild(document.createTextNode(' '));
+    });
+  });
+
+  /* ---------------------------------------------------------
+     Entrance reveals. Staggers are driven by one custom property
+     per item, so re-timing a whole sequence is a handful of
+     numbers rather than a rewrite.
+     --------------------------------------------------------- */
+  document.querySelectorAll('[data-anim]').forEach(function (group) {
+    var kids = group.children;
+    var n = kids.length;
+    for (var i = 0; i < n; i++) {
+      var order = i;
+      if (group.dataset.anim === 'centre-out') order = Math.abs(i - (n - 1) / 2);
+      kids[i].style.setProperty('--i', order);
+    }
+  });
+
+  function countUp(el) {
+    var to = parseFloat(el.dataset.count);
+    var dp = parseInt(el.dataset.dp || '0', 10);
+    var prefix = el.dataset.prefix || '';
+    var comma = el.dataset.comma === '1';
+    var start = performance.now();
+    var dur = 900;
+    function fmt(v) {
+      var s = v.toFixed(dp);
+      if (comma) s = s.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      return prefix + s;
+    }
+    function frame(now) {
+      var t = Math.min(1, (now - start) / dur);
+      var eased = 1 - Math.pow(1 - t, 3);
+      el.textContent = fmt(to * eased);
+      if (t < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  var revealables = document.querySelectorAll('[data-anim], [data-words]');
+  if (reduced || !('IntersectionObserver' in window)) {
+    revealables.forEach(function (el) { el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('in');
+        if (e.target.dataset.anim === 'count') {
+          e.target.querySelectorAll('[data-count]').forEach(countUp);
+        }
+        io.unobserve(e.target);
+      });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.15 });
+    revealables.forEach(function (el) { io.observe(el); });
+  }
+
+  /* ---------------------------------------------------------
+     Before / after. The range is the only input; it drives a
+     custom property that clips the top layer.
+     --------------------------------------------------------- */
+  document.querySelectorAll('[data-ba]').forEach(function (input) {
+    var box = input.closest('.ba');
+    function sync() { box.style.setProperty('--pos', input.value + '%'); }
+    input.addEventListener('input', sync);
+    sync();
+  });
+
+  /* ---------------------------------------------------------
+     Review marquee. The clone is added only when motion is
+     allowed, so reduced-motion users get a plain static list
+     rather than a duplicated one.
+     --------------------------------------------------------- */
+  if (!reduced) {
+    document.querySelectorAll('.rev-track').forEach(function (track) {
+      var clone = track.cloneNode(true);
+      clone.setAttribute('aria-hidden', 'true');
+      Array.prototype.forEach.call(clone.children, function (c) { c.setAttribute('aria-hidden', 'true'); });
+      while (clone.firstChild) track.appendChild(clone.firstChild);
+    });
+  }
+
+  /* --------------------------------------------------------- FAQ */
+  document.querySelectorAll('.faq-q').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      btn.setAttribute('aria-expanded', btn.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');
+    });
+  });
+
+  /* --------------------------------------------------------- Team */
+  /* Swap the inline lockup for the supplied logo, but only once it has
+     actually decoded — a missing or broken file leaves the lockup. */
+  (function () {
+    var img = document.querySelector('.brand-logo');
+    if (img) {
+      var show = function () { if (img.naturalWidth) img.closest('.brand').classList.add('has-logo'); };
+      if (img.complete) show(); else img.addEventListener('load', show, { once: true });
+    }
+
+    /* Mark a media block once its file has actually decoded, so the labelled
+       slot behind it stops showing through transparent artwork. Resting state
+       is the slot, so a missing file still says which file it wants. */
+    document.querySelectorAll('.media img').forEach(function (im) {
+      var mark = function () { if (im.naturalWidth) im.closest('.media').classList.add('loaded'); };
+      if (im.complete) mark(); else im.addEventListener('load', mark, { once: true });
+    });
+  })();
+
+
+  /* ---------------------------------------------------------
+     Background video, built only when a source is set. It starts
+     when the band is on screen, motion is allowed and the visitor
+     has not asked to save data, and stops when the band leaves —
+     so a multi-megabyte loop never decodes against a page the
+     reader has left. The poster is the resting state throughout.
+     --------------------------------------------------------- */
+  (function () {
+    var band = document.querySelector('.bg-video');
+    if (!band || !band.dataset.video) return;
+
+    var v = document.createElement('video');
+    v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'none';
+    if (band.dataset.poster) v.poster = band.dataset.poster;
+    v.setAttribute('muted', '');            // Safari wants the attribute too
+    v.setAttribute('playsinline', '');
+    v.src = band.dataset.video;
+    band.appendChild(v);
+
+    var saveData = navigator.connection && navigator.connection.saveData;
+    if (reduced || saveData || !('IntersectionObserver' in window)) return;  // poster stands
+
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          if (v.preload === 'none') v.preload = 'auto';
+          var pr = v.play();
+          if (pr && pr.catch) pr.catch(function () { /* autoplay refused: poster stands */ });
+        } else if (!v.paused) { v.pause(); }
+      });
+    }, { rootMargin: '200px 0px' }).observe(band);
+  })();
+
+  /* ---------------------------------------------------------
+     Gallery marquee. The loop needs the set twice; cloning it here
+     keeps the document (and the embedded build) at single weight.
+     Without JS the track stays a scrollable rail, which works.
+     --------------------------------------------------------- */
+  (function () {
+    var track = document.querySelector('.gallery-track');
+    if (!track || reduced) return;
+    var set = [].slice.call(track.children);
+    set.forEach(function (fig) {
+      var copy = fig.cloneNode(true);
+      copy.setAttribute('aria-hidden', 'true');
+      copy.querySelectorAll('img').forEach(function (i) { i.setAttribute('alt', ''); });
+      track.appendChild(copy);
+    });
+    track.classList.add('dup');
+  })();
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+})();
+</script>
+
+<script>
+/* =========================================================
+   P6 · THREE-STEP QUALIFIER
+   ========================================================= */
+(function () {
+  'use strict';
+
+  /* ── SET BEFORE PUBLISH ────────────────────────────────────
+     Where the lead is posted. Leave null to keep the form in
+     demonstration mode: it validates, shows the success state
+     and forwards to the thank-you page without sending
+     anything anywhere.                                        */
+  var ENDPOINT = null; // ← paste your CRM / GoHighLevel inbound webhook URL (leave null to test)
+  var THANK_YOU = 'thank-you.html';
+  /* ──────────────────────────────────────────────────────── */
+
+  var form = document.getElementById('qualifier');
+  if (!form) return;
+
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var steps = Array.prototype.slice.call(form.querySelectorAll('.step'));
+  var fill = document.getElementById('meter-fill');
+  var count = document.getElementById('meter-count');
+  var meter = document.getElementById('meter');
+  var done = document.getElementById('form-done');
+  var current = 0;
+
+  function show(i) {
+    current = i;
+    steps.forEach(function (s, n) { s.hidden = n !== i; });
+    fill.style.width = ((i + 1) / steps.length * 100) + '%';
+    count.textContent = 'Step ' + (i + 1) + ' of ' + steps.length;
+  }
+
+  function setError(el, describedBy, message) {
+    var out = document.getElementById(describedBy);
+    if (out) out.textContent = message || '';
+    if (message) {
+      el.setAttribute('aria-invalid', 'true');
+      el.setAttribute('aria-describedby', describedBy);
+    } else {
+      el.removeAttribute('aria-invalid');
+      el.removeAttribute('aria-describedby');
+    }
+  }
+
+  var EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  var PHONE = /^[0-9+()\s-]{9,}$/;
+
+  function validate(i) {
+    var step = steps[i];
+    var ok = true;
+    var firstBad = null;
+
+    var group = step.querySelector('fieldset');
+    if (group) {
+      var name = group.querySelector('input[type=radio]').name;
+      var picked = form.querySelector('input[name="' + name + '"]:checked');
+      if (!picked) {
+        setError(group, 'err-' + name, 'Please choose one option to continue.');
+        ok = false;
+        firstBad = firstBad || group.querySelector('input[type=radio]');
+      } else {
+        setError(group, 'err-' + name, '');
+      }
+    }
+
+    step.querySelectorAll('input[required]:not([type=radio])').forEach(function (input) {
+      var v = input.value.trim();
+      var msg = '';
+      if (!v) {
+        msg = 'This field is required.';
+      } else if (input.type === 'email' && !EMAIL.test(v)) {
+        msg = 'Please enter a valid email address.';
+      } else if (input.type === 'tel' && !PHONE.test(v)) {
+        msg = 'Please enter a valid phone number.';
+      }
+      setError(input, 'err-' + input.name, msg);
+      if (msg) { ok = false; firstBad = firstBad || input; }
+    });
+
+    if (firstBad) firstBad.focus();
+    return ok;
+  }
+
+  /* Errors clear as soon as the reader starts fixing them. */
+  form.addEventListener('input', function (e) {
+    var t = e.target;
+    if (t.matches('input[required]:not([type=radio])')) setError(t, 'err-' + t.name, '');
+  });
+  form.addEventListener('change', function (e) {
+    if (e.target.type === 'radio') {
+      var fs = e.target.closest('fieldset');
+      if (fs) setError(fs, 'err-' + e.target.name, '');
+    }
+  });
+
+  function next() {
+    if (!validate(current)) return;
+    if (current < steps.length - 1) {
+      show(current + 1);
+      var focusTarget = steps[current].querySelector('input, button');
+      if (focusTarget) focusTarget.focus({ preventScroll: true });
+    }
+  }
+  function back() {
+    if (current > 0) {
+      /* answers are never cleared, so going back and forward
+         leaves every previous choice intact */
+      show(current - 1);
+      var checked = steps[current].querySelector('input:checked');
+      (checked || steps[current].querySelector('input')).focus({ preventScroll: true });
+    }
+  }
+  form.querySelectorAll('[data-next]').forEach(function (b) { b.addEventListener('click', next); });
+  form.querySelectorAll('[data-back]').forEach(function (b) { b.addEventListener('click', back); });
+
+  /* -----------------------------------------------------------
+     Selection auto-advances — ON POINTER INPUT ONLY.
+     Arrow keys move between radios in a group and fire `change`
+     at every stop, so advancing on keyboard selection throws a
+     keyboard user past the question the instant they start
+     reading it. Track pointer intent and check it in `change`.
+     Keyboard users get the Continue button, which is why it
+     stays in all four treatments.
+     ----------------------------------------------------------- */
+  var pointerAt = 0;
+  form.addEventListener('pointerdown', function () { pointerAt = Date.now(); }, true);
+  form.addEventListener('keydown', function () { pointerAt = 0; }, true);
+  form.addEventListener('change', function (e) {
+    if (e.target.type !== 'radio') return;
+    if (Date.now() - pointerAt > 700) return;          // keyboard selection: stay put
+    pointerAt = 0;
+    /* a beat, so the tick is visibly acknowledged rather than swallowed */
+    setTimeout(next, reduced ? 0 : 260);
+  });
+
+  /* Enter advances a step rather than submitting early. */
+  form.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter') return;
+    if (current < steps.length - 1) {
+      e.preventDefault();
+      next();
+    }
+  });
+
+  function goToThankYou(firstName) {
+    if (!THANK_YOU) return;           /* inline confirmation stands */
+    var url = THANK_YOU;
+    if (firstName) {
+      /* choose the separator from whether the destination already
+         has a query string; do not assume */
+      url += (url.indexOf('?') === -1 ? '?' : '&') + 'name=' + encodeURIComponent(firstName);
+    }
+    window.location.href = url;
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!validate(current)) return;
+
+    var data = {};
+    new FormData(form).forEach(function (v, k) { data[k] = v; });
+
+    /* honeypot: a bot filled the hidden field. Show the same
+       success state and send nothing. */
+    var isBot = !!(data.company && data.company.trim());
+    delete data.company;
+
+    form.hidden = true;
+    meter.hidden = true;
+    done.hidden = false;
+    done.focus();
+    var tick = document.getElementById('done-tick');
+    if (tick && !reduced) tick.classList.add('go');
+
+    if (isBot) return;
+
+    var forward = function () { goToThankYou(data.firstName); };
+
+    if (ENDPOINT) {
+      fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      }).then(forward, forward);
+    } else {
+      setTimeout(forward, reduced ? 0 : 1400);
+    }
+  });
+
+  show(0);
+})();
+</script>
+
+</body>
+</html>
