@@ -9,7 +9,7 @@ for (const path of PAGES) {
     await page.setViewportSize({ width: 390, height: 844 });   // the mobile bar only exists here
     await page.goto(path, { waitUntil: 'load' });
     await page.evaluate(() => window.scrollTo(0, 800));         // reveal the sticky bar
-    await page.waitForTimeout(400);
+    await page.waitForTimeout(900);   // outlast the header's 520ms light/dark colour transition
 
     const pairs = await page.evaluate(() => {
       const out = [];
