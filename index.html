@@ -10,7 +10,7 @@
 <meta name="description" content="A fully digital, dentist-led dental lab for private practices. Crowns, bridges, veneers and dentures — every case checked by a dentist, back within ten working days.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
 <style>
 /* ============================================================
    ★ BRAND CONFIG — the one place you set the look.
@@ -73,7 +73,7 @@
   --s-5:48px; --s-6:64px; --s-7:88px; --s-8:112px;
 
   /* — type — */
-  --font-head:"Outfit","Futura","Century Gothic",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-head:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --font-body:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
 
   /* — motion — */
@@ -105,10 +105,10 @@ body{
   -webkit-font-smoothing:antialiased;
 }
 img{max-width:100%;height:auto;display:block}
-h1,h2,h3,h4{font-family:var(--font-head);margin:0 0 var(--s-2);line-height:1.12;font-weight:600;text-wrap:balance}
-h1{font-size:clamp(2rem,6.2vw,3.6rem);letter-spacing:-.03em}
-h2{font-size:clamp(1.65rem,4.4vw,2.6rem);letter-spacing:-.025em}
-h3{font-size:clamp(1.12rem,2.4vw,1.4rem);font-weight:600}
+h1,h2,h3,h4{font-family:var(--font-head);margin:0 0 var(--s-2);line-height:1.12;font-weight:700;letter-spacing:-.015em;text-wrap:balance}
+h1{font-size:clamp(2.15rem,5vw,3.35rem);line-height:1.08;font-weight:800;letter-spacing:-.025em}
+h2{font-size:clamp(1.9rem,4.2vw,2.85rem);letter-spacing:-.02em}
+h3{font-size:clamp(1.12rem,2.4vw,1.4rem);font-weight:700}
 p,li,legend,figcaption,cite,dd{text-wrap:pretty}
 p{margin:0 0 var(--s-2)}
 a{color:inherit}
@@ -283,7 +283,7 @@ ul,ol{margin:0;padding:0;list-style:none}
 .progress{
   position:absolute;left:0;bottom:-1px;height:2px;width:100%;
   transform:scaleX(0);transform-origin:0 50%;
-  background:linear-gradient(90deg,var(--color-flourish),var(--cta-on-dark));
+  background:linear-gradient(90deg,var(--color-accent),var(--lux-warm) 65%,var(--cta-on-dark));
   z-index:3;
 }
 
@@ -1132,6 +1132,116 @@ ul,ol{margin:0;padding:0;list-style:none}
 .rep-grid h2{margin:0}
 .rep-photo{margin-top:var(--s-4);border-radius:var(--r-md);box-shadow:0 24px 48px -28px rgba(23,20,15,.45)}
 .final-ticks{width:fit-content;max-width:100%;margin:var(--s-3) auto var(--s-4);text-align:left}
+/* ============================================================
+   LUXE LAYER — headline type, kinetic headings, ambient
+   backgrounds, sheen and grain (ported from the luxe funnel).
+   Everything has a finished resting state and is stripped
+   under prefers-reduced-motion.
+   ============================================================ */
+:root{
+  --lux-warm:#8F93E6;              /* the "ignite" tone: a periwinkle on the brand navy */
+  --lux-warm-rgb:143,147,230;
+  --lux-royal-rgb:58,63,154;
+  --lux-lav-rgb:191,192,211;
+  --lux-navy-rgb:30,36,102;
+}
+/* eyebrow with the leading accent bar */
+.eyebrow{display:flex;align-items:center;gap:.6rem;font-size:.74rem;letter-spacing:.22em}
+.eyebrow::before{content:"";flex:0 0 auto;width:1.6rem;height:2px;border-radius:2px;background:currentColor;opacity:.9}
+.section-head.centre .eyebrow,.eyebrow.c{justify-content:center}
+@media (max-width:1023.98px){ .hero-copy .eyebrow{justify-content:center} }
+
+/* dark bands take the luxe angled gradient */
+.section.dark{background:linear-gradient(155deg,var(--color-primary) 0%,var(--color-primary-dark) 62%,var(--color-secondary) 135%) var(--color-primary)}
+.section.deep{background:linear-gradient(155deg,var(--color-primary-dark) 0%,var(--color-primary) 70%,var(--color-secondary) 140%) var(--color-primary-dark)}
+
+/* hero accent word */
+.hero h1 .accent,.hero h1 .accent .split-char{color:var(--cta-on-dark)}
+
+/* kinetic split-char headings: each glyph rises and ignites, then settles */
+.split-word{display:inline-block;white-space:nowrap}
+.split-char{display:inline-block;will-change:transform,opacity}
+.is-splitting .split-char{
+  opacity:0;transform:translateY(.55em) rotate(2deg);
+  color:var(--lux-warm);text-shadow:0 0 22px rgba(var(--lux-warm-rgb),.55);
+  transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1),color .95s ease,text-shadow .95s ease;
+  transition-delay:calc(var(--i,0) * 16ms);
+}
+.is-splitting.split-in .split-char{opacity:1;transform:none;color:inherit;text-shadow:none}
+.hero h1.split-in .accent .split-char{color:var(--cta-on-dark)}
+
+/* underline that draws in beneath centred section heads */
+.section-head.centre h2::after{
+  content:"";display:block;width:0;height:3px;margin:1.1rem auto 0;border-radius:3px;
+  background:linear-gradient(90deg,var(--color-accent),var(--lux-warm));
+  transition:width .8s cubic-bezier(.22,1,.36,1) .2s;
+}
+.dark .section-head.centre h2::after,.deep .section-head.centre h2::after{background:linear-gradient(90deg,var(--cta-on-dark),var(--lux-warm))}
+.section-head.centre h2.split-in::after,.section-head.centre h2.no-split::after{width:3.5rem}
+
+/* sheen sweep + hairline edge on cards */
+.lux-sheen{position:relative;overflow:hidden;isolation:isolate}
+.lux-sheen::before{
+  content:"";position:absolute;top:0;left:-130%;width:60%;height:100%;z-index:2;pointer-events:none;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);
+  transform:skewX(-18deg);transition:left .75s cubic-bezier(.22,1,.36,1);
+}
+.lux-sheen:hover::before{left:145%}
+.lux-edge::after{
+  content:"";position:absolute;top:0;left:1.4rem;right:1.4rem;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(var(--lux-warm-rgb),.8),transparent);
+  opacity:0;transition:opacity .35s ease;
+}
+.lux-edge:hover::after{opacity:1}
+
+/* fine film grain */
+.lux-grain{
+  position:fixed;inset:0;z-index:98;pointer-events:none;opacity:.05;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ambient background layers, injected by JS */
+.fx-host>.wrap,.fx-host>.gallery{position:relative;z-index:1}
+.fx-layer{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.fx-aurora{position:absolute;inset:0;filter:blur(40px)}
+.fx-aurora .fx-blob{position:absolute;border-radius:50%;mix-blend-mode:screen}
+.fx-aurora .b1{width:55%;height:72%;left:-8%;top:-22%;opacity:.55;background:radial-gradient(circle,rgb(var(--lux-royal-rgb)),transparent 70%);animation:fxDrift1 17s ease-in-out infinite}
+.fx-aurora .b2{width:50%;height:60%;right:-10%;top:-4%;opacity:.16;background:radial-gradient(circle,rgb(var(--lux-lav-rgb)),transparent 70%);animation:fxDrift2 21s ease-in-out infinite}
+.fx-aurora .b3{width:62%;height:66%;left:18%;bottom:-32%;opacity:.24;background:radial-gradient(circle,var(--lux-warm),transparent 72%);animation:fxDrift3 19s ease-in-out infinite}
+@keyframes fxDrift1{50%{transform:translate(22%,18%) scale(1.15)}}
+@keyframes fxDrift2{50%{transform:translate(-18%,22%) scale(1.2)}}
+@keyframes fxDrift3{50%{transform:translate(16%,-16%) scale(1.1)}}
+.fx-dust{display:block;width:100%;height:100%}
+.fx-rays{position:absolute;inset:0}
+.fx-rays .ray{position:absolute;inset:-25%;will-change:transform}
+.fx-rays .r1{animation:fxSweep 11s linear infinite;background:repeating-linear-gradient(72deg,transparent 0 40px,rgba(var(--lux-navy-rgb),.07) 40px 42px,transparent 42px 86px)}
+.fx-rays .r2{animation:fxSweep 17s linear infinite;opacity:.7;background:repeating-linear-gradient(72deg,transparent 0 70px,rgba(var(--lux-warm-rgb),.10) 70px 73px,transparent 73px 140px)}
+@keyframes fxSweep{to{transform:translateX(-86px)}}
+.fx-contour{position:absolute;inset:0}
+.fx-contour .rings{
+  position:absolute;inset:0;transform-origin:28% 120%;
+  background:repeating-radial-gradient(circle at 28% 120%,transparent 0 24px,rgba(var(--lux-navy-rgb),.11) 24px 25.5px,transparent 25.5px 50px);
+  animation:fxBreathe 14s ease-in-out infinite;
+}
+@keyframes fxBreathe{50%{transform:scale(1.13);opacity:.6}}
+/* living hairline frame around a feature card */
+.fx-framed{position:relative}
+.fx-framed::after{
+  content:"";position:absolute;inset:0;z-index:3;border-radius:inherit;padding:1.5px;pointer-events:none;
+  background:linear-gradient(120deg,var(--lux-warm),transparent 30%,transparent 70%,var(--cta-on-dark)) border-box;
+  background-size:300% 300%;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  animation:fxSlideGrad 7s linear infinite;
+}
+@keyframes fxSlideGrad{to{background-position:300% 0}}
+
+@media (prefers-reduced-motion:reduce){
+  .is-splitting .split-char{opacity:1;transform:none;color:inherit;text-shadow:none}
+  .section-head.centre h2::after{width:3.5rem}
+  .lux-sheen::before,.lux-grain{display:none}
+  .fx-aurora .fx-blob,.fx-rays .ray,.fx-contour .rings,.fx-framed::after{animation:none!important}
+}
 </style>
 </head>
 <body>
@@ -1198,14 +1308,14 @@ ul,ol{margin:0;padding:0;list-style:none}
 <section class="hero" id="enquiry">
   <!-- Optional background video: hosted .mp4 in data-video. Empty = flat dark band. -->
   <div class="bg-video" aria-hidden="true" data-video="" style="background:url(assets/img/hero-technician.jpg) center 30%/cover"></div>
-  <div class="drift" aria-hidden="true"><b></b><b></b></div>
+  
   <div class="wrap">
     <div class="hero-grid">
 
       <div class="hero-copy">
         <p class="eyebrow">Dentist-led digital dental lab · Private practices only</p>
 
-        <h1 data-words>The Dental Lab Built by Dentists, for Dentists</h1>
+        <h1>The Dental Lab Built by Dentists, <span class="accent">for&nbsp;Dentists</span></h1>
 
         <p class="lede">Crowns, bridges, veneers and dentures made on a fully digital workflow &mdash;
         and checked by a dentist before they&rsquo;re approved. Predictable contacts. Predictable occlusion.
@@ -1434,10 +1544,10 @@ ul,ol{margin:0;padding:0;list-style:none}
      ======================================================== -->
 <section class="section dark has-cut section-photo" id="digital" aria-labelledby="digital-h" data-anim="rule-first">
   <div class="photo-bg" aria-hidden="true" style="background-image:url(assets/img/digital-furnace.jpg)"></div>
-  <div class="drift" aria-hidden="true"><b></b><b></b></div>
+  
   <div class="wrap">
     <div style="max-width:70ch;margin-inline:auto;text-align:center">
-      <p class="eyebrow">Why digital changes the fit</p>
+      <p class="eyebrow c">Why digital changes the fit</p>
       <h2 id="digital-h">The real reason your crowns don&rsquo;t always seat first time &mdash; and it usually isn&rsquo;t your&nbsp;prep</h2>
       <div class="rule" style="height:2px;background:linear-gradient(90deg,var(--color-flourish),transparent);margin:var(--s-3) 0" aria-hidden="true"></div>
       <div class="rule-body">
@@ -1618,7 +1728,7 @@ ul,ol{margin:0;padding:0;list-style:none}
      INSIDE THE LAB — photo marquee.
      ======================================================== -->
 <section class="section dark has-cut" id="lab" aria-labelledby="lab-h">
-  <div class="drift" aria-hidden="true"><b></b><b></b></div>
+  
   <div class="wrap">
     <div class="section-head centre">
       <p class="eyebrow">Inside the lab</p>
@@ -1795,10 +1905,10 @@ ul,ol{margin:0;padding:0;list-style:none}
      11 · FINAL CTA — dark band. Motion: M1 colour curtain.
      ======================================================== -->
 <section class="section deep" id="start" aria-labelledby="final-h" data-anim="curtain">
-  <div class="drift" aria-hidden="true"><b></b><b></b></div>
+  
   <div class="wrap">
     <div style="max-width:64ch;margin-inline:auto;text-align:center">
-      <p class="eyebrow">Limited number of partner practices</p>
+      <p class="eyebrow c">Limited number of partner practices</p>
       <h2 id="final-h">Your clinical work deserves a lab that works to the same&nbsp;standard</h2>
       <p class="lede" style="margin-inline:auto">If you&rsquo;re tired of paying twice, and you&rsquo;ve built a practice
       around delivering <span class="nb">high-quality</span> dentistry, see if we&rsquo;re the right fit for&nbsp;yours.</p>
@@ -2346,6 +2456,135 @@ ul,ol{margin:0;padding:0;list-style:none}
   });
 
   show(0);
+})();
+</script>
+
+<script>
+/* =========================================================
+   LUXE LAYER — kinetic headings, ambient backgrounds, sheen
+   ========================================================= */
+(function () {
+  'use strict';
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function el(tag, cls) { var n = document.createElement(tag); if (cls) n.className = cls; return n; }
+
+  /* ---- kinetic split-char headings ---- */
+  var heads = [].slice.call(document.querySelectorAll('.hero h1, main h2'))
+    .filter(function (h) { return !h.closest('.form-card') && !h.classList.contains('sr-only'); });
+  if (reduced || !('IntersectionObserver' in window)) {
+    heads.forEach(function (h) { h.classList.add('no-split'); });
+  } else {
+    heads.forEach(function (h) {
+      var counter = { n: 0 };
+      h.setAttribute('aria-label', h.textContent.replace(/\s+/g, ' ').trim());
+      (function walk(node) {
+        [].slice.call(node.childNodes).forEach(function (c) {
+          if (c.nodeType === 1) { walk(c); return; }
+          if (c.nodeType !== 3) return;
+          var frag = document.createDocumentFragment();
+          /* split on breaking whitespace only: a no-break space stays inside its word */
+          c.textContent.split(/([ \t\n\r]+)/).forEach(function (chunk) {
+            if (!chunk) return;
+            if (/^[ \t\n\r]+$/.test(chunk)) { frag.appendChild(document.createTextNode(' ')); return; }
+            var w = el('span', 'split-word');
+            w.setAttribute('aria-hidden', 'true');
+            for (var i = 0; i < chunk.length; i++) {
+              var ch = el('span', 'split-char');
+              ch.style.setProperty('--i', counter.n++);
+              ch.textContent = chunk[i];
+              w.appendChild(ch);
+            }
+            frag.appendChild(w);
+          });
+          node.replaceChild(frag, c);
+        });
+      })(h);
+      h.classList.add('is-splitting');
+    });
+    var sio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('split-in'); sio.unobserve(e.target); }
+      });
+    }, { threshold: 0.25, rootMargin: '0px 0px -6% 0px' });
+    heads.forEach(function (h) { sio.observe(h); });
+  }
+
+  /* ---- sheen + hairline edge on cards ---- */
+  document.querySelectorAll('.card-plain:not(.card-photo), .price-card').forEach(function (c) {
+    c.classList.add('lux-sheen', 'lux-edge');
+  });
+  if (!reduced) document.body.appendChild(el('div', 'lux-grain'));
+
+  /* ---- ambient backgrounds ---- */
+  var dust = [];
+  var builders = {
+    aurora: function (L) { var a = el('div', 'fx-aurora'); a.innerHTML = '<span class="fx-blob b1"></span><span class="fx-blob b2"></span><span class="fx-blob b3"></span>'; L.appendChild(a); },
+    rays: function (L) { var r = el('div', 'fx-rays'); r.innerHTML = '<span class="ray r1"></span><span class="ray r2"></span>'; L.appendChild(r); },
+    contour: function (L) { var c = el('div', 'fx-contour'); c.innerHTML = '<span class="rings"></span>'; L.appendChild(c); },
+    dust: function (L, light) { var cv = el('canvas', 'fx-dust'); cv.setAttribute('aria-hidden', 'true'); cv.dataset.tone = light ? 'light' : 'dark'; L.appendChild(cv); dust.push(cv); }
+  };
+  var FX = [
+    { sel: '.hero',        types: ['aurora', 'dust'] },
+    { sel: '#digital',     types: ['dust'] },
+    { sel: '#how',         types: ['rays'],    light: true },
+    { sel: '#reputation',  types: ['contour'], light: true },
+    { sel: '#lab',         types: ['aurora'] },
+    { sel: '#problem',     types: ['dust'],    light: true },
+    { sel: '#start',       types: ['aurora', 'dust'] },
+    { sel: '#included .card-photo', types: ['frame'] }
+  ];
+  FX.forEach(function (cfg) {
+    document.querySelectorAll(cfg.sel).forEach(function (node) {
+      var layer = null;
+      cfg.types.forEach(function (t) {
+        if (t === 'frame') { node.classList.add('fx-framed'); return; }
+        if (!layer) {
+          layer = el('div', 'fx-layer'); layer.setAttribute('aria-hidden', 'true');
+          node.classList.add('fx-host');
+          node.insertBefore(layer, node.firstChild);
+        }
+        builders[t](layer, !!cfg.light);
+      });
+    });
+  });
+
+  /* ---- dust renderer: shared, and paused while off screen ---- */
+  dust.forEach(function (cv) {
+    var ctx = cv.getContext('2d');
+    var light = cv.dataset.tone === 'light';
+    var tone = light ? '30,36,102' : '191,192,211';
+    var baseA = light ? 0.4 : 0.5;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var parts = [], vis = true, W = 0, H = 0;
+    function size() { var r = cv.getBoundingClientRect(); W = cv.width = Math.max(1, r.width * dpr); H = cv.height = Math.max(1, r.height * dpr); }
+    function seed() {
+      parts = [];
+      var n = Math.max(16, Math.min(64, Math.round((W * H) / (dpr * dpr * 6000))));
+      for (var i = 0; i < n; i++) parts.push({
+        x: Math.random() * W, y: Math.random() * H,
+        r: (Math.random() * 1.5 + 0.4) * dpr, s: (Math.random() * 0.22 + 0.05) * dpr,
+        a: Math.random() * baseA + 0.15, t: Math.random() * 6.28
+      });
+    }
+    size(); seed();
+    if ('ResizeObserver' in window) new ResizeObserver(function () { size(); seed(); }).observe(cv);
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (e) {
+      var was = vis; vis = e[0].isIntersecting; if (vis && !was && !reduced) requestAnimationFrame(frame);
+    }).observe(cv);
+    function frame() {
+      ctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < parts.length; i++) {
+        var p = parts[i];
+        if (!reduced) { p.y -= p.s; p.t += 0.02; p.x += Math.sin(p.t) * 0.15 * dpr; if (p.y < -4) { p.y = H + 4; p.x = Math.random() * W; } }
+        var g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3);
+        g.addColorStop(0, 'rgba(' + tone + ',' + p.a + ')');
+        g.addColorStop(1, 'rgba(' + tone + ',0)');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 3, 0, 6.283); ctx.fill();
+      }
+      if (!reduced && vis) requestAnimationFrame(frame);
+    }
+    frame();
+  });
 })();
 </script>
 
