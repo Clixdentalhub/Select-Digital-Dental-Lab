@@ -1130,6 +1130,7 @@ ul,ol{margin:0;padding:0;list-style:none}
 .rep-grid{display:grid;gap:var(--s-4);align-items:start}
 @media (min-width:900px){ .rep-grid{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:var(--s-6)} }
 .rep-grid h2{margin:0}
+.rep-photo{margin-top:var(--s-4);border-radius:var(--r-md);box-shadow:0 24px 48px -28px rgba(23,20,15,.45)}
 .final-ticks{width:fit-content;max-width:100%;margin:var(--s-3) auto var(--s-4);text-align:left}
 </style>
 </head>
@@ -1196,7 +1197,7 @@ ul,ol{margin:0;padding:0;list-style:none}
      ======================================================== -->
 <section class="hero" id="enquiry">
   <!-- Optional background video: hosted .mp4 in data-video. Empty = flat dark band. -->
-  <div class="bg-video" aria-hidden="true" data-video=""></div>
+  <div class="bg-video" aria-hidden="true" data-video="" style="background:url(assets/img/hero-technician.jpg) center 30%/cover"></div>
   <div class="drift" aria-hidden="true"><b></b><b></b></div>
   <div class="wrap">
     <div class="hero-grid">
@@ -1431,7 +1432,8 @@ ul,ol{margin:0;padding:0;list-style:none}
      5 · WHY DIGITAL — dark band, the core mechanism.
      Motion: S3 rule draws first.
      ======================================================== -->
-<section class="section dark has-cut" id="digital" aria-labelledby="digital-h" data-anim="rule-first">
+<section class="section dark has-cut section-photo" id="digital" aria-labelledby="digital-h" data-anim="rule-first">
+  <div class="photo-bg" aria-hidden="true" style="background-image:url(assets/img/digital-furnace.jpg)"></div>
   <div class="drift" aria-hidden="true"><b></b><b></b></div>
   <div class="wrap">
     <div style="max-width:70ch;margin-inline:auto;text-align:center">
@@ -1510,6 +1512,10 @@ ul,ol{margin:0;padding:0;list-style:none}
       <div>
         <p class="eyebrow">Your name is on it</p>
         <h2 id="reputation-h">Your patient doesn&rsquo;t know which lab made their crown. They know you fitted&nbsp;it.</h2>
+        <div class="media media-4x3 rep-photo" data-slot="reputation-boxes.jpg">
+          <img src="assets/img/reputation-boxes.jpg" width="900" height="1000" loading="lazy"
+               alt="Select Digital Dental Lab branded case boxes stacked on a lab bench">
+        </div>
       </div>
       <div class="profile">
         <blockquote>&ldquo;Every time you cement a restoration, you&rsquo;re putting your name on it. When the fit&rsquo;s off,
@@ -1583,13 +1589,13 @@ ul,ol{margin:0;padding:0;list-style:none}
 
       <div class="grid" style="gap:var(--s-3)">
         <div class="card-plain card-photo">
-          <span class="card-photo-bg" aria-hidden="true"></span>
+          <span class="card-photo-bg" aria-hidden="true" style="background-image:url(assets/img/callout-stains.jpg)"></span>
           <h3>Occlusion. Margins. Contacts. Fit.&nbsp;Aesthetics.</h3>
           <p style="margin:0">These aren&rsquo;t just manufacturing details. They affect what happens in the chair &mdash;
           and when you send us a case, it&rsquo;s reviewed by someone who knows&nbsp;that.</p>
         </div>
         <div class="card-plain card-photo">
-          <span class="card-photo-bg" aria-hidden="true"></span>
+          <span class="card-photo-bg" aria-hidden="true" style="background-image:url(assets/img/callout-equipment.jpg)"></span>
           <h3>You shouldn&rsquo;t have to translate dentistry to your own&nbsp;lab</h3>
           <p style="margin:0">Your lab is an extension of your hands. It shouldn&rsquo;t feel like the weakest link in
           the&nbsp;chain.</p>
@@ -1598,12 +1604,88 @@ ul,ol{margin:0;padding:0;list-style:none}
     </div>
   </div>
 
-  <div class="cut to-bg" aria-hidden="true">
+  <div class="cut to-dark" aria-hidden="true">
     <svg viewBox="0 0 1440 120" preserveAspectRatio="none" role="presentation" focusable="false">
       <path class="l1" d="M0,52 L1440,96 L1440,120 L0,120 Z"/>
       <path class="l2" d="M0,70 L1440,104 L1440,120 L0,120 Z"/>
       <path class="l3" d="M0,88 L1440,110 L1440,120 L0,120 Z"/>
       <path class="l4" d="M0,104 L1440,116 L1440,120 L0,120 Z"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ========================================================
+     INSIDE THE LAB — photo marquee.
+     ======================================================== -->
+<section class="section dark has-cut" id="lab" aria-labelledby="lab-h">
+  <div class="drift" aria-hidden="true"><b></b><b></b></div>
+  <div class="wrap">
+    <div class="section-head centre">
+      <p class="eyebrow">Inside the lab</p>
+      <h2 id="lab-h">Where your cases are&nbsp;made</h2>
+      <p class="lede" style="margin-inline:auto">Every case is designed, made and checked here &mdash; before it comes back to&nbsp;you.</p>
+    </div>
+  </div>
+
+  <div class="gallery" id="gallery-rail" role="region" aria-label="Photographs of the lab, scrollable" tabindex="0">
+    <div class="gallery-track">
+        <figure class="gallery-item">
+          <div class="media media-4x3" data-slot="g01.jpg">
+            <img src="assets/img/g01.jpg" width="800" height="600" loading="lazy"
+                 alt="The Select Digital Dental Lab workroom, with design stations and benches">
+          </div>
+        </figure>
+        <figure class="gallery-item">
+          <div class="media media-4x3" data-slot="g02.jpg">
+            <img src="assets/img/g02.jpg" width="800" height="600" loading="lazy"
+                 alt="A technician finishing a restoration at the bench">
+          </div>
+        </figure>
+        <figure class="gallery-item">
+          <div class="media media-4x3" data-slot="g03.jpg">
+            <img src="assets/img/g03.jpg" width="800" height="600" loading="lazy"
+                 alt="The ceramic furnace and equipment on the lab bench">
+          </div>
+        </figure>
+        <figure class="gallery-item">
+          <div class="media media-4x3" data-slot="g04.jpg">
+            <img src="assets/img/g04.jpg" width="800" height="600" loading="lazy"
+                 alt="A tray of Miyo ceramic stains used for shade characterisation">
+          </div>
+        </figure>
+        <figure class="gallery-item">
+          <div class="media media-4x3" data-slot="g05.jpg">
+            <img src="assets/img/g05.jpg" width="800" height="600" loading="lazy"
+                 alt="Design workstations inside the lab">
+          </div>
+        </figure>
+        <figure class="gallery-item">
+          <div class="media media-4x3" data-slot="g06.jpg">
+            <img src="assets/img/g06.jpg" width="800" height="600" loading="lazy"
+                 alt="A finishing bench with the furnace and hand tools">
+          </div>
+        </figure>
+        <figure class="gallery-item">
+          <div class="media media-4x3" data-slot="g07.jpg">
+            <img src="assets/img/g07.jpg" width="800" height="600" loading="lazy"
+                 alt="A technician working on a case under the extraction arm">
+          </div>
+        </figure>
+        <figure class="gallery-item">
+          <div class="media media-4x3" data-slot="g08.jpg">
+            <img src="assets/img/g08.jpg" width="800" height="600" loading="lazy"
+                 alt="Select Digital Dental Lab case boxes">
+          </div>
+        </figure>
+    </div>
+  </div>
+
+  <div class="cut to-bg" aria-hidden="true">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none" role="presentation" focusable="false">
+      <path class="l1" d="M0,120 L0,44 L560,44 L620,4 L820,4 L880,44 L1440,44 L1440,120 Z"/>
+      <path class="l2" d="M0,120 L0,64 L570,64 L628,26 L812,26 L870,64 L1440,64 L1440,120 Z"/>
+      <path class="l3" d="M0,120 L0,84 L580,84 L636,50 L804,50 L860,84 L1440,84 L1440,120 Z"/>
+      <path class="l4" d="M0,120 L0,102 L590,102 L644,74 L796,74 L850,102 L1440,102 L1440,120 Z"/>
     </svg>
   </div>
 </section>
