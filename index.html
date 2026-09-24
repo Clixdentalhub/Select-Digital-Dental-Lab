@@ -692,8 +692,10 @@ ul,ol{margin:0;padding:0;list-style:none}
 /* The trust strip is one row of figures, not a full section — it reads as a
    band between the hero and the problem cards, so it sits tighter than the
    section default. The extra bottom is clearance for the cut overlay. */
-#trust{padding-top:var(--s-4);padding-bottom:calc(var(--s-3) + var(--cut-h))}
-@media (min-width:768px){ #trust{padding-top:var(--s-5);padding-bottom:calc(var(--s-4) + var(--cut-h))} }
+#trust{padding-top:var(--s-5);padding-bottom:calc(var(--s-3) + var(--cut-h))}
+@media (min-width:768px){ #trust{padding-top:var(--s-6);padding-bottom:calc(var(--s-3) + var(--cut-h))} }
+#trust .stat span{white-space:nowrap}
+@media (min-width:900px){ #trust .stat+.stat{border-left:1px solid rgba(191,192,211,.18)} }
 .stats{display:grid;gap:var(--s-3);text-align:center}
 @media (min-width:640px){ .stats{grid-template-columns:repeat(2,1fr)} }
 @media (min-width:900px){ .stats{grid-template-columns:repeat(4,1fr)} }
@@ -1131,6 +1133,7 @@ ul,ol{margin:0;padding:0;list-style:none}
 @media (min-width:900px){ .rep-grid{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:var(--s-6)} }
 .rep-grid h2{margin:0}
 .rep-photo{margin-top:var(--s-4);border-radius:var(--r-md);box-shadow:0 24px 48px -28px rgba(23,20,15,.45)}
+#digital .rule-body>p,#start .lede,.section-head.centre .lede{text-wrap:balance}
 .final-ticks{width:fit-content;max-width:100%;margin:var(--s-3) auto var(--s-4);text-align:left}
 /* ============================================================
    LUXE LAYER — headline type, kinetic headings, ambient
@@ -1486,10 +1489,10 @@ ul,ol{margin:0;padding:0;list-style:none}
   <div class="wrap">
     <h2 id="trust-h" class="sr-only">Why private practices choose Select Digital Dental Lab</h2>
     <ul class="stats">
-      <li class="stat"><b>UK-wide</b><span>Nationwide delivery and a UK support&nbsp;team</span></li>
-      <li class="stat"><b>Every case</b><span>Checked by a dentist before&nbsp;approval</span></li>
-      <li class="stat"><b>100% digital</b><span>From your scan to the finished&nbsp;restoration</span></li>
-      <li class="stat"><b>10 days</b><span>Working day turnaround, every&nbsp;case</span></li>
+      <li class="stat"><b>UK-wide</b><span>Nationwide delivery &amp; support</span></li>
+      <li class="stat"><b>Every case</b><span>Checked by a dentist</span></li>
+      <li class="stat"><b>100% digital</b><span>From scan to restoration</span></li>
+      <li class="stat"><b>10 days</b><span>Working day turnaround</span></li>
     </ul>
   </div>
   <div class="cut to-bg" aria-hidden="true">
@@ -1556,13 +1559,13 @@ ul,ol{margin:0;padding:0;list-style:none}
       <div class="rule-body">
         <p>The material distorts, the pour adds more, and the model is a copy of a copy of your patient&rsquo;s mouth.
         Small errors &mdash; but they land at the margin, where you feel&nbsp;them.</p>
-        <ul class="ticks" style="max-width:52ch;margin:var(--s-3) auto 0;text-align:left" aria-label="How a fully digital workflow protects the fit">
+        <ul class="ticks" style="width:fit-content;max-width:100%;margin:var(--s-3) auto 0;text-align:left" aria-label="How a fully digital workflow protects the fit">
           <li class="tick"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 6.9"/></svg>
-            <span>Your scan comes straight to us &mdash; no distortion, no pour, no copy of a&nbsp;copy</span></li>
+            <span>Your scan comes straight to us &mdash; no copy of a&nbsp;copy</span></li>
           <li class="tick"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 6.9"/></svg>
-            <span>Contacts and occlusion are verified on screen. The fit is engineered, not&nbsp;guessed</span></li>
+            <span>Contacts and occlusion verified on&nbsp;screen</span></li>
           <li class="tick"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 6.9"/></svg>
-            <span>Every case is signed off by a dentist before it comes back to&nbsp;you</span></li>
+            <span>Every case signed off by a&nbsp;dentist</span></li>
         </ul>
         <p style="margin-top:var(--s-3)">The result: a crown that drops in with a satisfying click &mdash; every&nbsp;time.</p>
         <a class="btn btn-primary" href="#qualifier-card" style="margin-top:var(--s-1)">See how we work</a>
