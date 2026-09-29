@@ -1129,6 +1129,11 @@ ul,ol{margin:0;padding:0;list-style:none}
   font-family:var(--font-head);font-weight:600;font-size:clamp(1.15rem,2.6vw,1.45rem);line-height:1.35;
   color:var(--color-accent);text-wrap:balance;
 }
+/* a quiet static glow instead of a pattern: separates this band from the plain one above */
+#reputation{background:
+  radial-gradient(60% 70% at 100% 0%,rgba(30,36,102,.07),transparent 70%),
+  radial-gradient(50% 60% at 0% 100%,rgba(143,147,230,.10),transparent 70%),
+  var(--color-surface)}
 .rep-grid{display:grid;gap:var(--s-4);align-items:start}
 @media (min-width:900px){ .rep-grid{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:var(--s-6)} }
 .rep-grid h2{margin:0}
@@ -2582,8 +2587,6 @@ ul,ol{margin:0;padding:0;list-style:none}
   var FX = [
     { sel: '.hero',        types: ['aurora', 'dust'] },
     { sel: '#digital',     types: ['dust'] },
-    { sel: '#how',         types: ['rays'],    light: true },
-    { sel: '#reputation',  types: ['contour'], light: true },
     { sel: '#lab',         types: ['aurora'] },
     { sel: '#problem',     types: ['dust'],    light: true },
     { sel: '#start',       types: ['aurora', 'dust'] },
