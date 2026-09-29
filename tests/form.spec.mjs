@@ -117,3 +117,53 @@ test('a hostile name in the query string is never printed', async ({ page }) => 
   expect(await page.content()).not.toContain('onerror=alert');
 });
 
+
+test('the lead reaches the webhook with answers, UTMs and Meta click IDs', async ({ page }) => {
+  await page.goto('/index.html?utm_source=facebook&utm_medium=paid&utm_campaign=c1-no-offer&utm_content=hook-2&utm_term=dentists&fbclid=ABC123', { waitUntil: 'load' });
+  await page.locator('.step[data-step="1"] .opt').first().click();
+  await expect(page.locator('.step[data-step="2"]')).toBeVisible();
+  await page.locator('.step[data-step="2"] .opt').nth(1).click();
+  await expect(page.locator('.step[data-step="3"]')).toBeVisible();
+  await page.fill('input[name=firstName]', 'Jane');
+  await page.fill('input[name=lastName]', 'Doe');
+  await page.fill('input[name=practiceName]', 'Doe Dental');
+  await page.fill('input[name=phone]', '07700 900123');
+  await page.fill('input[name=email]', 'jane@example.com');
+  const sent = page.waitForRequest(/leadconnectorhq\.com/);
+  await page.locator('.step[data-step="3"] button[type=submit]').click();
+  const req = await sent;
+  const body = new URLSearchParams(req.postData());
+  expect(req.method()).toBe('POST');
+  expect(body.get('first_name')).toBe('Jane');
+  expect(body.get('last_name')).toBe('Doe');
+  expect(body.get('email')).toBe('jane@example.com');
+  expect(body.get('phone')).toBe('07700 900123');
+  expect(body.get('practice_name')).toBe('Doe Dental');
+  expect(body.get('practice_type')).toBe('Fully private practice');
+  expect(body.get('lab_frustration')).toBe('Remakes and lost chair time');
+  expect(body.get('utm_source')).toBe('facebook');
+  expect(body.get('utm_medium')).toBe('paid');
+  expect(body.get('utm_campaign')).toBe('c1-no-offer');
+  expect(body.get('utm_content')).toBe('hook-2');
+  expect(body.get('utm_term')).toBe('dentists');
+  expect(body.get('fbclid')).toBe('ABC123');
+  expect(body.get('fbc')).toMatch(/^fb\.1\.\d{13}\.ABC123$/);
+  expect(body.get('landing_page')).toContain('utm_campaign=c1-no-offer');
+  expect(body.get('submitted_at')).toMatch(/^\d{4}-\d\d-\d\dT/);
+  await page.waitForURL(/thank-you\.html\?name=Jane/, { timeout: 20000, waitUntil: 'commit' });
+});
+
+test('UTMs survive a click-around before the form is sent', async ({ page }) => {
+  await page.goto('/index.html?utm_source=facebook&utm_campaign=c1&fbclid=XYZ', { waitUntil: 'load' });
+  await page.goto('/index.html#faq', { waitUntil: 'load' });   // same session, no query string
+  await page.reload({ waitUntil: 'load' });
+  await page.locator('.step[data-step="1"] .opt').first().click();
+  await page.locator('.step[data-step="2"] .opt').first().click();
+  for (const [n, v] of [['firstName','A'],['lastName','B'],['practiceName','C'],['phone','07700 900123'],['email','a@b.co']]) await page.fill(`input[name=${n}]`, v);
+  const sent = page.waitForRequest(/leadconnectorhq\.com/);
+  await page.locator('.step[data-step="3"] button[type=submit]').click();
+  const body = new URLSearchParams((await sent).postData());
+  expect(body.get('utm_source')).toBe('facebook');
+  expect(body.get('utm_campaign')).toBe('c1');
+  expect(body.get('fbclid')).toBe('XYZ');
+});

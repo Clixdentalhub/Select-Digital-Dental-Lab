@@ -32,8 +32,11 @@ npm test          # 49 tests: contrast, no overflow at 7 widths, form, typograph
 
 ## Before going live
 
-1. **Form endpoint.** In `index.html`, set `ENDPOINT` to the GoHighLevel inbound webhook. The form posts:
-   `practiceType`, `frustration`, `firstName`, `lastName`, `practiceName`, `phone`, `email`.
+1. **Form endpoint.** `ENDPOINT` in `index.html` points at the GoHighLevel inbound webhook. The form posts
+   form-encoded fields: `first_name`, `last_name`, `email`, `phone`, `practice_name`, `practice_type`,
+   `lab_frustration`, `utm_source`, `utm_medium`, `utm_campaign`, `utm_content`, `utm_term`, `fbclid`, `fbc`,
+   `fbp`, `landing_page`, `referrer`, `lead_source`, `submitted_at`. UTMs and fbclid are captured on landing and
+   kept for the session. Tests intercept the webhook, so `npm test` never creates a real lead.
 2. **Logo** (optional). Add `assets/img/logo.png`. Without it, the header uses a text lockup.
 3. **Conversion tag.** Paste the pixel or GTM event into the marked block at the bottom of `thank-you.html`.
    Fire it only there.

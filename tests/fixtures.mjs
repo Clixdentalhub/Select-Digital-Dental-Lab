@@ -27,6 +27,13 @@ export const test = base.extend({
     await page.route(/google\.com\/maps|maps\.googleapis\.com|maps\.gstatic\.com/, (route) =>
       route.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><title>map</title>' }));
 
+    /* The form posts to the live GoHighLevel webhook. Never let a test create
+       a real lead: capture the request and answer it locally instead. */
+    await page.route(/leadconnectorhq\.com/, (route) => {
+      (page.__leads || (page.__leads = [])).push(route.request().postData() || '');
+      return route.fulfill({ status: 200, contentType: 'application/json', body: '{"status":"ok"}' });
+    });
+
     await page.route(/fonts\.(googleapis|gstatic)\.com/, (route) => {
       const entry = fonts && fonts[route.request().url()];
       if (!entry) return route.abort();

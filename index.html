@@ -1289,9 +1289,9 @@ ul,ol{margin:0;padding:0;list-style:none}
 
       <span class="header-spacer"></span>
 
-      <a class="btn-call" href="tel:+441922308120">
+      <a class="btn-call" href="tel:+447700163894">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg>
-        <span>01922&nbsp;308&nbsp;120</span>
+        <span>07700&nbsp;163894</span>
       </a>
 
       <a class="btn btn-primary btn-sm header-cta" href="#qualifier-card">See if we&rsquo;re a fit</a>
@@ -1938,7 +1938,7 @@ ul,ol{margin:0;padding:0;list-style:none}
         </button>
         <div class="faq-a" id="a7" role="region" aria-labelledby="q7"><div>
           <p>Answer the two quick questions at the top of this page and leave your details, or call us on
-          <a href="tel:+441922308120">01922 308 120</a>. We&rsquo;ll talk through the cases you send, how we work, and whether
+          <a href="tel:+447700163894">07700 163894</a>. We&rsquo;ll talk through the cases you send, how we work, and whether
           we&rsquo;re the right fit for your&nbsp;practice.</p>
         </div></div>
       </div>
@@ -2006,7 +2006,7 @@ ul,ol{margin:0;padding:0;list-style:none}
       <div>
         <h4>Contact</h4>
         <ul style="display:grid;gap:6px">
-          <li><a href="tel:+441922308120">01922 308 120</a></li>
+          <li><a href="tel:+447700163894">07700 163894</a></li>
           <li><a href="mailto:info@selectdigitaldentallab.com" style="overflow-wrap:anywhere">info@selectdigitaldentallab.com</a></li>
           <li><a href="#qualifier-card">See if we&rsquo;re the right fit</a></li>
         </ul>
@@ -2022,7 +2022,7 @@ ul,ol{margin:0;padding:0;list-style:none}
 </footer>
 
 <div class="mobile-bar" id="mobile-bar">
-  <a class="btn btn-ghost" href="tel:+441922308120">Call</a>
+  <a class="btn btn-ghost" href="tel:+447700163894">Call</a>
   <a class="btn btn-primary" href="#qualifier-card">See if we&rsquo;re a fit</a>
 </div>
 
@@ -2032,7 +2032,7 @@ ul,ol{margin:0;padding:0;list-style:none}
   "@type":"Organization",
   "name":"Select Digital Dental Lab",
   "slogan":"The lab built by dentists",
-  "telephone":"+441922308120",
+  "telephone":"+447700163894",
   "email":"info@selectdigitaldentallab.com",
   "areaServed":{"@type":"Country","name":"United Kingdom"},
   "description":"A fully digital, dentist-led dental lab for private practices. Crowns, bridges, veneers and dentures, every case checked by a dentist, with a ten working day turnaround.",
@@ -2337,12 +2337,39 @@ ul,ol{margin:0;padding:0;list-style:none}
      demonstration mode: it validates, shows the success state
      and forwards to the thank-you page without sending
      anything anywhere.                                        */
-  var ENDPOINT = null; // ← paste your CRM / GoHighLevel inbound webhook URL (leave null to test)
+  var ENDPOINT = 'https://services.leadconnectorhq.com/hooks/MwfeS47rhDLa0mMRth3T/webhook-trigger/46c2dfc3-560f-473b-8302-4fdd445219b4'; // GoHighLevel inbound webhook
   var THANK_YOU = 'thank-you.html';
   /* ──────────────────────────────────────────────────────── */
 
   var form = document.getElementById('qualifier');
   if (!form) return;
+
+  /* -----------------------------------------------------------
+     Attribution. Read once on landing and kept for the session,
+     so a visitor who clicks around (or reloads) before submitting
+     still carries the ad click that brought them. First touch in
+     the session wins; a later visit with new UTMs replaces it.
+     ----------------------------------------------------------- */
+  var ATTR_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'fbclid'];
+  function cookie(name) {
+    var m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+    return m ? decodeURIComponent(m[1]) : '';
+  }
+  var attribution = (function () {
+    var stored = null;
+    try { stored = JSON.parse(sessionStorage.getItem('sddl_attr') || 'null'); } catch (err) {}
+    var fresh = {};
+    try {
+      var q = new URLSearchParams(window.location.search);
+      ATTR_KEYS.forEach(function (k) { var v = q.get(k); if (v) fresh[k] = v.slice(0, 250); });
+    } catch (err) {}
+    var a = Object.keys(fresh).length ? fresh : (stored || {});
+    if (!a.landing_page) a.landing_page = window.location.href.split('#')[0].slice(0, 500);
+    if (!a.referrer && document.referrer) a.referrer = document.referrer.slice(0, 500);
+    if (a.fbclid && !a.fbc_created) a.fbc_created = Date.now();
+    try { sessionStorage.setItem('sddl_attr', JSON.stringify(a)); } catch (err) {}
+    return a;
+  })();
 
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var steps = Array.prototype.slice.call(form.querySelectorAll('.step'));
@@ -2505,13 +2532,41 @@ ul,ol{margin:0;padding:0;list-style:none}
 
     var forward = function () { goToThankYou(data.firstName); };
 
+    /* The payload, keyed to match the CRM fields one-to-one. */
+    var payload = {
+      first_name: data.firstName || '',
+      last_name: data.lastName || '',
+      email: data.email || '',
+      phone: data.phone || '',
+      practice_name: data.practiceName || '',
+      practice_type: data.practiceType || '',
+      lab_frustration: data.frustration || '',
+      utm_source: attribution.utm_source || '',
+      utm_medium: attribution.utm_medium || '',
+      utm_campaign: attribution.utm_campaign || '',
+      utm_content: attribution.utm_content || '',
+      utm_term: attribution.utm_term || '',
+      fbclid: attribution.fbclid || '',
+      /* Meta click and browser IDs, in the format the Conversions API expects:
+         the pixel's own cookie if it set one, otherwise built from fbclid. */
+      fbc: cookie('_fbc') || (attribution.fbclid ? 'fb.1.' + attribution.fbc_created + '.' + attribution.fbclid : ''),
+      fbp: cookie('_fbp'),
+      landing_page: attribution.landing_page || '',
+      referrer: attribution.referrer || '',
+      lead_source: 'Select Digital Dental Lab landing page',
+      submitted_at: new Date().toISOString()
+    };
+
     if (ENDPOINT) {
-      fetch(ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      }).then(forward, forward);
+      /* Form-encoded and no-cors: a "simple" request, so the browser sends
+         it without a CORS preflight the webhook may not answer. The
+         response is opaque, which is fine; nothing here reads it. */
+      var body = new URLSearchParams();
+      Object.keys(payload).forEach(function (k) { body.append(k, payload[k]); });
+      fetch(ENDPOINT, { method: 'POST', mode: 'no-cors', body: body, keepalive: true })
+        .then(forward, forward);
     } else {
+      if (window.console) console.info('[demo mode, not sent] lead payload:', payload);
       setTimeout(forward, reduced ? 0 : 1400);
     }
   });
