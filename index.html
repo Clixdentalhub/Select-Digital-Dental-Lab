@@ -1244,7 +1244,17 @@ ul,ol{margin:0;padding:0;list-style:none}
 }
 .lead-modal[open]{display:flex;flex-direction:column}
 .lead-modal::backdrop{background:rgba(6,6,68,.72);backdrop-filter:blur(6px)}
-.lead-modal .form-card{background-color:#12125A;max-height:calc(100dvh - 24px);overflow-y:auto;overscroll-behavior:contain}
+.lead-modal .form-card{background-color:#12125A;max-height:calc(100dvh - 24px);overflow-y:auto;overscroll-behavior:contain;
+  scrollbar-width:none;-ms-overflow-style:none}   /* still scrolls on short screens, just without the bar */
+.lead-modal .form-card::-webkit-scrollbar{display:none;width:0;height:0}
+/* the bloom is painted into the background: a positioned ::after below the card
+   would add scrollable overflow and a phantom scroll */
+.lead-modal .form-card::after{display:none}
+.lead-modal .form-card{background-image:
+  radial-gradient(60% 40% at 50% 108%,rgba(191,192,211,.20),rgba(191,192,211,0) 70%),
+  linear-gradient(180deg,#12125A 0%,#0B0B4A 100%)}
+.lead-modal{scrollbar-width:none}
+.lead-modal::-webkit-scrollbar{display:none}
 .modal-close{
   position:absolute;top:12px;right:12px;z-index:5;width:40px;height:40px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;cursor:pointer;
