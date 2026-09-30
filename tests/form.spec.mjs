@@ -12,7 +12,7 @@ test('pointer selection advances the step', async ({ page }) => {
   await expect(page.locator('.step[data-step="1"]')).toBeVisible();
   await page.locator('.step[data-step="1"] .opt').first().click();
   await expect(page.locator('.step[data-step="2"]')).toBeVisible({ timeout: 2000 });
-  await expect(page.locator('#meter-count')).toHaveText('Step 2 of 3');
+  await expect(page.locator('#meter-count')).toHaveText('Step 2 of 2');
 });
 
 test('arrow keys do NOT advance — they move within the group', async ({ page }) => {
@@ -23,7 +23,7 @@ test('arrow keys do NOT advance — they move within the group', async ({ page }
   await page.waitForTimeout(600);
   // still on step 1, with the third option selected
   await expect(page.locator('.step[data-step="1"]')).toBeVisible();
-  await expect(page.locator('#meter-count')).toHaveText('Step 1 of 3');
+  await expect(page.locator('#meter-count')).toHaveText('Step 1 of 2');
   const checkedIndex = await page.evaluate(() =>
     [...document.querySelectorAll('.step[data-step="1"] input[type=radio]')].findIndex((r) => r.checked));
   expect(checkedIndex).toBe(2);
@@ -31,21 +31,19 @@ test('arrow keys do NOT advance — they move within the group', async ({ page }
 
 test('validation blocks an empty step and errors clear on input', async ({ page }) => {
   await page.locator('.step[data-step="1"] [data-next]').click();
-  await expect(page.locator('#err-practiceType')).not.toBeEmpty();
+  await expect(page.locator('#err-role')).not.toBeEmpty();
   await expect(page.locator('.step[data-step="1"] fieldset')).toHaveAttribute('aria-invalid', 'true');
   await expect(page.locator('.step[data-step="1"]')).toBeVisible();
 
   await page.locator('.step[data-step="1"] .opt').first().click();
-  await expect(page.locator('#err-practiceType')).toBeEmpty();
+  await expect(page.locator('#err-role')).toBeEmpty();
 });
 
-test('step 3 validates each field and wires aria-invalid to aria-describedby', async ({ page }) => {
+test('the details step validates each field and wires aria-invalid to aria-describedby', async ({ page }) => {
   await page.locator('.step[data-step="1"] .opt').first().click();
   await expect(page.locator('.step[data-step="2"]')).toBeVisible();
-  await page.locator('.step[data-step="2"] .opt').first().click();
-  await expect(page.locator('.step[data-step="3"]')).toBeVisible();
 
-  await page.locator('.step[data-step="3"] button[type=submit]').click();
+  await page.locator('.step[data-step="2"] button[type=submit]').click();
   for (const name of ['firstName', 'lastName', 'practiceName', 'phone', 'email']) {
     await expect(page.locator(`#err-${name}`)).not.toBeEmpty();
     const input = page.locator(`input[name="${name}"]`);
@@ -54,18 +52,14 @@ test('step 3 validates each field and wires aria-invalid to aria-describedby', a
   }
 
   await page.fill('input[name=email]', 'not-an-email');
-  await page.locator('.step[data-step="3"] button[type=submit]').click();
+  await page.locator('.step[data-step="2"] button[type=submit]').click();
   await expect(page.locator('#err-email')).toContainText('valid email');
 });
 
-test('back navigation preserves answers', async ({ page }) => {
+test('back navigation preserves the answer', async ({ page }) => {
   await page.locator('.step[data-step="1"] .opt').nth(1).click();
   await expect(page.locator('.step[data-step="2"]')).toBeVisible();
-  await page.locator('.step[data-step="2"] .opt').nth(2).click();
-  await expect(page.locator('.step[data-step="3"]')).toBeVisible();
-
-  await page.locator('.step[data-step="3"] [data-back]').click();
-  await expect(page.locator('.step[data-step="2"] input[type=radio]').nth(2)).toBeChecked();
+  await expect(page.locator('#meter-count')).toHaveText('Step 2 of 2');
   await page.locator('.step[data-step="2"] [data-back]').click();
   await expect(page.locator('.step[data-step="1"] input[type=radio]').nth(1)).toBeChecked();
 });
@@ -80,15 +74,13 @@ test('Enter advances a step rather than submitting early', async ({ page }) => {
 test('a completed form reaches the success state and forwards with a name', async ({ page }) => {
   await page.locator('.step[data-step="1"] .opt').first().click();
   await expect(page.locator('.step[data-step="2"]')).toBeVisible();
-  await page.locator('.step[data-step="2"] .opt').first().click();
-  await expect(page.locator('.step[data-step="3"]')).toBeVisible();
 
   await page.fill('input[name=firstName]', 'Jane');
   await page.fill('input[name=lastName]', 'Doe');
   await page.fill('input[name=practiceName]', 'Doe Dental');
   await page.fill('input[name=phone]', '07700 900123');
   await page.fill('input[name=email]', 'jane@example.com');
-  await page.locator('.step[data-step="3"] button[type=submit]').click();
+  await page.locator('.step[data-step="2"] button[type=submit]').click();
 
   await expect(page.locator('#form-done')).toBeVisible();
   await page.waitForURL(/thank-you\.html\?name=Jane/, { timeout: 20000, waitUntil: 'commit' });
@@ -98,14 +90,13 @@ test('a completed form reaches the success state and forwards with a name', asyn
 
 test('the honeypot suppresses the forward without changing what a bot sees', async ({ page }) => {
   await page.locator('.step[data-step="1"] .opt').first().click();
-  await page.locator('.step[data-step="2"] .opt').first().click();
   await page.fill('input[name=firstName]', 'Bot');
   await page.fill('input[name=lastName]', 'Net');
   await page.fill('input[name=practiceName]', 'Net Dental');
   await page.fill('input[name=phone]', '07700 900123');
   await page.fill('input[name=email]', 'bot@example.com');
   await page.evaluate(() => { document.querySelector('input[name=company]').value = 'spam'; });
-  await page.locator('.step[data-step="3"] button[type=submit]').click();
+  await page.locator('.step[data-step="2"] button[type=submit]').click();
 
   await expect(page.locator('#form-done')).toBeVisible();
   await page.waitForTimeout(2200);
@@ -126,15 +117,13 @@ test('the lead reaches the webhook with answers, UTMs and Meta click IDs', async
   await expect(page.locator('#lead-modal')).toBeVisible();
   await page.locator('.step[data-step="1"] .opt').first().click();
   await expect(page.locator('.step[data-step="2"]')).toBeVisible();
-  await page.locator('.step[data-step="2"] .opt').nth(1).click();
-  await expect(page.locator('.step[data-step="3"]')).toBeVisible();
   await page.fill('input[name=firstName]', 'Jane');
   await page.fill('input[name=lastName]', 'Doe');
   await page.fill('input[name=practiceName]', 'Doe Dental');
   await page.fill('input[name=phone]', '07700 900123');
   await page.fill('input[name=email]', 'jane@example.com');
   const sent = page.waitForRequest(/leadconnectorhq\.com/);
-  await page.locator('.step[data-step="3"] button[type=submit]').click();
+  await page.locator('.step[data-step="2"] button[type=submit]').click();
   const req = await sent;
   const body = new URLSearchParams(req.postData());
   expect(req.method()).toBe('POST');
@@ -143,8 +132,9 @@ test('the lead reaches the webhook with answers, UTMs and Meta click IDs', async
   expect(body.get('email')).toBe('jane@example.com');
   expect(body.get('phone')).toBe('07700 900123');
   expect(body.get('practice_name')).toBe('Doe Dental');
-  expect(body.get('practice_type')).toBe('Fully private practice');
-  expect(body.get('lab_frustration')).toBe('Remakes and lost chair time');
+  expect(body.get('role')).toBe('Practice owner / principal dentist');
+  expect(body.has('practice_type')).toBe(false);
+  expect(body.has('lab_frustration')).toBe(false);
   expect(body.get('utm_source')).toBe('facebook');
   expect(body.get('utm_medium')).toBe('paid');
   expect(body.get('utm_campaign')).toBe('c1-no-offer');
@@ -164,10 +154,9 @@ test('UTMs survive a click-around before the form is sent', async ({ page }) => 
   await page.locator('[data-open-form]').first().click();
   await expect(page.locator('#lead-modal')).toBeVisible();
   await page.locator('.step[data-step="1"] .opt').first().click();
-  await page.locator('.step[data-step="2"] .opt').first().click();
   for (const [n, v] of [['firstName','A'],['lastName','B'],['practiceName','C'],['phone','07700 900123'],['email','a@b.co']]) await page.fill(`input[name=${n}]`, v);
   const sent = page.waitForRequest(/leadconnectorhq\.com/);
-  await page.locator('.step[data-step="3"] button[type=submit]').click();
+  await page.locator('.step[data-step="2"] button[type=submit]').click();
   const body = new URLSearchParams((await sent).postData());
   expect(body.get('utm_source')).toBe('facebook');
   expect(body.get('utm_campaign')).toBe('c1');

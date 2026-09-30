@@ -75,5 +75,5 @@ test('the form still works inside the host page', async ({ page }) => {
   await expect(page.locator('#lead-modal')).toBeVisible();
   await page.locator('.step[data-step="1"] .opt').first().click();
   await expect(page.locator('.step[data-step="2"]')).toBeVisible({ timeout: 3000 });
-  await expect(page.locator('#meter-count')).toHaveText('Step 2 of 3');
+  await expect(page.locator('#meter-count')).toHaveText('Step 2 of 2');
 });

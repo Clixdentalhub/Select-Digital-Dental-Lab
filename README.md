@@ -43,8 +43,7 @@ poster (`assets/img/g02.jpg`) and play button show until it is clicked; while `d
 ## Before going live
 
 1. **Form endpoint.** `ENDPOINT` in `index.html` points at the GoHighLevel inbound webhook. The form posts
-   form-encoded fields: `first_name`, `last_name`, `email`, `phone`, `practice_name`, `practice_type`,
-   `lab_frustration`, `utm_source`, `utm_medium`, `utm_campaign`, `utm_content`, `utm_term`, `fbclid`, `fbc`,
+   form-encoded fields: `first_name`, `last_name`, `email`, `phone`, `practice_name`, `role`, `utm_source`, `utm_medium`, `utm_campaign`, `utm_content`, `utm_term`, `fbclid`, `fbc`,
    `fbp`, `landing_page`, `referrer`, `lead_source`, `submitted_at`. UTMs and fbclid are captured on landing and
    kept for the session. Tests intercept the webhook, so `npm test` never creates a real lead.
 2. **Logo** (optional). Add `assets/img/logo.png`. Without it, the header uses a text lockup.

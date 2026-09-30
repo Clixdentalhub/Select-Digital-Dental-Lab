@@ -600,7 +600,7 @@ ul,ol{margin:0;padding:0;list-style:none}
 .steps-meter{display:flex;align-items:center;gap:10px;margin-bottom:var(--s-3)}
 .steps-meter .bar{flex:1 1 auto;height:4px;border-radius:var(--r-pill);background:#23266A;overflow:hidden}
 .steps-meter .bar>i{
-  display:block;height:100%;width:33.333%;border-radius:inherit;
+  display:block;height:100%;width:50%;border-radius:inherit;
   background:linear-gradient(90deg,var(--color-flourish),var(--cta-on-dark));
   transition:width var(--d-2) var(--ease);
 }
@@ -657,7 +657,8 @@ ul,ol{margin:0;padding:0;list-style:none}
   color:var(--color-error-on-dark);margin-top:6px;
 }
 .err:empty{display:none}
-.field-row{display:grid;gap:var(--s-2)}
+.field-row{display:grid;gap:var(--s-2);margin-bottom:var(--s-2)}
+.field-row .field{margin-bottom:0}
 @media (min-width:480px){ .field-row{grid-template-columns:1fr 1fr} }
 .hp{position:absolute!important;left:-9999px;width:1px;height:1px;overflow:hidden}
 .form-actions{display:flex;gap:10px;align-items:center;margin-top:var(--s-2)}
@@ -1476,7 +1477,7 @@ html.modal-open{overflow:hidden}
       <div class="vsl-cta">
         <a class="btn btn-primary btn-lg" href="#qualifier-card" data-open-form>See if we&rsquo;re the right fit
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12.5 5.5 19 12l-6.5 6.5"/></svg></a>
-        <p class="vsl-note">Two quick questions &middot; about 30 seconds &middot; no&nbsp;obligation</p>
+        <p class="vsl-note">One quick question &middot; about 20 seconds &middot; no&nbsp;obligation</p>
       </div>
 
       <ul class="chips vsl-chips" aria-label="How we work">
@@ -1949,7 +1950,7 @@ html.modal-open{overflow:hidden}
           <svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
         </button>
         <div class="faq-a" id="a7" role="region" aria-labelledby="q7"><div>
-          <p>Answer the two quick questions at the top of this page and leave your details, or call us on
+          <p>Tap &ldquo;See if we&rsquo;re the right fit&rdquo;, answer one quick question and leave your details, or call us on
           <a href="tel:+447700163894">07700 163894</a>. We&rsquo;ll talk through the cases you send, how we work, and whether
           we&rsquo;re the right fit for your&nbsp;practice.</p>
         </div></div>
@@ -2010,29 +2011,29 @@ html.modal-open{overflow:hidden}
         Limited partner places
       </p>
       <h2 id="form-title">See if we&rsquo;re the right fit for your practice</h2>
-      <p class="form-sub">Two quick questions, then your details. Takes about 30&nbsp;seconds, with no&nbsp;obligation.</p>
+      <p class="form-sub">One quick question, then your details. Takes about 20&nbsp;seconds, with no&nbsp;obligation.</p>
     </div>
 
     <div class="steps-meter" id="meter">
       <div class="bar"><i id="meter-fill"></i></div>
-      <span class="count" id="meter-count">Step 1 of 3</span>
+      <span class="count" id="meter-count">Step 1 of 2</span>
     </div>
 
     <form id="qualifier" novalidate>
       <!-- ── Step 1 ── -->
       <div class="step" data-step="1">
         <fieldset class="opts">
-          <legend class="step-q">Which best describes your&nbsp;practice?</legend>
-          <label class="opt"><input type="radio" name="practiceType" value="Fully private practice" required>
-            <span>Fully private practice</span></label>
-          <label class="opt"><input type="radio" name="practiceType" value="Mixed practice, mostly private">
-            <span>Mixed practice, mostly private</span></label>
-          <label class="opt"><input type="radio" name="practiceType" value="Mixed practice, mostly NHS">
-            <span>Mixed practice, mostly NHS</span></label>
-          <label class="opt"><input type="radio" name="practiceType" value="Opening a new practice">
-            <span>I&rsquo;m opening a new practice</span></label>
+          <legend class="step-q">What&rsquo;s your role at the&nbsp;practice?</legend>
+          <label class="opt"><input type="radio" name="role" value="Practice owner / principal dentist" required>
+            <span>Practice owner or principal&nbsp;dentist</span></label>
+          <label class="opt"><input type="radio" name="role" value="Associate dentist">
+            <span>Associate dentist</span></label>
+          <label class="opt"><input type="radio" name="role" value="Practice manager">
+            <span>Practice manager</span></label>
+          <label class="opt"><input type="radio" name="role" value="Other practice team member">
+            <span>Other practice team&nbsp;member</span></label>
         </fieldset>
-        <p class="err" id="err-practiceType" role="alert"></p>
+        <p class="err" id="err-role" role="alert"></p>
         <div class="form-actions">
           <button type="button" class="btn btn-primary" data-next>Continue
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12.5 5.5 19 12l-6.5 6.5"/></svg>
@@ -2042,29 +2043,6 @@ html.modal-open{overflow:hidden}
 
       <!-- ── Step 2 ── -->
       <div class="step" data-step="2" hidden>
-        <fieldset class="opts">
-          <legend class="step-q">What&rsquo;s the biggest frustration with your current&nbsp;lab?</legend>
-          <label class="opt"><input type="radio" name="frustration" value="Fit - crowns not seating first time" required>
-            <span>Fit &mdash; restorations not seating first time</span></label>
-          <label class="opt"><input type="radio" name="frustration" value="Remakes and lost chair time">
-            <span>Remakes and lost chair time</span></label>
-          <label class="opt"><input type="radio" name="frustration" value="Communication - they don't get what I'm asking for">
-            <span>They don&rsquo;t understand what I&rsquo;m asking&nbsp;for</span></label>
-          <label class="opt"><input type="radio" name="frustration" value="Late cases and chasing">
-            <span>Late cases and chasing them up</span></label>
-        </fieldset>
-        <p class="err" id="err-frustration" role="alert"></p>
-        <div class="form-actions">
-          <button type="button" class="btn-back" data-back>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H6M11.5 5.5 5 12l6.5 6.5"/></svg> Back</button>
-          <button type="button" class="btn btn-primary" data-next>Continue
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12.5 5.5 19 12l-6.5 6.5"/></svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- ── Step 3 ── -->
-      <div class="step" data-step="3" hidden>
         <p class="step-q">Where should we get in touch?</p>
         <div class="field-row">
           <div class="field">
@@ -2677,8 +2655,7 @@ html.modal-open{overflow:hidden}
       email: data.email || '',
       phone: data.phone || '',
       practice_name: data.practiceName || '',
-      practice_type: data.practiceType || '',
-      lab_frustration: data.frustration || '',
+      role: data.role || '',
       utm_source: attribution.utm_source || '',
       utm_medium: attribution.utm_medium || '',
       utm_campaign: attribution.utm_campaign || '',
