@@ -4,6 +4,8 @@ test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 1000 });
   await page.goto('/index.html', { waitUntil: 'load' });
   await page.waitForTimeout(250);
+  await page.locator('[data-open-form]').first().click();
+  await expect(page.locator('#lead-modal')).toBeVisible();
 });
 
 test('pointer selection advances the step', async ({ page }) => {
@@ -120,6 +122,8 @@ test('a hostile name in the query string is never printed', async ({ page }) => 
 
 test('the lead reaches the webhook with answers, UTMs and Meta click IDs', async ({ page }) => {
   await page.goto('/index.html?utm_source=facebook&utm_medium=paid&utm_campaign=c1-no-offer&utm_content=hook-2&utm_term=dentists&fbclid=ABC123', { waitUntil: 'load' });
+  await page.locator('[data-open-form]').first().click();
+  await expect(page.locator('#lead-modal')).toBeVisible();
   await page.locator('.step[data-step="1"] .opt').first().click();
   await expect(page.locator('.step[data-step="2"]')).toBeVisible();
   await page.locator('.step[data-step="2"] .opt').nth(1).click();
@@ -157,6 +161,8 @@ test('UTMs survive a click-around before the form is sent', async ({ page }) => 
   await page.goto('/index.html?utm_source=facebook&utm_campaign=c1&fbclid=XYZ', { waitUntil: 'load' });
   await page.goto('/index.html#faq', { waitUntil: 'load' });   // same session, no query string
   await page.reload({ waitUntil: 'load' });
+  await page.locator('[data-open-form]').first().click();
+  await expect(page.locator('#lead-modal')).toBeVisible();
   await page.locator('.step[data-step="1"] .opt').first().click();
   await page.locator('.step[data-step="2"] .opt').first().click();
   for (const [n, v] of [['firstName','A'],['lastName','B'],['practiceName','C'],['phone','07700 900123'],['email','a@b.co']]) await page.fill(`input[name=${n}]`, v);
@@ -166,4 +172,35 @@ test('UTMs survive a click-around before the form is sent', async ({ page }) => 
   expect(body.get('utm_source')).toBe('facebook');
   expect(body.get('utm_campaign')).toBe('c1');
   expect(body.get('fbclid')).toBe('XYZ');
+});
+
+test('every CTA opens the popup, and Escape, the close button and the backdrop close it', async ({ page }) => {
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#lead-modal')).toBeHidden();
+  const ctas = page.locator('a[href="#qualifier-card"]');
+  const n = await ctas.count();
+  expect(n).toBeGreaterThan(4);
+  await page.locator('.header-cta').click();
+  await expect(page.locator('#lead-modal')).toBeVisible();
+  await page.locator('[data-close-form]').click();
+  await expect(page.locator('#lead-modal')).toBeHidden();
+  await page.locator('#how a[href="#qualifier-card"]').click();
+  await expect(page.locator('#lead-modal')).toBeVisible();
+  await page.mouse.click(8, 8);                                  // the backdrop
+  await expect(page.locator('#lead-modal')).toBeHidden();
+});
+
+test('the VSL poster shows a play button and swaps to a player once a source is set', async ({ page }) => {
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#vsl .vsl-play')).toBeVisible();
+  await expect(page.locator('#vsl .vsl-soon')).toBeVisible();
+  // no source yet: clicking does nothing
+  await page.locator('#vsl .vsl-play').click();
+  await expect(page.locator('#vsl iframe, #vsl video')).toHaveCount(0);
+  // with a YouTube link it becomes an autoplaying embed
+  await page.route(/youtube\.com/, (r) => r.fulfill({ status: 200, contentType: 'text/html', body: '<title>yt</title>' }));
+  await page.evaluate(() => document.getElementById('vsl').setAttribute('data-src', 'https://youtu.be/dQw4w9WgXcQ'));
+  await page.locator('#vsl .vsl-play').click();
+  await expect(page.locator('#vsl iframe')).toHaveAttribute('src', /youtube\.com\/embed\/dQw4w9WgXcQ\?autoplay=1/);
+  await expect(page.locator('#vsl .vsl-poster')).toBeHidden();
 });

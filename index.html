@@ -1176,6 +1176,92 @@ ul,ol{margin:0;padding:0;list-style:none}
 #digital .rule-body>p,#start .lede,.section-head.centre .lede{text-wrap:balance}
 .final-ticks{width:fit-content;max-width:100%;margin:var(--s-3) auto var(--s-4);text-align:left}
 /* ============================================================
+   VSL HERO — centred copy, the video, one CTA
+   ============================================================ */
+.hero-vsl{text-align:center}
+.vsl-hero{max-width:900px;margin-inline:auto}
+.vsl-hero .lede{margin-inline:auto;max-width:60ch;text-wrap:balance}
+.vsl{
+  position:relative;margin:var(--s-4) auto 0;max-width:860px;aspect-ratio:16/9;
+  border-radius:var(--r-lg);overflow:hidden;isolation:isolate;background:#060644;
+  box-shadow:0 40px 80px -40px rgba(0,0,0,.8),0 0 0 1px rgba(191,192,211,.22);
+}
+.vsl::before{ /* the luxe portal frame */
+  content:"";position:absolute;inset:0;z-index:3;border-radius:inherit;padding:2px;pointer-events:none;
+  background:linear-gradient(160deg,rgba(191,192,211,.75),rgba(143,147,230,.35) 45%,rgba(6,6,68,.9));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;
+}
+.vsl-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.9)}
+.vsl::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(6,6,68,.25),rgba(6,6,68,.55))}
+.vsl-play{
+  position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  background:none;border:0;cursor:pointer;color:#fff;font:inherit;
+}
+.vsl-ring{
+  display:flex;align-items:center;justify-content:center;width:86px;height:86px;border-radius:50%;
+  background:var(--cta-on-dark);color:var(--cta-on-dark-text);padding-left:5px;
+  box-shadow:0 0 0 10px rgba(191,192,211,.18),0 18px 40px -12px rgba(0,0,0,.6);
+  transition:transform var(--d-1) var(--ease);
+}
+.vsl-play:hover .vsl-ring{transform:scale(1.06)}
+.vsl-play:focus-visible{outline:3px solid var(--cta-on-dark);outline-offset:-6px}
+.vsl-label{font-family:var(--font-head);font-weight:600;font-size:.95rem;letter-spacing:.02em;text-shadow:0 2px 12px rgba(0,0,0,.5)}
+@media (prefers-reduced-motion:no-preference){
+  .vsl-ring{animation:vslPulse 2.6s ease-out infinite}
+  @keyframes vslPulse{0%{box-shadow:0 0 0 0 rgba(191,192,211,.45),0 18px 40px -12px rgba(0,0,0,.6)}100%{box-shadow:0 0 0 22px rgba(191,192,211,0),0 18px 40px -12px rgba(0,0,0,.6)}}
+}
+.vsl-soon{
+  position:absolute;left:14px;top:14px;z-index:2;white-space:nowrap;
+  font-size:.74rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--cta-on-dark-text);background:var(--cta-on-dark);padding:5px 12px;border-radius:var(--r-pill);
+}
+.vsl.has-src .vsl-soon{display:none}
+.vsl.playing .vsl-poster,.vsl.playing .vsl-play,.vsl.playing .vsl-soon{display:none}
+.vsl.playing::after{display:none}
+.vsl iframe,.vsl video{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:2;background:#000}
+.vsl-cta{margin-top:var(--s-4);display:flex;flex-direction:column;align-items:center;gap:10px}
+.btn-lg{padding:18px 34px;min-height:60px;font-size:1.06rem}
+.vsl-note{margin:0;font-size:.86rem;color:var(--color-on-primary-mut)}
+.vsl-chips{justify-content:center;margin-top:var(--s-4)}
+.hero .btn-primary{background:var(--cta-on-dark);color:var(--cta-on-dark-text)}
+.hero .btn-primary:hover{background:#D9DAE6}
+.hero .chip{background:rgba(255,255,255,.06);border-color:rgba(191,192,211,.28);color:var(--color-on-primary-mut)}
+.hero .chip svg{color:var(--cta-on-dark)}
+@media (max-width:767.98px){
+  .vsl{margin-top:var(--s-3);border-radius:var(--r-md)}
+  .vsl-ring{width:68px;height:68px}
+  .vsl-cta .btn{width:100%}
+  .vsl-chips{gap:8px}
+  .vsl-chips .chip{font-size:.74rem;padding:6px 11px}
+}
+
+/* ============================================================
+   LEAD POPUP
+   ============================================================ */
+.lead-modal{
+  padding:0;border:0;background:transparent;color:inherit;overflow:visible;
+  width:min(520px,calc(100vw - 24px));max-width:none;max-height:calc(100dvh - 24px);
+}
+.lead-modal[open]{display:flex;flex-direction:column}
+.lead-modal::backdrop{background:rgba(6,6,68,.72);backdrop-filter:blur(6px)}
+.lead-modal .form-card{background-color:#12125A;max-height:calc(100dvh - 24px);overflow-y:auto;overscroll-behavior:contain}
+.modal-close{
+  position:absolute;top:12px;right:12px;z-index:5;width:40px;height:40px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  background:rgba(255,255,255,.08);border:1px solid rgba(191,192,211,.28);color:#fff;
+}
+.modal-close:hover{background:rgba(255,255,255,.16)}
+.modal-close:focus-visible{outline:3px solid var(--cta-on-dark);outline-offset:2px}
+.lead-modal .form-head{padding-right:40px}
+@media (prefers-reduced-motion:no-preference){
+  .lead-modal[open]{animation:modalIn .35s cubic-bezier(.22,1,.36,1)}
+  .lead-modal[open]::backdrop{animation:fadeIn .35s ease}
+  @keyframes modalIn{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+}
+html.modal-open{overflow:hidden}
+
+/* ============================================================
    LUXE LAYER — headline type, kinetic headings, ambient
    backgrounds, sheen and grain (ported from the luxe funnel).
    Everything has a finished resting state and is stripped
@@ -1353,161 +1439,42 @@ ul,ol{margin:0;padding:0;list-style:none}
      2 · HERO — the ad's promise, with the practice qualifier.
      Motion: H2 word rise (headline only).
      ======================================================== -->
-<section class="hero" id="enquiry">
-  <!-- Optional background video: hosted .mp4 in data-video. Empty = flat dark band. -->
-  <div class="bg-video" aria-hidden="true" data-video="" style="background:url(assets/img/hero-technician.jpg) center 30%/cover"></div>
-  
+<section class="hero hero-vsl" id="enquiry">
+  <!-- optional background loop: hosted .mp4 in data-video; empty = the aurora band -->
+  <div class="bg-video" aria-hidden="true" data-video=""></div>
   <div class="wrap">
-    <div class="hero-grid">
+    <div class="vsl-hero">
+      <p class="eyebrow c">Dentist-led · Nationwide UK delivery</p>
 
-      <div class="hero-copy">
-        <p class="eyebrow">Dentist-led · Nationwide UK delivery</p>
+      <h1>The Dental Lab Built&nbsp;by&nbsp;Dentists, <span class="accent">for&nbsp;Dentists</span></h1>
 
-        <h1>The Dental Lab Built&nbsp;by&nbsp;Dentists, <span class="accent">for&nbsp;Dentists</span></h1>
+      <p class="lede">Crowns, bridges, veneers and dentures on a fully digital workflow &mdash;
+      every case checked by a dentist before it&rsquo;s&nbsp;approved.</p>
 
-        <p class="lede">Crowns, bridges, veneers and dentures on a fully digital workflow &mdash;
-        every case checked by a dentist before it&rsquo;s&nbsp;approved.</p>
-
-        <div class="anchor-figure">
-          <div class="af-price"><b>10</b><span class="af-per">working&nbsp;day turnaround</span></div>
-          <div class="af-fin">A timeline you can plan your diary&nbsp;around</div>
-        </div>
-
-        <ul class="ticks" aria-label="How Select Digital Dental Lab works">
-          <li class="tick"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 6.9"/></svg>
-            <span>Every case checked by a dentist <span class="nb">before approval</span></span></li>
-          <li class="tick"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 6.9"/></svg>
-            <span>Fully digital, from your scan to the <span class="nb">finished restoration</span></span></li>
-          <li class="tick"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5.2 5.2L20 6.9"/></svg>
-            <span>Private practices only. Premium materials&nbsp;only.</span></li>
-        </ul>
-
-        <div class="chips">
-          <span class="chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6.5v5.2c0 5 3.4 8.6 8 9.8 4.6-1.2 8-4.8 8-9.8V6.5Z"/><path d="M9 12.2l2.1 2.1L15.4 10"/></svg> Dentist-checked</span>
-          <span class="chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg> Fully digital</span>
-          <span class="chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8 12 3 3 8v8l9 5 9-5Z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg> Nationwide&nbsp;UK&nbsp;delivery</span>
-        </div>
-
+      <!-- ★ VSL: put the video URL in data-src — an .mp4, or a YouTube, Vimeo,
+           Wistia or Loom link. Empty, the poster shows with a "coming soon" tag. -->
+      <div class="vsl" id="vsl" data-src="">
+        <img class="vsl-poster" src="assets/img/g02.jpg" width="800" height="600"
+             alt="A Select Digital Dental Lab technician finishing a restoration at the bench">
+        <button class="vsl-play" type="button" aria-label="Play the video">
+          <span class="vsl-ring"><svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg></span>
+          <span class="vsl-label">Watch the video</span>
+        </button>
+        <span class="vsl-soon">Video coming soon</span>
       </div>
 
-      <!-- P6 · three-step practice qualifier -->
-      <div class="form-card" id="qualifier-card">
-        <div class="form-head">
-          <p class="form-kicker">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg>
-            Limited partner places
-          </p>
-          <h2>See if we&rsquo;re the right fit for your practice</h2>
-          <p class="form-sub">Two quick questions, then your details. Takes about 30&nbsp;seconds, with no&nbsp;obligation.</p>
-        </div>
-
-        <div class="steps-meter" id="meter">
-          <div class="bar"><i id="meter-fill"></i></div>
-          <span class="count" id="meter-count">Step 1 of 3</span>
-        </div>
-
-        <form id="qualifier" novalidate>
-          <!-- ── Step 1 ── -->
-          <div class="step" data-step="1">
-            <fieldset class="opts">
-              <legend class="step-q">Which best describes your&nbsp;practice?</legend>
-              <label class="opt"><input type="radio" name="practiceType" value="Fully private practice" required>
-                <span>Fully private practice</span></label>
-              <label class="opt"><input type="radio" name="practiceType" value="Mixed practice, mostly private">
-                <span>Mixed practice, mostly private</span></label>
-              <label class="opt"><input type="radio" name="practiceType" value="Mixed practice, mostly NHS">
-                <span>Mixed practice, mostly NHS</span></label>
-              <label class="opt"><input type="radio" name="practiceType" value="Opening a new practice">
-                <span>I&rsquo;m opening a new practice</span></label>
-            </fieldset>
-            <p class="err" id="err-practiceType" role="alert"></p>
-            <div class="form-actions">
-              <button type="button" class="btn btn-primary" data-next>Continue
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12.5 5.5 19 12l-6.5 6.5"/></svg>
-              </button>
-            </div>
-          </div>
-
-          <!-- ── Step 2 ── -->
-          <div class="step" data-step="2" hidden>
-            <fieldset class="opts">
-              <legend class="step-q">What&rsquo;s the biggest frustration with your current&nbsp;lab?</legend>
-              <label class="opt"><input type="radio" name="frustration" value="Fit - crowns not seating first time" required>
-                <span>Fit &mdash; restorations not seating first time</span></label>
-              <label class="opt"><input type="radio" name="frustration" value="Remakes and lost chair time">
-                <span>Remakes and lost chair time</span></label>
-              <label class="opt"><input type="radio" name="frustration" value="Communication - they don't get what I'm asking for">
-                <span>They don&rsquo;t understand what I&rsquo;m asking&nbsp;for</span></label>
-              <label class="opt"><input type="radio" name="frustration" value="Late cases and chasing">
-                <span>Late cases and chasing them up</span></label>
-            </fieldset>
-            <p class="err" id="err-frustration" role="alert"></p>
-            <div class="form-actions">
-              <button type="button" class="btn-back" data-back>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H6M11.5 5.5 5 12l6.5 6.5"/></svg> Back</button>
-              <button type="button" class="btn btn-primary" data-next>Continue
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12.5 5.5 19 12l-6.5 6.5"/></svg>
-              </button>
-            </div>
-          </div>
-
-          <!-- ── Step 3 ── -->
-          <div class="step" data-step="3" hidden>
-            <p class="step-q">Where should we get in touch?</p>
-            <div class="field-row">
-              <div class="field">
-                <label for="f-first">First name</label>
-                <input id="f-first" name="firstName" type="text" autocomplete="given-name" placeholder="Jane" required>
-                <span class="err" id="err-firstName" role="alert"></span>
-              </div>
-              <div class="field">
-                <label for="f-last">Surname</label>
-                <input id="f-last" name="lastName" type="text" autocomplete="family-name" placeholder="Smith" required>
-                <span class="err" id="err-lastName" role="alert"></span>
-              </div>
-            </div>
-            <div class="field">
-              <label for="f-practice">Practice name</label>
-              <input id="f-practice" name="practiceName" type="text" autocomplete="organization" placeholder="Smith Dental Care" required>
-              <span class="err" id="err-practiceName" role="alert"></span>
-            </div>
-            <div class="field">
-              <label for="f-phone">Phone</label>
-              <input id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="07700 900123" required>
-              <span class="err" id="err-phone" role="alert"></span>
-            </div>
-            <div class="field">
-              <label for="f-email">Email</label>
-              <input id="f-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="jane@smithdental.co.uk" required>
-              <span class="err" id="err-email" role="alert"></span>
-            </div>
-            <div class="hp" aria-hidden="true">
-              <label for="f-company">Company</label>
-              <input id="f-company" name="company" type="text" tabindex="-1" autocomplete="off">
-            </div>
-            <div class="form-actions">
-              <button type="button" class="btn-back" data-back>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H6M11.5 5.5 5 12l6.5 6.5"/></svg> Back</button>
-              <button type="submit" class="btn btn-primary">See if we&rsquo;re a fit</button>
-            </div>
-            <p class="form-foot">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>
-              We use your details only to talk to you about working together. No obligation, and you can ask us to delete them at any time.
-            </p>
-          </div>
-        </form>
-
-        <!-- success state -->
-        <div class="form-done" id="form-done" hidden tabindex="-1">
-          <svg class="tick-draw" id="done-tick" width="72" height="72" viewBox="0 0 72 72" fill="none" stroke="#BFC0D3" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin:0 auto var(--s-2)">
-            <circle cx="36" cy="36" r="31" style="--len:195"/>
-            <path d="M22 37.5l10 10 19-21" style="--len:46"/>
-          </svg>
-          <h3>Thanks &mdash; we&rsquo;ve got your details</h3>
-          <p class="form-sub">We&rsquo;ll be in touch shortly to talk through your cases and how we work.</p>
-        </div>
+      <div class="vsl-cta">
+        <a class="btn btn-primary btn-lg" href="#qualifier-card" data-open-form>See if we&rsquo;re the right fit
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12.5 5.5 19 12l-6.5 6.5"/></svg></a>
+        <p class="vsl-note">Two quick questions &middot; about 30 seconds &middot; no&nbsp;obligation</p>
       </div>
 
+      <ul class="chips vsl-chips" aria-label="How we work">
+        <li class="chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6.5v5.2c0 5 3.4 8.6 8 9.8 4.6-1.2 8-4.8 8-9.8V6.5Z"/><path d="M9 12.2l2.1 2.1L15.4 10"/></svg> Dentist-checked</li>
+        <li class="chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg> Fully digital</li>
+        <li class="chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.4 2"/></svg> 10&nbsp;working&nbsp;days</li>
+        <li class="chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8 12 3 3 8v8l9 5 9-5Z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg> Nationwide&nbsp;UK&nbsp;delivery</li>
+      </ul>
     </div>
   </div>
 
@@ -2017,6 +1984,132 @@ ul,ol{margin:0;padding:0;list-style:none}
 </section>
 
 </main>
+
+<!-- ========================================================
+     LEAD POPUP — every "See if we're a fit" CTA opens this.
+     ======================================================== -->
+<dialog class="lead-modal" id="lead-modal" aria-labelledby="form-title">
+  <button class="modal-close" type="button" data-close-form aria-label="Close the form">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+  </button>
+      <!-- three-step practice qualifier, shown in the popup -->
+  <div class="form-card" id="qualifier-card">
+    <div class="form-head">
+      <p class="form-kicker">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.2 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg>
+        Limited partner places
+      </p>
+      <h2 id="form-title">See if we&rsquo;re the right fit for your practice</h2>
+      <p class="form-sub">Two quick questions, then your details. Takes about 30&nbsp;seconds, with no&nbsp;obligation.</p>
+    </div>
+
+    <div class="steps-meter" id="meter">
+      <div class="bar"><i id="meter-fill"></i></div>
+      <span class="count" id="meter-count">Step 1 of 3</span>
+    </div>
+
+    <form id="qualifier" novalidate>
+      <!-- ── Step 1 ── -->
+      <div class="step" data-step="1">
+        <fieldset class="opts">
+          <legend class="step-q">Which best describes your&nbsp;practice?</legend>
+          <label class="opt"><input type="radio" name="practiceType" value="Fully private practice" required>
+            <span>Fully private practice</span></label>
+          <label class="opt"><input type="radio" name="practiceType" value="Mixed practice, mostly private">
+            <span>Mixed practice, mostly private</span></label>
+          <label class="opt"><input type="radio" name="practiceType" value="Mixed practice, mostly NHS">
+            <span>Mixed practice, mostly NHS</span></label>
+          <label class="opt"><input type="radio" name="practiceType" value="Opening a new practice">
+            <span>I&rsquo;m opening a new practice</span></label>
+        </fieldset>
+        <p class="err" id="err-practiceType" role="alert"></p>
+        <div class="form-actions">
+          <button type="button" class="btn btn-primary" data-next>Continue
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12.5 5.5 19 12l-6.5 6.5"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Step 2 ── -->
+      <div class="step" data-step="2" hidden>
+        <fieldset class="opts">
+          <legend class="step-q">What&rsquo;s the biggest frustration with your current&nbsp;lab?</legend>
+          <label class="opt"><input type="radio" name="frustration" value="Fit - crowns not seating first time" required>
+            <span>Fit &mdash; restorations not seating first time</span></label>
+          <label class="opt"><input type="radio" name="frustration" value="Remakes and lost chair time">
+            <span>Remakes and lost chair time</span></label>
+          <label class="opt"><input type="radio" name="frustration" value="Communication - they don't get what I'm asking for">
+            <span>They don&rsquo;t understand what I&rsquo;m asking&nbsp;for</span></label>
+          <label class="opt"><input type="radio" name="frustration" value="Late cases and chasing">
+            <span>Late cases and chasing them up</span></label>
+        </fieldset>
+        <p class="err" id="err-frustration" role="alert"></p>
+        <div class="form-actions">
+          <button type="button" class="btn-back" data-back>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H6M11.5 5.5 5 12l6.5 6.5"/></svg> Back</button>
+          <button type="button" class="btn btn-primary" data-next>Continue
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12.5 5.5 19 12l-6.5 6.5"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Step 3 ── -->
+      <div class="step" data-step="3" hidden>
+        <p class="step-q">Where should we get in touch?</p>
+        <div class="field-row">
+          <div class="field">
+            <label for="f-first">First name</label>
+            <input id="f-first" name="firstName" type="text" autocomplete="given-name" placeholder="Jane" required>
+            <span class="err" id="err-firstName" role="alert"></span>
+          </div>
+          <div class="field">
+            <label for="f-last">Surname</label>
+            <input id="f-last" name="lastName" type="text" autocomplete="family-name" placeholder="Smith" required>
+            <span class="err" id="err-lastName" role="alert"></span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="f-practice">Practice name</label>
+          <input id="f-practice" name="practiceName" type="text" autocomplete="organization" placeholder="Smith Dental Care" required>
+          <span class="err" id="err-practiceName" role="alert"></span>
+        </div>
+        <div class="field">
+          <label for="f-phone">Phone</label>
+          <input id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="07700 900123" required>
+          <span class="err" id="err-phone" role="alert"></span>
+        </div>
+        <div class="field">
+          <label for="f-email">Email</label>
+          <input id="f-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="jane@smithdental.co.uk" required>
+          <span class="err" id="err-email" role="alert"></span>
+        </div>
+        <div class="hp" aria-hidden="true">
+          <label for="f-company">Company</label>
+          <input id="f-company" name="company" type="text" tabindex="-1" autocomplete="off">
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-back" data-back>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H6M11.5 5.5 5 12l6.5 6.5"/></svg> Back</button>
+          <button type="submit" class="btn btn-primary">See if we&rsquo;re a fit</button>
+        </div>
+        <p class="form-foot">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>
+          We use your details only to talk to you about working together. No obligation, and you can ask us to delete them at any time.
+        </p>
+      </div>
+    </form>
+
+    <!-- success state -->
+    <div class="form-done" id="form-done" hidden tabindex="-1">
+      <svg class="tick-draw" id="done-tick" width="72" height="72" viewBox="0 0 72 72" fill="none" stroke="#BFC0D3" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin:0 auto var(--s-2)">
+        <circle cx="36" cy="36" r="31" style="--len:195"/>
+        <path d="M22 37.5l10 10 19-21" style="--len:46"/>
+      </svg>
+      <h3>Thanks &mdash; we&rsquo;ve got your details</h3>
+      <p class="form-sub">We&rsquo;ll be in touch shortly to talk through your cases and how we work.</p>
+    </div>
+  </div>
+</dialog>
 
 <footer class="site-footer">
   <div class="wrap">
@@ -2734,6 +2827,80 @@ ul,ol{margin:0;padding:0;list-style:none}
     }
     frame();
   });
+})();
+</script>
+
+<script>
+/* =========================================================
+   VSL player + lead popup
+   ========================================================= */
+(function () {
+  'use strict';
+  /* ---- VSL: poster until clicked, then the real player ---- */
+  var vsl = document.getElementById('vsl');
+  if (vsl) {
+    var src = (vsl.getAttribute('data-src') || '').trim();
+    if (src) vsl.classList.add('has-src');
+    function embedUrl(u) {
+      var m;
+      if ((m = u.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{6,})/))) return 'https://www.youtube.com/embed/' + m[1] + '?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+      if ((m = u.match(/vimeo\.com\/(?:video\/)?(\d+)/))) return 'https://player.vimeo.com/video/' + m[1] + '?autoplay=1&title=0&byline=0&portrait=0';
+      if ((m = u.match(/loom\.com\/(?:share|embed)\/(\w+)/))) return 'https://www.loom.com/embed/' + m[1] + '?autoplay=1';
+      if ((m = u.match(/wistia\.(?:com|net)\/(?:medias|embed\/iframe)\/(\w+)/))) return 'https://fast.wistia.net/embed/iframe/' + m[1] + '?autoPlay=true';
+      return u;
+    }
+    vsl.querySelector('.vsl-play').addEventListener('click', function () {
+      src = (vsl.getAttribute('data-src') || '').trim();
+      if (!src) return;
+      var el;
+      if (/\.(mp4|webm|mov|m4v)(\?|#|$)/i.test(src)) {
+        el = document.createElement('video');
+        el.src = src; el.controls = true; el.autoplay = true; el.playsInline = true;
+        el.setAttribute('playsinline', '');
+      } else {
+        el = document.createElement('iframe');
+        el.src = embedUrl(src);
+        el.allow = 'autoplay; fullscreen; picture-in-picture; encrypted-media';
+        el.allowFullscreen = true;
+        el.title = 'Select Digital Dental Lab video';
+      }
+      vsl.appendChild(el);
+      vsl.classList.add('playing');
+      if (el.play) { var pr = el.play(); if (pr && pr.catch) pr.catch(function () {}); }
+    });
+  }
+
+  /* ---- lead popup ---- */
+  var modal = document.getElementById('lead-modal');
+  if (!modal) return;
+  var root = document.documentElement;
+  var opener = null;
+  function openForm(e) {
+    if (e) e.preventDefault();
+    opener = document.activeElement;
+    if (typeof modal.showModal === 'function') { if (!modal.open) modal.showModal(); }
+    else modal.setAttribute('open', '');
+    root.classList.add('modal-open');
+    var first = modal.querySelector('.step:not([hidden]) input, #form-done:not([hidden])');
+    if (first) first.focus({ preventScroll: true });
+  }
+  function closeForm() {
+    if (typeof modal.close === 'function' && modal.open) modal.close();
+    else modal.removeAttribute('open');
+  }
+  modal.addEventListener('close', function () {
+    root.classList.remove('modal-open');
+    if (opener && opener.focus) opener.focus({ preventScroll: true });
+  });
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest && e.target.closest('a[href="#qualifier-card"], [data-open-form]');
+    if (t) openForm(e);
+  });
+  modal.querySelector('[data-close-form]').addEventListener('click', closeForm);
+  /* a click on the backdrop (the dialog box itself, outside the card) closes it */
+  modal.addEventListener('click', function (e) { if (e.target === modal) closeForm(); });
+  if (location.hash === '#qualifier-card') openForm();
+  window.SDDLopenForm = openForm;
 })();
 </script>
 

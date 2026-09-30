@@ -71,6 +71,8 @@ for (const width of [375, 768, 1280]) {
 test('the form still works inside the host page', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 1000 });
   await page.goto('/test-results/ghl-host.html', { waitUntil: 'load' });
+  await page.locator('[data-open-form]').first().click();
+  await expect(page.locator('#lead-modal')).toBeVisible();
   await page.locator('.step[data-step="1"] .opt').first().click();
   await expect(page.locator('.step[data-step="2"]')).toBeVisible({ timeout: 3000 });
   await expect(page.locator('#meter-count')).toHaveText('Step 2 of 3');

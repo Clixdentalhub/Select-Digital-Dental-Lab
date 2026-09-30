@@ -30,6 +30,16 @@ npm run serve     # http://localhost:4321/index.html
 npm test          # 49 tests: contrast, no overflow at 7 widths, form, typography, GHL isolation
 ```
 
+## Hero video and popup form
+
+The hero is a VSL: headline, the video, one CTA. Every "See if we're a fit" link and button (header, hero,
+sections, mobile bar) opens the three-step form in a popup; Escape, the close button or a backdrop click closes it.
+
+**To add the video**, put its URL in `data-src` on `<div class="vsl" id="vsl" data-src="">` in `index.html`.
+An `.mp4` link plays in a native player; YouTube, Vimeo, Loom and Wistia links become an autoplaying embed. The
+poster (`assets/img/g02.jpg`) and play button show until it is clicked; while `data-src` is empty a
+"Video coming soon" tag shows.
+
 ## Before going live
 
 1. **Form endpoint.** `ENDPOINT` in `index.html` points at the GoHighLevel inbound webhook. The form posts
