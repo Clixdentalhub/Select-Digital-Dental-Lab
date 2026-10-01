@@ -179,16 +179,15 @@ test('every CTA opens the popup, and Escape, the close button and the backdrop c
   await expect(page.locator('#lead-modal')).toBeHidden();
 });
 
-test('the VSL poster shows a play button and swaps to a player once a source is set', async ({ page }) => {
+test('with no video set the VSL slot is a plain photo; a source brings the player', async ({ page }) => {
   await page.keyboard.press('Escape');
-  await expect(page.locator('#vsl .vsl-play')).toBeVisible();
-  await expect(page.locator('#vsl .vsl-soon')).toBeVisible();
-  // no source yet: clicking does nothing
-  await page.locator('#vsl .vsl-play').click();
-  await expect(page.locator('#vsl iframe, #vsl video')).toHaveCount(0);
-  // with a YouTube link it becomes an autoplaying embed
+  await expect(page.locator('#vsl .vsl-poster')).toBeVisible();
+  await expect(page.locator('#vsl .vsl-play')).toBeHidden();
+  await expect(page.locator('#vsl .vsl-soon')).toBeHidden();
+  // with a YouTube link the play button appears and loads an autoplaying embed
   await page.route(/youtube\.com/, (r) => r.fulfill({ status: 200, contentType: 'text/html', body: '<title>yt</title>' }));
   await page.evaluate(() => document.getElementById('vsl').setAttribute('data-src', 'https://youtu.be/dQw4w9WgXcQ'));
+  await expect(page.locator('#vsl .vsl-play')).toBeVisible();
   await page.locator('#vsl .vsl-play').click();
   await expect(page.locator('#vsl iframe')).toHaveAttribute('src', /youtube\.com\/embed\/dQw4w9WgXcQ\?autoplay=1/);
   await expect(page.locator('#vsl .vsl-poster')).toBeHidden();

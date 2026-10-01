@@ -36,9 +36,9 @@ The hero is a VSL: headline, the video, one CTA. Every "See if we're a fit" link
 sections, mobile bar) opens the three-step form in a popup; Escape, the close button or a backdrop click closes it.
 
 **To add the video**, put its URL in `data-src` on `<div class="vsl" id="vsl" data-src="">` in `index.html`.
-An `.mp4` link plays in a native player; YouTube, Vimeo, Loom and Wistia links become an autoplaying embed. The
-poster (`assets/img/g02.jpg`) and play button show until it is clicked; while `data-src` is empty a
-"Video coming soon" tag shows.
+An `.mp4` link plays in a native player; YouTube, Vimeo, Loom and Wistia links become an autoplaying embed. While
+`data-src` is empty the slot is a plain photo (`assets/img/vsl-poster.jpg`) with no play button; once a URL is
+set, the photo becomes the poster with a play button and the video loads on click.
 
 ## Before going live
 

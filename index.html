@@ -1216,7 +1216,9 @@ ul,ol{margin:0;padding:0;list-style:none}
   font-size:.74rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
   color:var(--cta-on-dark-text);background:var(--cta-on-dark);padding:5px 12px;border-radius:var(--r-pill);
 }
-.vsl.has-src .vsl-soon{display:none}
+/* no video yet: a clean photo — no play button, tag or dimming overlay */
+.vsl:not(.has-src) .vsl-play,.vsl:not(.has-src) .vsl-soon,.vsl:not(.has-src)::after{display:none}
+.vsl:not(.has-src) .vsl-poster{filter:none}
 .vsl.playing .vsl-poster,.vsl.playing .vsl-play,.vsl.playing .vsl-soon{display:none}
 .vsl.playing::after{display:none}
 .vsl iframe,.vsl video{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:2;background:#000}
@@ -1463,9 +1465,10 @@ html.modal-open{overflow:hidden}
       every case checked by a dentist before it&rsquo;s&nbsp;approved.</p>
 
       <!-- ★ VSL: put the video URL in data-src — an .mp4, or a YouTube, Vimeo,
-           Wistia or Loom link. Empty, the poster shows with a "coming soon" tag. -->
+           Wistia or Loom link. Empty, this is a plain photo (no play button);
+           with a URL, the play button appears and the video loads on click. -->
       <div class="vsl" id="vsl" data-src="">
-        <img class="vsl-poster" src="assets/img/g02.jpg" width="800" height="600"
+        <img class="vsl-poster" src="assets/img/vsl-poster.jpg" width="1600" height="900"
              alt="A Select Digital Dental Lab technician finishing a restoration at the bench">
         <button class="vsl-play" type="button" aria-label="Play the video">
           <span class="vsl-ring"><svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg></span>
@@ -2826,8 +2829,13 @@ html.modal-open{overflow:hidden}
   /* ---- VSL: poster until clicked, then the real player ---- */
   var vsl = document.getElementById('vsl');
   if (vsl) {
-    var src = (vsl.getAttribute('data-src') || '').trim();
-    if (src) vsl.classList.add('has-src');
+    var src = '';
+    function syncSrc() {
+      src = (vsl.getAttribute('data-src') || '').trim();
+      vsl.classList.toggle('has-src', !!src);
+    }
+    syncSrc();
+    if (window.MutationObserver) new MutationObserver(syncSrc).observe(vsl, { attributes: true, attributeFilter: ['data-src'] });
     function embedUrl(u) {
       var m;
       if ((m = u.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{6,})/))) return 'https://www.youtube.com/embed/' + m[1] + '?autoplay=1&rel=0&modestbranding=1&playsinline=1';
