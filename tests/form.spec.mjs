@@ -179,16 +179,25 @@ test('every CTA opens the popup, and Escape, the close button and the backdrop c
   await expect(page.locator('#lead-modal')).toBeHidden();
 });
 
-test('with no video set the VSL slot is a plain photo; a source brings the player', async ({ page }) => {
+test('the VSL shows its poster and play button, and plays the hosted mp4 on click', async ({ page }) => {
   await page.keyboard.press('Escape');
+  await page.route(/filesafe\.space/, (r) => r.fulfill({ status: 200, contentType: 'video/mp4', body: '' }));
+  await expect(page.locator('#vsl')).toHaveAttribute('data-src', /\.mp4$/);
   await expect(page.locator('#vsl .vsl-poster')).toBeVisible();
+  await expect(page.locator('#vsl .vsl-play')).toBeVisible();
+  await expect(page.locator('#vsl .vsl-soon')).toHaveCount(0);
+  await page.locator('#vsl .vsl-play').click();
+  await expect(page.locator('#vsl video')).toHaveAttribute('src', /filesafe\.space\/.+\.mp4$/);
+  await expect(page.locator('#vsl .vsl-poster')).toBeHidden();
+});
+
+test('with no video set the VSL slot is a plain photo; a link brings the player back', async ({ page }) => {
+  await page.keyboard.press('Escape');
+  await page.evaluate(() => document.getElementById('vsl').setAttribute('data-src', ''));
   await expect(page.locator('#vsl .vsl-play')).toBeHidden();
-  await expect(page.locator('#vsl .vsl-soon')).toBeHidden();
-  // with a YouTube link the play button appears and loads an autoplaying embed
   await page.route(/youtube\.com/, (r) => r.fulfill({ status: 200, contentType: 'text/html', body: '<title>yt</title>' }));
   await page.evaluate(() => document.getElementById('vsl').setAttribute('data-src', 'https://youtu.be/dQw4w9WgXcQ'));
   await expect(page.locator('#vsl .vsl-play')).toBeVisible();
   await page.locator('#vsl .vsl-play').click();
   await expect(page.locator('#vsl iframe')).toHaveAttribute('src', /youtube\.com\/embed\/dQw4w9WgXcQ\?autoplay=1/);
-  await expect(page.locator('#vsl .vsl-poster')).toBeHidden();
 });

@@ -1221,7 +1221,7 @@ ul,ol{margin:0;padding:0;list-style:none}
 .vsl:not(.has-src) .vsl-poster{filter:none}
 .vsl.playing .vsl-poster,.vsl.playing .vsl-play,.vsl.playing .vsl-soon{display:none}
 .vsl.playing::after{display:none}
-.vsl iframe,.vsl video{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:2;background:#000}
+.vsl iframe,.vsl video{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:2;background:#000;object-fit:contain}
 .vsl-cta{margin-top:var(--s-4);display:flex;flex-direction:column;align-items:center;gap:10px}
 .btn-lg{padding:18px 34px;min-height:60px;font-size:1.06rem}
 .vsl-note{margin:0;font-size:.86rem;color:var(--color-on-primary-mut)}
@@ -1467,14 +1467,13 @@ html.modal-open{overflow:hidden}
       <!-- ★ VSL: put the video URL in data-src — an .mp4, or a YouTube, Vimeo,
            Wistia or Loom link. Empty, this is a plain photo (no play button);
            with a URL, the play button appears and the video loads on click. -->
-      <div class="vsl" id="vsl" data-src="">
+      <div class="vsl" id="vsl" data-src="https://assets.cdn.filesafe.space/MwfeS47rhDLa0mMRth3T/media/6ac33bcec478ac5535d535da.mp4">
         <img class="vsl-poster" src="assets/img/vsl-poster.jpg" width="1600" height="900"
              alt="A Select Digital Dental Lab technician finishing a restoration at the bench">
         <button class="vsl-play" type="button" aria-label="Play the video">
           <span class="vsl-ring"><svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg></span>
           <span class="vsl-label">Watch the video</span>
         </button>
-        <span class="vsl-soon">Video coming soon</span>
       </div>
 
       <div class="vsl-cta">
@@ -2851,7 +2850,17 @@ html.modal-open{overflow:hidden}
       if (/\.(mp4|webm|mov|m4v)(\?|#|$)/i.test(src)) {
         el = document.createElement('video');
         el.src = src; el.controls = true; el.autoplay = true; el.playsInline = true;
+        el.preload = 'auto';
         el.setAttribute('playsinline', '');
+        el.setAttribute('controlsList', 'nodownload');
+        /* fit the frame to the footage: a portrait or square video gets a
+           frame of its own shape (capped to the screen) instead of bars */
+        el.addEventListener('loadedmetadata', function () {
+          var w = el.videoWidth, h = el.videoHeight;
+          if (!w || !h) return;
+          vsl.style.aspectRatio = w + ' / ' + h;
+          if (h > w * 0.9) vsl.style.maxWidth = 'min(860px, calc(78vh * ' + (w / h).toFixed(4) + '))';
+        });
       } else {
         el = document.createElement('iframe');
         el.src = embedUrl(src);
