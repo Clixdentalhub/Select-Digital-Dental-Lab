@@ -10,6 +10,9 @@ const FONTS = (src.match(/href="(https:\/\/fonts\.googleapis\.com\/css2[^"]+)"/)
 
 let styles = [...src.matchAll(/<style>([\s\S]*?)<\/style>/g)].map((m) => m[1]).join('\n');
 let body = src.match(/<body>([\s\S]*)<\/body>/)[1];
+/* Inside GHL the landing page is the live funnel step, not index.html. */
+const LANDING_URL = 'https://learn.selectdigitaldentallab.com/';
+body = body.replace(/href="index\.html/g, `href="${LANDING_URL}`);
 const scripts = [...body.matchAll(/<script[\s\S]*?<\/script>/g)].map((m) => m[0]);
 body = body.replace(/<script[\s\S]*?<\/script>/g, '');
 

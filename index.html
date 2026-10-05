@@ -8,6 +8,12 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Select Digital Dental Lab — The Dental Lab Built by Dentists, for Dentists</title>
 <meta name="description" content="A fully digital, dentist-led dental lab for private practices. Crowns, bridges, veneers and dentures — every case checked by a dentist, back within ten working days.">
+<link rel="canonical" href="https://learn.selectdigitaldentallab.com/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://learn.selectdigitaldentallab.com/">
+<meta property="og:title" content="Select Digital Dental Lab — The Dental Lab Built by Dentists, for Dentists">
+<meta property="og:description" content="A fully digital, dentist-led dental lab for private practices. Every case checked by a dentist, back within ten working days.">
+<meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
@@ -2648,7 +2654,13 @@ html.modal-open{overflow:hidden}
 
     if (isBot) return;
 
-    var forward = function () { goToThankYou(data.firstName); };
+    /* Hold the confirmation tick on screen for a beat before redirecting,
+       however fast the webhook answers, so the visitor sees it went through. */
+    var shownAt = Date.now();
+    var forward = function () {
+      setTimeout(function () { goToThankYou(data.firstName); },
+        Math.max(0, (reduced ? 400 : 900) - (Date.now() - shownAt)));
+    };
 
     /* The payload, keyed to match the CRM fields one-to-one. */
     var payload = {

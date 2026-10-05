@@ -30,6 +30,15 @@ npm run serve     # http://localhost:4321/index.html
 npm test          # 49 tests: contrast, no overflow at 7 widths, form, typography, GHL isolation
 ```
 
+## Live addresses
+
+- Landing page: https://learn.selectdigitaldentallab.com/
+- Thank-you step: https://learn.selectdigitaldentallab.com/thankyou
+
+`npm run ghl` builds both paste files against these: the landing form redirects to `/thankyou?name=<first name>`
+after a successful submit, and the thank-you page's links point back to the landing page. The standalone
+files keep relative links (`thank-you.html`, `index.html`).
+
 ## Hero video and popup form
 
 The hero is a VSL: headline, the video, one CTA. Every "See if we're a fit" link and button (header, hero,
@@ -50,7 +59,7 @@ set, the photo becomes the poster with a play button and the video loads on clic
 3. **Conversion tag.** Paste the pixel or GTM event into the marked block at the bottom of `thank-you.html`.
    Fire it only there.
 4. **GoHighLevel.** Run `npm run ghl`, then paste `ghl-embedded.html` (and `ghl-thank-you-embedded.html`) into
-   custom-code blocks. After that, set `THANK_YOU` in the fragment to your GHL thank-you step path.
+   custom-code blocks (landing step and thank-you step).
 
 Both pages ship with `noindex`. This is deliberate for a paid-traffic page: remove the tag in `index.html` only if
 you want the page to be indexed.

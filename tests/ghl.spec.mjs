@@ -77,3 +77,14 @@ test('the form still works inside the host page', async ({ page }) => {
   await expect(page.locator('.step[data-step="2"]')).toBeVisible({ timeout: 3000 });
   await expect(page.locator('#meter-count')).toHaveText('Step 2 of 2');
 });
+
+test('the GHL builds point at the live funnel steps', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { execSync } = await import('node:child_process');
+  execSync('node build-ghl.mjs && node build-ghl-thank-you.mjs', { stdio: 'ignore' });
+  const landing = readFileSync('ghl.html', 'utf8');
+  const thanks = readFileSync('ghl-thank-you.html', 'utf8');
+  expect(landing).toContain("var THANK_YOU = 'https://learn.selectdigitaldentallab.com/thankyou';");
+  expect(thanks).not.toContain('href="index.html');
+  expect(thanks).toContain('href="https://learn.selectdigitaldentallab.com/#faq"');
+});
