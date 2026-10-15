@@ -44,7 +44,7 @@ files keep relative links (`thank-you.html`, `index.html`).
 The hero is a VSL: headline, the video, one CTA. Every "See if we're a fit" link and button (header, hero,
 sections, mobile bar) opens the three-step form in a popup; Escape, the close button or a backdrop click closes it.
 
-The VSL is set to the GHL-hosted mp4 (`assets.cdn.filesafe.space/.../6ac33bcec478ac5535d535da.mp4`). **To change the video**, put its URL in `data-src` on `<div class="vsl" id="vsl" data-src="">` in `index.html`.
+The VSL is set to the GHL-hosted mp4 (`assets.cdn.filesafe.space/.../6ad11933283355138e79e988.mp4`). **To change the video**, put its URL in `data-src` on `<div class="vsl" id="vsl" data-src="">` in `index.html`.
 An `.mp4` link plays in a native player; YouTube, Vimeo, Loom and Wistia links become an autoplaying embed. While
 `data-src` is empty the slot is a plain photo (`assets/img/vsl-poster.jpg`) with no play button; once a URL is
 set, the photo becomes the poster with a play button and the video loads on click.
