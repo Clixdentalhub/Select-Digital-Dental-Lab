@@ -1331,18 +1331,28 @@ ul,ol{margin:0;padding:0;list-style:none}
     fbq('init', PIXEL_ID);
     fbq('track', 'PageView');
 
-    /* Lead fires once per submission: the landing form leaves a one-time
-       token in sessionStorage just before redirecting here. A refresh, a
-       bookmark or a direct visit finds no token and fires nothing, so
-       leads are not double-counted. The token doubles as the eventID, so
-       a Conversions API event sent with the same id is de-duplicated. */
-    var token = null, storageOk = true;
-    try { token = sessionStorage.getItem('sddl_lead'); } catch (e) { storageOk = false; }
-    if (token) {
-      fbq('track', 'Lead', {}, { eventID: token });
+    /* Lead fires once per real submission. The landing form passes a
+       one-time id in the redirect (?lid=) and in sessionStorage; either is
+       enough. The id is the Lead eventID (so a Conversions API event with
+       the same id de-duplicates), it is recorded once fired, and it is
+       stripped from the address bar, so a refresh, a bookmark or a direct
+       visit never counts again. */
+    var token = null;
+    try { token = new URLSearchParams(location.search).get('lid'); } catch (e) {}
+    if (!token) { try { token = sessionStorage.getItem('sddl_lead'); } catch (e) {} }
+    if (token && /^lead-[\w-]{6,60}$/.test(token)) {
+      var fired = [];
+      try { fired = JSON.parse(localStorage.getItem('sddl_leads_fired') || '[]'); } catch (e) {}
+      if (fired.indexOf(token) === -1) {
+        fbq('track', 'Lead', {}, { eventID: token });
+        fired.push(token);
+        try { localStorage.setItem('sddl_leads_fired', JSON.stringify(fired.slice(-20))); } catch (e) {}
+      }
       try { sessionStorage.removeItem('sddl_lead'); } catch (e) {}
-    } else if (!storageOk && /[?&]name=/.test(location.search)) {
-      fbq('track', 'Lead');
+      try {
+        var u = new URL(location.href); u.searchParams.delete('lid');
+        history.replaceState(history.state, '', u.pathname + u.search + u.hash);
+      } catch (e) {}
     }
   }
 

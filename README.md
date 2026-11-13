@@ -46,8 +46,10 @@ visitor clicks **Accept**; **Reject** loads nothing. The choice is remembered fo
 landing page and the thank-you step share it, and "Cookie settings" in the footer reopens the banner.
 
 - Landing page: `PageView` only.
-- Thank-you page: `PageView` + `Lead`. Lead fires once per real submission: the form leaves a one-time id in
-  sessionStorage, which the thank-you page uses as the Lead `eventID`. Refreshes and direct visits fire no Lead.
+- Thank-you page: `PageView` + `Lead`. Lead fires once per real submission: the form redirects to
+  `/thankyou?name=<first>&lid=<one-time id>` (and also leaves the id in sessionStorage). The thank-you page uses
+  the id as the Lead `eventID`, records it as fired and strips `lid` from the address bar, so refreshes,
+  bookmarks and direct visits fire no Lead.
   The same id is sent to GHL as `event_id`, so a Conversions API Lead with that id de-duplicates.
 - Do not also add the pixel in GHL's tracking-code settings, or every event counts twice.
 

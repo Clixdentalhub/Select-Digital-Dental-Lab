@@ -2655,14 +2655,16 @@ html.modal-open{overflow:hidden}
     }
   });
 
-  function goToThankYou(firstName) {
+  function goToThankYou(firstName, leadId) {
     if (!THANK_YOU) return;           /* inline confirmation stands */
+    var params = [];
+    if (firstName) params.push('name=' + encodeURIComponent(firstName));
+    /* the one-time lead id rides in the URL as well as sessionStorage, so the
+       thank-you pixel can fire Lead even where storage is blocked or the page
+       builder isolates the form */
+    if (leadId) params.push('lid=' + encodeURIComponent(leadId));
     var url = THANK_YOU;
-    if (firstName) {
-      /* choose the separator from whether the destination already
-         has a query string; do not assume */
-      url += (url.indexOf('?') === -1 ? '?' : '&') + 'name=' + encodeURIComponent(firstName);
-    }
+    if (params.length) url += (url.indexOf('?') === -1 ? '?' : '&') + params.join('&');
     window.location.href = url;
   }
 
@@ -2691,7 +2693,7 @@ html.modal-open{overflow:hidden}
        however fast the webhook answers, so the visitor sees it went through. */
     var shownAt = Date.now();
     var forward = function () {
-      setTimeout(function () { goToThankYou(data.firstName); },
+      setTimeout(function () { goToThankYou(data.firstName, leadId); },
         Math.max(0, (reduced ? 400 : 900) - (Date.now() - shownAt)));
     };
 

@@ -59,7 +59,7 @@ test('a real submission fires Lead once on the thank-you page, with the eventID 
   const eventId = new URLSearchParams((await sent).postData()).get('event_id');
   expect(eventId).toMatch(/^lead-\d+-\w+$/);
 
-  await page.waitForURL(/thank-you\.html\?name=Jane/, { timeout: 20000 });
+  await page.waitForURL(/thank-you\.html\?name=Jane&lid=lead-/, { timeout: 20000, waitUntil: 'commit' });
   await page.waitForLoadState('load');
   await expect(page.locator('#cookie-banner')).toBeHidden();       // choice carried over
   const calls = await fbqCalls(page);
@@ -82,4 +82,26 @@ test('a direct visit to the thank-you page fires no Lead, and no pixel without c
   const calls = await fbqCalls(page);
   expect(calls).toContainEqual(['track', 'PageView']);
   expect(calls.some((c) => c[1] === 'Lead')).toBe(false);
+});
+
+test('Lead fires from the redirect link alone (no shared storage), once, and the id is stripped', async ({ page }) => {
+  // consent already given on the landing step; nothing in sessionStorage
+  await page.goto('/index.html', { waitUntil: 'load' });
+  await page.locator('#cookie-banner .cookie-accept').click();
+  await page.goto('/thank-you.html?name=Test&lid=lead-1794575818000-abc12345', { waitUntil: 'load' });
+  const leads = (await fbqCalls(page)).filter((c) => c[1] === 'Lead');
+  expect(leads).toHaveLength(1);
+  expect(leads[0][3]).toEqual({ eventID: 'lead-1794575818000-abc12345' });
+  expect(page.url()).toContain('name=Test');
+  expect(page.url()).not.toContain('lid=');
+  // the same link opened again (bookmark, back button) does not count twice
+  await page.goto('/thank-you.html?name=Test&lid=lead-1794575818000-abc12345', { waitUntil: 'load' });
+  expect((await fbqCalls(page)).filter((c) => c[1] === 'Lead')).toHaveLength(0);
+});
+
+test('Lead waits for consent on the thank-you page, then fires once on Accept', async ({ page }) => {
+  await page.goto('/thank-you.html?name=Test&lid=lead-1794575818000-xyz98765', { waitUntil: 'load' });
+  expect(fbRequests(page)).toBe(0);
+  await page.locator('#cookie-banner .cookie-accept').click();
+  await expect.poll(async () => (await fbqCalls(page)).filter((c) => c[1] === 'Lead').length).toBe(1);
 });
