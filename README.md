@@ -39,6 +39,18 @@ npm test          # 49 tests: contrast, no overflow at 7 widths, form, typograph
 after a successful submit, and the thank-you page's links point back to the landing page. The standalone
 files keep relative links (`thank-you.html`, `index.html`).
 
+## Cookie consent and Meta Pixel
+
+Both pages carry a cookie banner and the Meta Pixel (ID 28063400443329444). Nothing from Meta loads until the
+visitor clicks **Accept**; **Reject** loads nothing. The choice is remembered for 6 months on the domain, so the
+landing page and the thank-you step share it, and "Cookie settings" in the footer reopens the banner.
+
+- Landing page: `PageView` only.
+- Thank-you page: `PageView` + `Lead`. Lead fires once per real submission: the form leaves a one-time id in
+  sessionStorage, which the thank-you page uses as the Lead `eventID`. Refreshes and direct visits fire no Lead.
+  The same id is sent to GHL as `event_id`, so a Conversions API Lead with that id de-duplicates.
+- Do not also add the pixel in GHL's tracking-code settings, or every event counts twice.
+
 ## Hero video and popup form
 
 The hero is a VSL: headline, the video, one CTA. Every "See if we're a fit" link and button (header, hero,
@@ -52,7 +64,7 @@ set, the photo becomes the poster with a play button and the video loads on clic
 ## Before going live
 
 1. **Form endpoint.** `ENDPOINT` in `index.html` points at the GoHighLevel inbound webhook. The form posts
-   form-encoded fields: `first_name`, `last_name`, `email`, `phone`, `practice_name`, `role`, `utm_source`, `utm_medium`, `utm_campaign`, `utm_content`, `utm_term`, `fbclid`, `fbc`,
+   form-encoded fields: `event_id`, `first_name`, `last_name`, `email`, `phone`, `practice_name`, `role`, `utm_source`, `utm_medium`, `utm_campaign`, `utm_content`, `utm_term`, `fbclid`, `fbc`,
    `fbp`, `landing_page`, `referrer`, `lead_source`, `submitted_at`. UTMs and fbclid are captured on landing and
    kept for the session. Tests intercept the webhook, so `npm test` never creates a real lead.
 2. **Logo** (optional). Add `assets/img/logo.png`. Without it, the header uses a text lockup.

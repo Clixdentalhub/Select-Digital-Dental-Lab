@@ -34,6 +34,14 @@ export const test = base.extend({
       return route.fulfill({ status: 200, contentType: 'application/json', body: '{"status":"ok"}' });
     });
 
+    /* Meta: never send real pixel events from a test. fbevents.js is served
+       as an empty script, so every fbq() call stays in fbq.queue where a
+       test can read it; every request is logged on page.__fb. */
+    await page.route(/connect\.facebook\.net|facebook\.com\/tr/, (route) => {
+      (page.__fb || (page.__fb = [])).push(route.request().url());
+      return route.fulfill({ status: 200, contentType: 'application/javascript', body: '' });
+    });
+
     await page.route(/fonts\.(googleapis|gstatic)\.com/, (route) => {
       const entry = fonts && fonts[route.request().url()];
       if (!entry) return route.abort();

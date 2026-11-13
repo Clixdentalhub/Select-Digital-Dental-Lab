@@ -16,7 +16,7 @@ for (const path of PAGES) {
       /* Every dark surface, not just the section bands. The sticky mobile
          bar was missing from this list and hid an invisible CTA. */
       const roots = document.querySelectorAll(
-        '.dark, .deep, .site-header, .nav-rail, .site-footer, .form-card, .hero, .mobile-bar');
+        '.dark, .deep, .site-header, .nav-rail, .site-footer, .form-card, .hero, .mobile-bar, .cookie-banner');
 
       function effectiveBg(el) {
         let node = el;

@@ -1390,6 +1390,39 @@ html.modal-open{overflow:hidden}
   .lux-sheen::before,.lux-grain{display:none}
   .fx-aurora .fx-blob,.fx-rays .ray,.fx-contour .rings,.fx-framed::after{animation:none!important}
 }
+
+/* ============================================================
+   COOKIE CONSENT — nothing that tracks loads until "Accept"
+   ============================================================ */
+.cookie-banner{
+  position:fixed;left:16px;right:16px;bottom:16px;z-index:200;
+  max-width:720px;margin-inline:auto;
+  display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px;
+  padding:18px 20px;border-radius:16px;
+  background:#060644;color:#fff;
+  border:1px solid rgba(191,192,211,.28);
+  box-shadow:0 24px 60px -20px rgba(0,0,0,.7);
+  font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:.9rem;line-height:1.55;
+}
+.cookie-banner[hidden]{display:none}
+.cookie-banner p{flex:1 1 320px;margin:0;color:#C3C5DA}
+.cookie-banner p strong{color:#fff}
+.cookie-actions{display:flex;gap:10px;flex:0 0 auto}
+.cookie-actions button{
+  font:inherit;font-weight:600;font-size:.9rem;cursor:pointer;
+  padding:11px 20px;min-height:44px;border-radius:999px;border:1px solid #BFC0D3;
+}
+.cookie-accept{background:#BFC0D3;color:#060644}
+.cookie-accept:hover{background:#D9DAE6}
+.cookie-reject{background:transparent;color:#fff}
+.cookie-reject:hover{background:rgba(255,255,255,.08)}
+.cookie-actions button:focus-visible{outline:3px solid #BFC0D3;outline-offset:3px}
+@media (max-width:559.98px){
+  .cookie-banner{left:10px;right:10px;bottom:10px;padding:16px}
+  .cookie-actions{width:100%}
+  .cookie-actions button{flex:1 1 0}
+}
+.cookie-settings-link{background:none;border:0;padding:0;font:inherit;color:inherit;text-decoration:underline;cursor:pointer}
 </style>
 </head>
 <body>
@@ -2140,7 +2173,7 @@ html.modal-open{overflow:hidden}
     <div class="legal">
       <p>Select Digital Dental Lab is a UK-based, dentist-led lab working exclusively with private dental practices, and serving the entire United Kingdom. This page is intended for dental
       professionals.</p>
-      <p style="margin:0">&copy; <span id="year">2026</span> Select Digital Dental Lab. All rights reserved.</p>
+      <p style="margin:0">&copy; <span id="year">2026</span> Select Digital Dental Lab. All rights reserved. · <button type="button" class="cookie-settings-link" data-cookie-settings>Cookie settings</button></p>
     </div>
   </div>
 </footer>
@@ -2663,7 +2696,13 @@ html.modal-open{overflow:hidden}
     };
 
     /* The payload, keyed to match the CRM fields one-to-one. */
+    /* One id per submission: sent to GHL as event_id, and left for the
+       thank-you page so its pixel fires Lead once, with the same eventID. */
+    var leadId = 'lead-' + Date.now() + '-' + Math.random().toString(36).slice(2, 10);
+    try { sessionStorage.setItem('sddl_lead', leadId); } catch (err) {}
+
     var payload = {
+      event_id: leadId,
       first_name: data.firstName || '',
       last_name: data.lastName || '',
       email: data.email || '',
@@ -2917,6 +2956,83 @@ html.modal-open{overflow:hidden}
   modal.addEventListener('click', function (e) { if (e.target === modal) closeForm(); });
   if (location.hash === '#qualifier-card') openForm();
   window.SDDLopenForm = openForm;
+})();
+</script>
+
+<!-- Cookie consent. The Meta pixel loads only after "Accept"; "Reject" loads nothing. -->
+<div class="cookie-banner" id="cookie-banner" role="region" aria-label="Cookie consent" hidden>
+  <p><strong>We use cookies</strong> to measure how our ads perform (Meta Pixel). They only load if you accept.
+  Essential site functions work either way.</p>
+  <div class="cookie-actions">
+    <button type="button" class="cookie-reject" data-consent="denied">Reject</button>
+    <button type="button" class="cookie-accept" data-consent="granted">Accept</button>
+  </div>
+</div>
+<script>
+/* =========================================================
+   CONSENT + META PIXEL (landing page: PageView only)
+   PECR/UK GDPR: the pixel and its cookies load only after the
+   visitor accepts. The choice is remembered for 6 months on this
+   domain, so the landing page and the thank-you step share it.
+   ========================================================= */
+(function () {
+  'use strict';
+  var PIXEL_ID = '28063400443329444';
+  var KEY = 'sddl_consent';
+  var MAX_AGE = 182 * 24 * 3600 * 1000;
+  var banner = document.getElementById('cookie-banner');
+
+  function readChoice() {
+    try {
+      var v = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (v && (v.c === 'granted' || v.c === 'denied') && Date.now() - v.t < MAX_AGE) return v.c;
+    } catch (e) {}
+    var m = document.cookie.match(/(?:^|; )sddl_consent=(granted|denied)/);
+    return m ? m[1] : null;
+  }
+  function saveChoice(c) {
+    try { localStorage.setItem(KEY, JSON.stringify({ c: c, t: Date.now() })); } catch (e) {}
+    document.cookie = 'sddl_consent=' + c + '; max-age=' + Math.round(MAX_AGE / 1000) + '; path=/; SameSite=Lax';
+  }
+
+  var loaded = false;
+  function loadPixel() {
+    if (loaded) return; loaded = true;
+    /* Meta's base code, unchanged apart from running only after consent */
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', PIXEL_ID);
+    fbq('track', 'PageView');
+  }
+
+  function decide(c) {
+    saveChoice(c);
+    if (banner) banner.hidden = true;
+    if (c === 'granted') loadPixel();
+  }
+
+  var choice = readChoice();
+  if (choice === 'granted') loadPixel();
+  else if (!choice && banner) banner.hidden = false;
+
+  if (banner) banner.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-consent]');
+    if (b) decide(b.getAttribute('data-consent'));
+  });
+  /* "Cookie settings" in the footer reopens the banner */
+  document.addEventListener('click', function (e) {
+    if (e.target.closest && e.target.closest('[data-cookie-settings]') && banner) {
+      e.preventDefault(); banner.hidden = false;
+      var a = banner.querySelector('.cookie-accept'); if (a) a.focus();
+    }
+  });
+  window.SDDLconsent = { get: readChoice, set: decide };
 })();
 </script>
 
