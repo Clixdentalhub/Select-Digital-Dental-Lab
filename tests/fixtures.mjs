@@ -29,7 +29,7 @@ export const test = base.extend({
 
     /* The form posts to the live GoHighLevel webhook. Never let a test create
        a real lead: capture the request and answer it locally instead. */
-    await page.route(/leadconnectorhq\.com/, (route) => {
+    await page.route(/services\.leadconnectorhq\.com\/hooks\//, (route) => {
       (page.__leads || (page.__leads = [])).push(route.request().postData() || '');
       return route.fulfill({ status: 200, contentType: 'application/json', body: '{"status":"ok"}' });
     });

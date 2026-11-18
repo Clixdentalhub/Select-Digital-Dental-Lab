@@ -54,7 +54,7 @@ test('a real submission fires Lead once on the thank-you page, with the eventID 
   await page.locator('[data-open-form]').first().click();
   await page.locator('.step[data-step="1"] .opt').first().click();
   for (const [n, v] of [['firstName', 'Jane'], ['lastName', 'Doe'], ['practiceName', 'Doe Dental'], ['phone', '07700 900123'], ['email', 'jane@example.com']]) await page.fill(`input[name=${n}]`, v);
-  const sent = page.waitForRequest(/leadconnectorhq\.com/);
+  const sent = page.waitForRequest(/services\.leadconnectorhq\.com\/hooks\//);
   await page.locator('.step[data-step="2"] button[type=submit]').click();
   const eventId = new URLSearchParams((await sent).postData()).get('event_id');
   expect(eventId).toMatch(/^lead-\d+-\w+$/);
