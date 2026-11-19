@@ -58,7 +58,7 @@ landing page and the thank-you step share it, and "Cookie settings" in the foote
 The hero is a VSL: headline, the video, one CTA. Every "See if we're a fit" link and button (header, hero,
 sections, mobile bar) opens the three-step form in a popup; Escape, the close button or a backdrop click closes it.
 
-The VSL is set to the GHL-hosted mp4 (`files.leadconnectorhq.com/file/6afddde52c672846862be267/final-landing-page-1.mp4`). **To change the video**, put its URL in `data-src` on `<div class="vsl" id="vsl" data-src="">` in `index.html`.
+The VSL is set to the GHL-hosted mp4 (`files.leadconnectorhq.com/file/6afece5cd50d9db796ef6d90/select-landing-page-final-1.mp4`). **To change the video**, put its URL in `data-src` on `<div class="vsl" id="vsl" data-src="">` in `index.html`.
 An `.mp4` link plays in a native player; YouTube, Vimeo, Loom and Wistia links become an autoplaying embed. While
 `data-src` is empty the slot is a plain photo (`assets/img/vsl-poster.jpg`) with no play button; once a URL is
 set, the photo becomes the poster with a play button and the video loads on click.
